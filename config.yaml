@@ -1,0 +1,29 @@
+---
+#项目名称
+name: test
+#项目生成文件输出目录
+output_dir:  "./"
+type: "rpc"
+
+#mybatis config
+mybatis:
+  host: "10.8.15.65"
+  port: "3306"
+  username: root
+  password: "*******"
+  database: test
+  encoding: utf-8
+  db_type:  "MySQL"
+  tables:
+          -   table_name: t_sms
+          -   table_name: t_account
+
+
+
+
+
+
+
+
+
+

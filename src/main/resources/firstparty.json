@@ -1,0 +1,192 @@
+{
+  "cgi_prefix": "onecollection_first",
+  "cgi_list": [
+    {
+      "cgi": "index_summary",
+      "request": null,
+      "response": {
+        "waiting_for_running_count": 12,
+        "running_count": 12,
+        "confirm_count": 12,
+        "success_count": 12,
+        "expire_count": 12
+      }
+    },
+    {
+      "cgi": "index_task_day_chart",
+      "request": {
+        "start_day": "",
+        "end_day": ""
+      },
+      "response": {
+        "chart_list": [
+          {
+            "chart_date": 0,
+            "waiting_for_running_count": 12,
+            "running_count": 12,
+            "confirm_count": 12
+          }
+        ]
+      }
+    },
+    {
+      "cgi": "upload_task",
+      "request": {
+        "task_upload_url": ""
+      },
+      "response": {
+        "upload_batch_id": "12121213232322312121",
+        "success_count": 0,
+        "error_list": [
+          {
+            "error_occur_line_num": 0,
+            "error_reason": ""
+          }
+        ]
+      }
+    },
+    {
+      "cgi": "confirm_tasks_effective",
+      "request": {
+        "upload_batch_id": ""
+      },
+      "response": {
+        "success_count": 12
+      }
+    },
+    {
+      "cgi": "refund_upload",
+      "request": {
+        "session_key": "",
+        "task_upload_url": ""
+      },
+      "response": {
+        "upload_batch_id": "12121213232322312121",
+        "success_count": 0,
+        "error_list": [
+          {
+            "error_occur_line_num": 0,
+            "error_reason": ""
+          }
+        ]
+      }
+    },
+    {
+      "cgi": "confirm_refund_effective",
+      "request": {
+        "upload_batch_id": ""
+      },
+      "response": {
+        "success_count": 12
+      }
+    },
+    {
+      "cgi": "query_task",
+      "request": {
+        "task_type": 1,
+        "search_type": 1,
+        "search_value": "",
+        "task_status": 1,
+        "commission_rate_min": "",
+        "commission_rate_end": "",
+        "pub_time_begin": "",
+        "pub_time_end": "",
+        "overdue_min": 1,
+        "overdue_max": 2,
+        "owed_amount_min": 1122,
+        "owed_amount_max": 9999,
+        "page_num": 0,
+        "page_size": 1
+      },
+      "response": {
+        "total_count": 0,
+        "page_num": 0,
+        "page_size": 0,
+        "page_total_count": 0,
+        "task_list": [
+          {
+            "task_id": "",
+            "pub_time": 0,
+            "borrower_name": "",
+            "borrower_card_id": "",
+            "owed_amount": 0,
+            "commission_rate": 0.1,
+            "overdue_days": "",
+            "task_status": 1,
+            "task_type": 1
+          }
+        ]
+      }
+    },
+    {
+      "cgi": "query_task_detail",
+      "request": {
+        "task_id": 1
+      },
+      "response": {
+        "base_info": {
+          "customer_name": "",
+          "loan_money": 0,
+          "dispatch_time": 0,
+          "end_time": 0,
+          "commission_rate": 0.1,
+          "task_type": "欠款类型",
+          "late_day": "",
+          "refund_money": 0,
+          "group_name": ""
+        },
+        "customer_info": {
+          "customer_name": "",
+          "card_id": "",
+          "sex": 1,
+          "mobile": "",
+          "weixin": "",
+          "qq": "",
+          "email": "",
+          "present_address": "",
+          "residence_address": "",
+          "company_address": "",
+          "other_address": ""
+        },
+        "bank_account_info": {
+          "creditors": "",
+          "bank_name": "",
+          "bank_card_no": "",
+          "bank_account_name": "",
+          "bank_withhold_status": 1
+        },
+        "customer_status": {
+          "housing_condition": "",
+          "registered_assets": "",
+          "work_condition": "",
+          "martial_status": "",
+          "children_status": "",
+          "education_level": ""
+        },
+        "contactors_guarantor": {
+          "contactors": [
+            {
+              "contact_name": "",
+              "relationship": "",
+              "contact_mobile": ""
+            }
+          ],
+          "guarantor": {
+            "guarantor_name": "",
+            "guarantor_mobile": "",
+            "guarantor_company_name": "",
+            "guarantor_company_phone": "",
+            "mortgage_assets": 123123,
+            "bond_amount": 123
+          }
+        },
+        "other_info": {
+          "special_collection_desc": "",
+          "special_collection_requirements": "",
+          "litigation_situation": ""
+        }
+      }
+    }
+  ]
+}
+

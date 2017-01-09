@@ -1,0 +1,50 @@
+---
+name: onecollection
+#dir:  "/Users/chunxiaoli/IdeaProjects/OneCollection"
+dir:  "/Users/chunxiaoli/"
+webservers:
+    -
+      web_server_name:  app
+      jsonfile: "app.json"
+services:
+    # 公共服务
+    -
+      owner: qixiang
+      rpc_name: common
+      tables: "t_app_update_info,t_operation_log"
+    #任务池
+    -
+      owner:  wangliang
+      rpc_name: task
+      tables: "t_task,t_task_temp,t_task_package,t_task_filter,t_contact_supplement,t_contactor,t_contactor_temp,t_commission_rate"
+    #甲方
+    -
+      owner:  qixiang
+      rpc_name: firstparty
+      tables: "t_first_party"
+    #订单
+    -
+      owner:  chunxiao
+      rpc_name: taskorder
+      tables: "t_task_order,t_collection_record,t_repay_evidence"
+    #还款
+    -
+      owner:  qixiang
+      rpc_name: repay
+      tables: "t_repay_record,t_repay_record_temp,t_refund_record"
+    #外包公司
+    -
+      owner:  wangliang
+      rpc_name: outsource
+      tables: "t_outsource,t_outsource_company,t_outsource_company_task,t_department_task"
+    #员工 组织架构
+    -
+      owner:  wangliang
+      rpc_name: outsource
+      tables: "t_admin,t_collection_staff,t_department,t_group,t_staff_temp"
+
+
+
+
+
+

@@ -1,0 +1,136 @@
+{
+  "cgi_prefix":"onecollection_app",
+
+  "controller_list":[{
+    "name":"user",
+    "cgi_list": [
+      { "desc":"我的页面",
+        "cgi": "my_property",
+        "request": null,
+        "response": {
+          "staff_info": {
+            "collection_staff_name": "无离恨",
+            "mobile": "",
+            "card_id": "",
+            "outsource_company": "",
+            "group_id": 123,
+            "group_name": "",
+            "operation_url": ""
+          },
+          "group_info": [
+            {
+              "group_id": 123,
+              "group_name": ""
+            }
+          ]
+        }
+      },
+      {
+        "desc":"我的页面",
+        "cgi": "show_group_info",
+        "request": {
+          "group_id": 123
+        },
+        "response": {
+          "department_name": "",
+          "staff_list": {
+            "collection_staff_name": "又白头",
+            "mobile": ""
+          }
+        }
+      },
+      {
+        "cgi": "login",
+        "request": {
+          "mobile": "18818997517",
+          "sms_code": "123456",
+          "verify_code": "111222",
+          "verify_key": "xxxx"
+        },
+        "response": {
+          "session_key": "",
+          "info": {
+            "real_name": "李静皮",
+            "id_no": "4417******5236",
+            "company": "达飞",
+            "type": ""
+          }
+        }
+      }
+    ]
+  },
+    {
+      "name":"task",
+      "cgi_list": [
+        {
+          "cgi": "task_query",
+          "request": {
+            "task_type": 1,
+            "sort_by": 1,
+            "page_size": 10,
+            "page_index": 0
+          },
+          "response": {
+            "task_list_task_query": [
+              {
+                "task_id": "",
+                "address": "",
+                "task_status": "未指派",
+                "customer_name": "",
+                "overdue_day": 123,
+                "task_type": "小额贷款",
+                "loan_money": 10000,
+                "days_remaining": 2
+              }
+            ]
+          }
+        },
+        {
+          "cgi": "choose_group",
+          "request": null,
+          "response": {
+            "group_list": [
+              {
+                "group_id": 123,
+                "group_name": "小组名",
+                "staff_num": 123
+              }
+            ]
+          }
+        },
+        {
+          "cgi": "dispatch_task",
+          "request": {
+            "task_ids": "111,222,333",
+            "group_id": 123
+          },
+          "response": null
+        },
+        {
+          "cgi": "dispatch_task_history",
+          "request": null,
+          "response": {
+            "task_list_dispatch_task_history": [
+              {
+                "order_no": "",
+                "task_id": "",
+                "address": "",
+                "collection_result": "承诺还款",
+                "customer_name": "",
+                "task_type": "小额贷款",
+                "overdue_day": 123,
+                "loan_money": 10000,
+                "days_remaining": 2,
+                "group_id": 123,
+                "group_name": "唐僧师徒",
+                "dispatch_time": 123123
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+
+}
+

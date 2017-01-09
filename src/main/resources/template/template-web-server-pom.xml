@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <artifactId>spring-boot-dubbo-starter</artifactId>
+    <groupId>com.dafy.dev</groupId>
+    <version>1.0-SNAPSHOT</version>
+    <modelVersion>4.0.0</modelVersion>
+
+    <properties>
+        <file_encoding>UTF-8</file_encoding>
+        <java_version>1.8</java_version>
+        <spring_boot_version>1.4.1</spring_boot_version>
+    </properties>
+
+    <dependencies>
+        <!-- String boot start -->
+        <dependency>
+            <artifactId>dafy-spring-boot-dubbo-web-starter</artifactId>
+            <groupId>com.dafy.dev</groupId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+            <!-- 拷贝启动配置文件 -->
+            <resource>
+                <directory>src/main/resources/config/</directory>
+                <targetPath>${project.build.directory}/</targetPath>
+            </resource>
+            <resource>
+                <directory>src/main/resources/bin/</directory>
+                <targetPath>${project.build.directory}/bin</targetPath>
+            </resource>
+        </resources>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>1.2.7.RELEASE</version>
+                    <configuration>
+                        <excludes>
+
+                        </excludes>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>repackage</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <!-- 为了发布更方便可靠,使用全部目录打包成zip发布 -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <version>2.2.1</version>
+                    <configuration>
+                        <descriptors>
+                            <descriptor>src/main/resources/assembly.xml</descriptor>
+                        </descriptors>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>make-assembly</id>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>single</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+            </plugins>
+        </pluginManagement>
+
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <!-- 当打包部署时排除provider. 使用rpc方式调用服务 -->
+                <configuration>
+                    <excludes>
+
+                    </excludes>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+            </plugin>
+
+            <!-- 指定JDK 字符集 -->
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <source>${java_version}</source>
+                    <target>${java_version}</target>
+                    <encoding>${file_encoding}</encoding>
+                    <showDeprecation>true</showDeprecation>
+                    <showWarnings>true</showWarnings>
+                </configuration>
+            </plugin>
+
+            <!-- 解决资源文件的编码问题 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.7</version>
+                <configuration>
+                    <encoding>utf-8</encoding>
+                </configuration>
+            </plugin>
+            <!-- 用于发布项目的插件 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5.3</version>
+                <configuration>
+                    <tagBase>http://10.8.15.15:8081/nexus/content/repositories/snapshots/</tagBase>
+                    <tagNameFormat>v@{project.version}</tagNameFormat>
+                </configuration>
+            </plugin>
+
+
+        </plugins>
+    </build>
+
+</project>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+    <name>demo</name>
+    <artifactId>project-generator</artifactId>
+    <groupId>com.dafy.dev</groupId>
+    <version>1.0.0-SNAPSHOT</version>
+    <pom>
+        <artifactId>project-generator</artifactId>
+        <groupId>com.dafy.dev</groupId>
+        <version>1.0.0-SNAPSHOT</version>
+        <modules>list</modules>
+    </pom>
+    <modules>
+        <module>
+            <name>demo</name>
+            <dir>demo</dir>
+        </module>
+    </modules>
+    <javafile>
+        <className>OrderService</className>
+        <outDir>order</outDir>
+        <packageName>com.dafy.dev.collection</packageName>
+        <interfaces>
+            <interface>
+                <doc>test method</doc>
+                <name>getAge</name>
+                <args>
+                    <arg>
+                        <type>java.lang.Integer</type>
+                        <value>name</value>
+                    </arg>
+                </args>
+                <return>
+                    <type>java.lang.Integer</type>
+                    <value>name</value>
+                </return>
+            </interface>
+        </interfaces>
+    </javafile>
+</project>
