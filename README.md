@@ -28,7 +28,7 @@
 
 ## Usage
 - step1. 安装JDK8(框架代码用了J8,生成的项目不要求)
-- step2. 下载[Generator.jar](http://10.8.15.73/dafy_dev/project-generator/raw/master/out/Generator.jar)
+- step2. 下载[Generator.jar](http://10.8.15.73/dafy_server/Dubbo-Spring-Mybatis-Generator/raw/master/out/Generator.jar)
 - ste3. java -jar Generator.jar -f config.yaml
 - setp4.  进入生成好的目录 mvn install 然后执行启动服务即可
 
@@ -41,7 +41,7 @@
     -f:指定生成的配置文件路径(绝对路径)
 
 ## Configuration
-**!!注意 配置文件是yaml格式  [在线编辑yaml](http://codebeautify.org/yaml-validator)  完整配置及默认值请参考源码 [config.yaml](http://10.8.15.73/dafy_dev/project-generator/raw/master/src/main/resources/template/all_config.yaml)**
+**!!注意 配置文件是yaml格式  [在线编辑yaml](http://codebeautify.org/yaml-validator)  完整配置及默认值请参考源码 [config.yaml](http://10.8.15.73/dafy_server/Dubbo-Spring-Mybatis-Generator/raw/master/src/main/resources/template/all_config.yaml)**
 ![](https://coding.net/u/chunxiao/p/project-generator/git/raw/master/config.png)
 ## Bugs
    写的比较匆忙 测试不是很充分 边界条件的bug估计不少
