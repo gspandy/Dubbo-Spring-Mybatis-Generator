@@ -6,7 +6,7 @@
     - 生成的代码目录结构 风格 命名 配置方式等都是统一的 减少代码阅读和配置的负载 方便团队成员沟通
     - (整合MBG)快速生成Dao ORM层 模板代码，只要定义表结构，就可以生成对应的mybatis 配置 Dao mapper xml model相关代码
     - 根据表结构或配置生成Service 层接口及对应的简单实现
-    - 根据表结构或cgi配置生成相应的Dto 前后端定义好协议 即可生成相关pojo对象
+    - 根据表结构或cgi配置生成相应的Dto 前后端定义好[协议](http://10.8.15.73/dafy_server/Dubbo-Spring-Mybatis-Generator/raw/master/app.json) 即可生成相关pojo对象
     - 根据Pojo,Dto 对象自动生成DtoConvertUtil工具类 避免写烦人的get set
     - 项目生成的配置(pom 依赖配置，logback配置,application.propertis配置等)可以复用以前项目的模板 通过修改配置参数传进来
     - 生成对应的service 层单元测试框架配置
