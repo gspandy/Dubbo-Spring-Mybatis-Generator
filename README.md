@@ -28,7 +28,7 @@
 
 ## Usage
 - step1. 安装JDK8(框架代码用了J8,生成的项目不要求)
-- step2. 下载[hamrmer.jar](http://10.8.15.73/dafy_dev/project-generator/raw/master/out/Generator.jar)
+- step2. 下载[Generator.jar](http://10.8.15.73/dafy_dev/project-generator/raw/master/out/Generator.jar)
 - ste3. java -jar Generator.jar -f config.yaml
 - setp4.  进入生成好的目录 mvn install 然后执行启动服务即可
 
