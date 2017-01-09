@@ -1,6 +1,6 @@
 # Dubbo-Spring-Mybatis-Generator
 
-## Ability 
+## Ability
 ### (quickly build Dubbo-Spring-Mybatis rpc project in one minute)
     - 快速生成spring-boot-duboo-rpc 服务框架模板代码 拒绝copy代码带来的坑 提高开发效率
     - 生成的代码目录结构 风格 命名 配置方式等都是统一的 减少代码阅读和配置的负载 方便团队成员沟通
@@ -28,16 +28,16 @@
 
 ## Usage
 - step1. 安装JDK8(框架代码用了J8,生成的项目不要求)
-- step2. 下载[hamrmer.jar](http://10.8.15.73/dafy_dev/project-generator/raw/master/out/harmer.jar)
-- ste3. java -jar harmer.jar -f config.yaml
+- step2. 下载[hamrmer.jar](http://10.8.15.73/dafy_dev/project-generator/raw/master/out/Generator.jar)
+- ste3. java -jar Generator.jar -f config.yaml
 - setp4.  进入生成好的目录 mvn install 然后执行启动服务即可
 
 ## Options
-    生成config sample文件 : java -jar harmer.jar y -t rpc
+    生成config sample文件 : java -jar Generator.jar y -t rpc
     -t [rpc|web|one_key] 生成配置的类型 不同项目配置项不一样
     -p /opt/config    生成配置的输出目录
 
-    生成项目框架文件 : java -jar harmer.jar -f /opt/config、config.yaml
+    生成项目框架文件 : java -jar Generator.jar -f /opt/config、config.yaml
     -f:指定生成的配置文件路径(绝对路径)
 
 ## Configuration

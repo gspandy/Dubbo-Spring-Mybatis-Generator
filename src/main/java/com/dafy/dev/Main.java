@@ -137,18 +137,18 @@ public class Main {
 
     private static void printHelp(){
         System.out.println("\n");
-        String usage="to start, run: java -jar harmer.jar -f config.yaml (replace the config path):\n\n";
+        String usage="to start, run: java -jar Generator.jar -f config.yaml (replace the config path):\n\n";
         usage+="\t-f  option to specify the config  path\n";
         System.out.println(usage);
         System.out.println();
 
-        usage="to create config sample, run: java -jar harmer.jar y: \n\n";
+        usage="to create config sample, run: java -jar Generator.jar y: \n\n";
         usage+="\t -p  option to specify the config output path\n";
         usage+="\t -t  option to specify the config type which can one of [web|rpc|one_key]\n";
         System.out.println(usage);
 
         System.out.println();
-        usage="to create a test project sample, run: java -jar harmer.jar t \n";
+        usage="to create a test project sample, run: java -jar Generator.jar t \n";
         System.out.println(usage);
     }
 
