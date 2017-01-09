@@ -1,7 +1,7 @@
 # Dubbo-Spring-Mybatis-Generator
 
 ## Ability 
-###(quickly build Dubbo-Spring-Mybatis rpc project in one minute)
+### (quickly build Dubbo-Spring-Mybatis rpc project in one minute)
     - 快速生成spring-boot-duboo-rpc 服务框架模板代码 拒绝copy代码带来的坑 提高开发效率
     - 生成的代码目录结构 风格 命名 配置方式等都是统一的 减少代码阅读和配置的负载 方便团队成员沟通
     - (整合MBG)快速生成Dao ORM层 模板代码，只要定义表结构，就可以生成对应的mybatis 配置 Dao mapper xml model相关代码
