@@ -26,8 +26,8 @@ mybatis:
   host: "10.8.15.65"
   port: "3306"
   username: root
-  password: "dafy1024"
-  database: onecollection
+  password: "******"
+  database: test
   encoding: utf-8
   db_type:  "MySQL"
   tables:
