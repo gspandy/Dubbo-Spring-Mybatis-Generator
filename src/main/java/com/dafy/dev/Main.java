@@ -196,48 +196,55 @@ public class Main {
     }
 
     private static void generateRpc(GlobalConfig config) {
-
         new DubboRPCProjectGenerator(config).generate();
     }
 
     private static void generateAll(GlobalConfig config) {
         List<ServiceInfo> serviceInfos=config.getServiceInfoList();
-        serviceInfos.forEach(item->{
-            String tables=item.getTables();
-            String[] tableList=tables.split(",");
-            if(tableList.length>0){
-                List<TableInfo> list=new ArrayList<TableInfo>();
-                Arrays.stream(tableList).forEach(t->{
-                    TableInfo info=new TableInfo();
-                    info.setTableName(t);
-                    String domain = SourceCodeUtil
-                            .uppercase(t.startsWith("t_") ? t.substring(2, t.length()) : t,
-                                    false);
-                    info.setDomainName(domain);
-                    list.add(info);
-                });
-                GlobalConfig cfg= ConfigGenerator.cloneConfig(config);
-                cfg.setOutputDir(cfg.getRootDir()+ File.separator+cfg.getOutputDir());
-                cfg.setName(item.getName());
-                cfg.setName(item.getName());
-                cfg.setDir(config.getDir());
-                cfg.getMybatisConfig().setTableInfoList(list);
-                new DubboRPCProjectGenerator(cfg).generate();
-            }
+        if(serviceInfos!=null){
+            serviceInfos.forEach(item->{
+                String tables=item.getTables();
+                String[] tableList=tables.split(",");
+                if(tableList.length>0){
+                    List<TableInfo> list=new ArrayList<TableInfo>();
+                    Arrays.stream(tableList).forEach(t->{
+                        TableInfo info=new TableInfo();
+                        info.setTableName(t);
+                        String domain = SourceCodeUtil
+                                .uppercase(t.startsWith("t_") ? t.substring(2, t.length()) : t,
+                                        false);
+                        info.setDomainName(domain);
+                        list.add(info);
+                    });
+                    GlobalConfig cfg= ConfigGenerator.cloneConfig(config);
+                    cfg.setOutputDir(cfg.getRootDir()+ File.separator+cfg.getOutputDir());
+                    cfg.setName(item.getName());
+                    cfg.setName(item.getName());
+                    cfg.setDir(config.getDir());
+                    cfg.getMybatisConfig().setTableInfoList(list);
+                    new DubboRPCProjectGenerator(cfg).generate();
+                }
 
-        });
+            });
+        }
+
 
         List<WebServerInfo> webServerInfos=config.getWebServerInfos();
-        webServerInfos.forEach(item->{
-            String json=item.getJsonFile();
-            String server=item.getName();
-            GlobalConfig cfg= ConfigGenerator.cloneConfig(config);
-            cfg.setCgiJsonFile(json);
-            cfg.setName(item.getName());
-            cfg.setName(server);
-            cfg.setDir(config.getDir());
-            new WebServerProjectGenerator(cfg).generate();
-        });
+
+        if(webServerInfos!=null){
+            webServerInfos.forEach(item->{
+                String json=item.getJsonFile();
+                String server=item.getName();
+                GlobalConfig cfg= ConfigGenerator.cloneConfig(config);
+                cfg.setCgiJsonFile(json);
+                cfg.setName(item.getName());
+                cfg.setName(server);
+                cfg.setDir(config.getDir());
+                new WebServerProjectGenerator(cfg).generate();
+            });
+        }
+
+
 
     }
 

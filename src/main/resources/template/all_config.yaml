@@ -62,6 +62,8 @@ mybatis:
               domain_name: Sms
           -   table_name: t_account
               domain_name: Account
+          -   table_name: t_task
+              domain_name: Task
 
 
 

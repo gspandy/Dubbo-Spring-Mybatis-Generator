@@ -3,7 +3,7 @@
 name: test
 #项目生成文件输出目录
 output_dir:  "./"
-type: "one_key"
+type: "rpc"
 #maven groupId
 group_id: "com.dafy.dev"
 #dubbo rpc owner
