@@ -16,7 +16,7 @@ cgi_json_file: "app.json"
 log_config_file: "logback.xml"
 
 #rpc service pom template path
-service_provider_pom_template: "pom.xml"
+#service_provider_pom_template: "pom.xml"
 
 #application.properties template
 application_properties_template_path: "application.properties"

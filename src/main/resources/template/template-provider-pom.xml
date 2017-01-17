@@ -10,11 +10,5 @@
             <artifactId>onecollection-base</artifactId>
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
-        <!--need-->
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-validator-annotation-processor</artifactId>
-            <version>4.1.0.Final</version>
-        </dependency>
     </dependencies>
 </project>
