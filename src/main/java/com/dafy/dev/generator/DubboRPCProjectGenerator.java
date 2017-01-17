@@ -41,6 +41,7 @@ public class DubboRPCProjectGenerator implements Generator {
     private GlobalConfig globalConfig;
 
     private ClassLoader classLoader;
+
     private ClassLoader apiClassLoader;
 
     private List<Class> daoList;

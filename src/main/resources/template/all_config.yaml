@@ -44,7 +44,7 @@ services:
       tables: "t_first_party"
     #订单
     -
-      owner:  chunxiao
+      owner: chunxiao
       name: taskorder
       tables: "t_task_order,t_collection_record,t_repay_evidence"
 

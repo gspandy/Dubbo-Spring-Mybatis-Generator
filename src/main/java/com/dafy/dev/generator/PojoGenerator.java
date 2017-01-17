@@ -150,10 +150,11 @@ public class PojoGenerator {
 
     private String getGetterName(String fieldName,JType fieldType){
         String prefix="get";
-        String fieldTypeName=fieldType.fullName();
+        //todo
+        /*String fieldTypeName=fieldType.fullName();
         if (fieldTypeName.equals("boolean") || fieldTypeName.equals("java.lang.Boolean")) {
             prefix = "is";
-        }
+        }*/
        return prefix+ SourceCodeUtil.convertMethodUppercase(fieldName);
     }
 
