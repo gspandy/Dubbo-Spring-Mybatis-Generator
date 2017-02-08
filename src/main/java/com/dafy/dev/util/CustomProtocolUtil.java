@@ -14,13 +14,14 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
  * Created by m000665 on 2017/2/7.
  */
 public class CustomProtocolUtil {
-    public static void parseProtocol(InputStream inputStream, OutputStream outputStream) throws IOException {
+    public static String parseProtocol(InputStream inputStream, OutputStream outputStream) throws IOException {
         if(inputStream==null||outputStream==null){
             throw new IllegalArgumentException("stream can not be null!");
         }
@@ -37,6 +38,15 @@ public class CustomProtocolUtil {
         List cgiList=new LinkedList();
         controllerItem.put("cgi_list",cgiList);
 
+        String module=bufferedReader.readLine();
+        if(module!=null){
+            Matcher matcher=Pattern.compile("\\w+").matcher(module);
+            if(matcher.find()){
+                module=matcher.group(0);
+            }else {
+                module=null;
+            }
+        }
         for(String line=bufferedReader.readLine();line!=null;line=bufferedReader.readLine()){
             if(!line.startsWith("CGI")) continue;
 
@@ -62,7 +72,7 @@ public class CustomProtocolUtil {
             bufferedOutputStream.flush();
             outputStream.flush();
         }
-
+        return module;
     }
     public static Map<String, Map> parseString(char[] str) {
         return parseString(str, new int[]{0, str.length}, Map.class);
