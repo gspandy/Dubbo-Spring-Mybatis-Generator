@@ -12,6 +12,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Random;
 
 public final class JsonToPojo {
 
@@ -195,7 +196,9 @@ public final class JsonToPojo {
 			if(serializable){
 				definedClass._implements(Serializable.class);
 				JFieldVar field1 = definedClass.field(JMod.PRIVATE | JMod.STATIC | JMod.FINAL, long.class, "serialVersionUID");
-				field1.init(JExpr.lit(1L));
+				long ser=new Random(System.currentTimeMillis()).nextLong();
+				if(ser>0) ser=-ser;
+				field1.init(JExpr.lit(ser));
 			}
 
 			for (Entry<String, JClass> field : fields.entrySet()) {
