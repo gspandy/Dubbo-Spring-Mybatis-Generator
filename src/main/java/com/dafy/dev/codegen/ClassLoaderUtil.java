@@ -152,7 +152,7 @@ public class ClassLoaderUtil {
 
                 for (File f : files) {
                     String source = FileUtil.readFromFile(f.getPath());
-                    JavaFileObject file = new JavaSourceFromFile(f.getPath(), source);
+                    JavaFileObject file = new JavaSourceFromFile(f.toURI().toString(), source);
                     compilationUnits.add(file);
                     clsList.add(resolveFullName(source));
                 }

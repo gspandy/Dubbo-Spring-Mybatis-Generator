@@ -26,7 +26,7 @@ public class CustomProtocolUtil {
             throw new IllegalArgumentException("stream can not be null!");
         }
         BufferedReader bufferedReader=new BufferedReader(new InputStreamReader(inputStream));
-        ObjectMapper objectMapper=new ObjectMapper();
+
         Map root=new HashMap();
         root.put("cgi_prefix","nothing");
         List controller=new LinkedList();
@@ -67,11 +67,10 @@ public class CustomProtocolUtil {
             }
             cgiItem.put("response",parseString(stringBuffer.toString().toCharArray()));
         }
-        try(BufferedOutputStream bufferedOutputStream=new BufferedOutputStream(outputStream)) {
-            bufferedOutputStream.write(objectMapper.writeValueAsBytes(root));
-            bufferedOutputStream.flush();
-            outputStream.flush();
-        }
+
+        outputStream.write(new ObjectMapper().writeValueAsBytes(root));
+        outputStream.flush();
+
         return module;
     }
     public static Map<String, Map> parseString(char[] str) {
