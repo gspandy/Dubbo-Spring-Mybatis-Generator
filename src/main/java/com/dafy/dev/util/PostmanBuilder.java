@@ -54,7 +54,7 @@ public class PostmanBuilder {
         return this;
     }
 
-    public PostmanBuilder addRequest(String folder,String name,String url,String method,Map<String,String> headers,Map jsonBody){
+    public PostmanBuilder addRequest(String folder,String name,String url,String method,Map<String,String> headers,String body,boolean format){
 
         PostmanModel postmanModel=postmanModelThreadLocal.get();
 
@@ -78,55 +78,54 @@ public class PostmanBuilder {
         request.headers=buildHeaders(headers);
 
         ObjectMapper objectMapper=new ObjectMapper();
-        try {
-            char[] str=objectMapper.writeValueAsString(jsonBody).toCharArray();
-            int tab=0;
-            StringBuffer stringBuffer=new StringBuffer();
-            for(int i=0;i<str.length;i++){
-                switch (str[i]){
-                    case '[':
-                    case '{':
-                        stringBuffer.append('\n');
-                        for(int j=0;j<tab;j++){
-                            stringBuffer.append('\t');
-                        }
-                        stringBuffer.append(str[i]);
-                        stringBuffer.append('\n');
-                        tab++;
-                        for(int j=0;j<tab;j++){
-                            stringBuffer.append('\t');
-                        }
-                        break;
-                    case ',':
-                        stringBuffer.append(str[i]);
-                        stringBuffer.append('\n');
-                        for(int j=0;j<tab;j++){
-                            stringBuffer.append('\t');
-                        }
-                        break;
-                    case '}':
-                    case ']':
-                        stringBuffer.append('\n');
-                        tab--;
-                        for(int j=0;j<tab;j++){
-                            stringBuffer.append('\t');
-                        }
-                        stringBuffer.append(str[i]);
-                        break;
-                    default:
-                        stringBuffer.append(str[i]);
-                }
 
-            }
-
-            request.rawModeData=stringBuffer.toString();
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        request.rawModeData=format(body.toCharArray());
 
         postmanModel.requests.add(request);
         findFolder(postmanModel,folder).order.add(request.id);
         return this;
+    }
+
+    private static String format(char []str){
+        int tab=0;
+        StringBuffer stringBuffer=new StringBuffer();
+        for(int i=0;i<str.length;i++){
+            switch (str[i]){
+                case '[':
+                case '{':
+                    stringBuffer.append('\n');
+                    for(int j=0;j<tab;j++){
+                        stringBuffer.append('\t');
+                    }
+                    stringBuffer.append(str[i]);
+                    stringBuffer.append('\n');
+                    tab++;
+                    for(int j=0;j<tab;j++){
+                        stringBuffer.append('\t');
+                    }
+                    break;
+                case ',':
+                    stringBuffer.append(str[i]);
+                    stringBuffer.append('\n');
+                    for(int j=0;j<tab;j++){
+                        stringBuffer.append('\t');
+                    }
+                    break;
+                case '}':
+                case ']':
+                    stringBuffer.append('\n');
+                    tab--;
+                    for(int j=0;j<tab;j++){
+                        stringBuffer.append('\t');
+                    }
+                    stringBuffer.append(str[i]);
+                    break;
+                default:
+                    stringBuffer.append(str[i]);
+            }
+
+        }
+        return stringBuffer.toString();
     }
 
     public PostmanModel build(){

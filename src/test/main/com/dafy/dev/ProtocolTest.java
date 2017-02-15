@@ -2,9 +2,11 @@ package com.dafy.dev;
 
 import com.dafy.dev.config.DtoConfig;
 import com.dafy.dev.generator.DtoGenerator;
-import com.dafy.dev.pojo.PostmanModel;
 import com.dafy.dev.util.CustomProtocolUtil;
 import com.dafy.dev.util.PostmanBuilder;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import org.junit.Test;
 
 import java.io.FileNotFoundException;
@@ -42,7 +44,7 @@ public class ProtocolTest {
     }
 
     @Test
-    public void postman() throws FileNotFoundException {
+    public void postman() throws FileNotFoundException, JsonProcessingException {
 
         Map<String,String> headers=new HashMap<>();
         headers.put("Content-Type","application/json");
@@ -60,7 +62,7 @@ public class ProtocolTest {
 
         PostmanBuilder.builder("达飞商城","好人家")
                 .addFolder("账号")
-                .addRequest("账号","注册","http://www.baidu.com","POST",headers,jsonBody)
+                .addRequest("账号","注册","http://www.baidu.com","POST",headers,new ObjectMapper().writeValueAsString(jsonBody),true)
                 .out(new FileOutputStream("target/postman.json"))
                 .release();
     }
