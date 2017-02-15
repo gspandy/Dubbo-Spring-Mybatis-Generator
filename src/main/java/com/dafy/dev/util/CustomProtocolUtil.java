@@ -53,19 +53,36 @@ public class CustomProtocolUtil {
             Map cgiItem=new HashMap();
             cgiList.add(cgiItem);
             cgiItem.put("desc","nothing");
-            cgiItem.put("cgi",line.substring(4,line.length()).trim());
-            for(line=bufferedReader.readLine();line!=null&&!line.startsWith("请求");line=bufferedReader.readLine());
+
+            String[] cgiArr=line.substring(4,line.length()).split("/");
+            StringBuffer cgi=new StringBuffer();
+            for(int i=cgiArr.length-2;i<cgiArr.length;i++){
+                if(i>=0){
+                    cgi.append(cgiArr[i]);
+                }
+            }
+            cgiItem.put("cgi",cgi.toString());
+            for(line=bufferedReader.readLine();line!=null&&!line.trim().startsWith("请求");line=bufferedReader.readLine());
 
             StringBuffer stringBuffer=new StringBuffer();
-            for(line=bufferedReader.readLine();line!=null&&!line.startsWith("返回");line=bufferedReader.readLine()){
+            for(line=bufferedReader.readLine();line!=null&&!line.trim().startsWith("返回");line=bufferedReader.readLine()){
                 stringBuffer.append(line).append("\n");
             }
+
             cgiItem.put("request",parseString(stringBuffer.toString().toCharArray()));
             stringBuffer=new StringBuffer();
-            for(line=bufferedReader.readLine();line!=null&&!line.startsWith("#");line=bufferedReader.readLine()){
+            for(line=bufferedReader.readLine();line!=null&&!line.trim().startsWith("#");line=bufferedReader.readLine()){
                 stringBuffer.append(line).append("\n");
             }
-            cgiItem.put("response",parseString(stringBuffer.toString().toCharArray()));
+
+            Map<String, Object> resp= parseString(stringBuffer.toString().toCharArray());
+            if(resp!=null&&resp.keySet().size()==4&&resp.containsKey("code")
+                    &&resp.containsKey("subcode")&&resp.containsKey("msg")&&resp.containsKey("data")){
+                cgiItem.put("response",resp.get("data"));
+            }
+            else {
+                cgiItem.put("response",resp);
+            }
         }
 
         outputStream.write(new ObjectMapper().writeValueAsBytes(root));
@@ -73,8 +90,13 @@ public class CustomProtocolUtil {
 
         return module;
     }
-    public static Map<String, Map> parseString(char[] str) {
-        return parseString(str, new int[]{0, str.length}, Map.class);
+    public static Map<String, Object> parseString(char[] str) {
+        try{
+            return parseString(str, new int[]{0, str.length}, Map.class);
+        }catch (Throwable e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private static <T> T parseString(char[] str, int[] point, Class<T> type) {
@@ -114,6 +136,7 @@ public class CustomProtocolUtil {
                     point[0]++;
                 point[0]++;
                 while (point[0] < point[1]&&str[point[0]]!='}') {
+                    int last=point[0];
                     parseString(str,point,Void.class);
                     if (str[point[0]] == '"') {
                         point[0]++;
@@ -129,7 +152,7 @@ public class CustomProtocolUtil {
                         point[0]++;
                         root.put(field, parseString(str, point, List.class));
                         continue;
-                    }else  if (',' == str[point[0]]) {
+                    }else if('，' == str[point[0]]||',' == str[point[0]]||last!=point[0]){
                         break;
                     }
                     point[0]++;
