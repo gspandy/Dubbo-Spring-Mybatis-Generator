@@ -79,7 +79,47 @@ public class PostmanBuilder {
 
         ObjectMapper objectMapper=new ObjectMapper();
         try {
-            request.rawModeData=objectMapper.writeValueAsString(jsonBody);
+            char[] str=objectMapper.writeValueAsString(jsonBody).toCharArray();
+            int tab=0;
+            StringBuffer stringBuffer=new StringBuffer();
+            for(int i=0;i<str.length;i++){
+                switch (str[i]){
+                    case '[':
+                    case '{':
+                        stringBuffer.append('\n');
+                        for(int j=0;j<tab;j++){
+                            stringBuffer.append('\t');
+                        }
+                        stringBuffer.append(str[i]);
+                        stringBuffer.append('\n');
+                        tab++;
+                        for(int j=0;j<tab;j++){
+                            stringBuffer.append('\t');
+                        }
+                        break;
+                    case ',':
+                        stringBuffer.append(str[i]);
+                        stringBuffer.append('\n');
+                        for(int j=0;j<tab;j++){
+                            stringBuffer.append('\t');
+                        }
+                        break;
+                    case '}':
+                    case ']':
+                        stringBuffer.append('\n');
+                        tab--;
+                        for(int j=0;j<tab;j++){
+                            stringBuffer.append('\t');
+                        }
+                        stringBuffer.append(str[i]);
+                        break;
+                    default:
+                        stringBuffer.append(str[i]);
+                }
+
+            }
+
+            request.rawModeData=stringBuffer.toString();
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
@@ -99,6 +139,7 @@ public class PostmanBuilder {
         BufferedOutputStream bufferedOutputStream=null;
         try {
             bufferedOutputStream=new BufferedOutputStream(outputStream);
+
             bufferedOutputStream.write(objectMapper.writeValueAsBytes(postmanModel));
         } catch (IOException e) {
             e.printStackTrace();

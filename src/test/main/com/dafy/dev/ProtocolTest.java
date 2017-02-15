@@ -55,6 +55,8 @@ public class ProtocolTest {
         workInfo.put("company","达飞");
         workInfo.put("mobile","110");
         jsonBody.put("work_info",workInfo);
+        String contacts[]=new String[]{"a","b","c"};
+        jsonBody.put("contacts",contacts);
 
         PostmanBuilder.builder("达飞商城","好人家")
                 .addFolder("账号")
