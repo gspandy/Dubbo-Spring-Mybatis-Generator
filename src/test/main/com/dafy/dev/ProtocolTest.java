@@ -12,6 +12,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * Created by m000665 on 2017/2/8.
@@ -41,9 +43,22 @@ public class ProtocolTest {
 
     @Test
     public void postman() throws FileNotFoundException {
+
+        Map<String,String> headers=new HashMap<>();
+        headers.put("Content-Type","application/json");
+        headers.put("session_key", UUID.randomUUID().toString());
+
+        Map<String,Object> jsonBody=new  HashMap<>();
+        jsonBody.put("account","13200000");
+        jsonBody.put("password","123456");
+        Map<String,Object> workInfo=new HashMap<>();
+        workInfo.put("company","达飞");
+        workInfo.put("mobile","110");
+        jsonBody.put("work_info",workInfo);
+
         PostmanBuilder.builder("达飞商城","好人家")
                 .addFolder("账号")
-                .addRequest("账号","注册","http://www.baidu.com","POST",new HashMap<>(),new HashMap<>())
+                .addRequest("账号","注册","http://www.baidu.com","POST",headers,jsonBody)
                 .out(new FileOutputStream("target/postman.json"))
                 .release();
     }

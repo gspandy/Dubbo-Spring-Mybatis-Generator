@@ -54,7 +54,7 @@ public class PostmanBuilder {
         return this;
     }
 
-    public PostmanBuilder addRequest(String folder,String name,String url,String method,Map<String,String> heders,Map jsonBody){
+    public PostmanBuilder addRequest(String folder,String name,String url,String method,Map<String,String> headers,Map jsonBody){
 
         PostmanModel postmanModel=postmanModelThreadLocal.get();
 
@@ -75,7 +75,7 @@ public class PostmanBuilder {
         request.responses=new LinkedList();
 
         request.collectionId=postmanModel.id;
-        request.headers=buildHeaders(heders);
+        request.headers=buildHeaders(headers);
 
         ObjectMapper objectMapper=new ObjectMapper();
         try {
