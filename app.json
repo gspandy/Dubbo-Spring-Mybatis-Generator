@@ -1,6 +1,5 @@
 {
   "cgi_prefix":"onecollection_app",
-
   "controller_list":[{
     "name":"user",
     "cgi_list": [

@@ -15,24 +15,22 @@
  */
 package org.mybatis.generator.config;
 
-import static org.mybatis.generator.internal.util.EqualsUtil.areEqual;
-import static org.mybatis.generator.internal.util.HashCodeUtil.hash;
-import static org.mybatis.generator.internal.util.HashCodeUtil.SEED;
-import static org.mybatis.generator.internal.util.messages.Messages.getString;
-import static org.mybatis.generator.internal.util.StringUtility.composeFullyQualifiedTableName;
-import static org.mybatis.generator.internal.util.StringUtility.isTrue;
-import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
+import org.mybatis.generator.api.dom.xml.Attribute;
+import org.mybatis.generator.api.dom.xml.XmlElement;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.mybatis.generator.api.dom.xml.Attribute;
-import org.mybatis.generator.api.dom.xml.XmlElement;
+import static org.mybatis.generator.internal.util.EqualsUtil.areEqual;
+import static org.mybatis.generator.internal.util.HashCodeUtil.SEED;
+import static org.mybatis.generator.internal.util.HashCodeUtil.hash;
+import static org.mybatis.generator.internal.util.StringUtility.*;
+import static org.mybatis.generator.internal.util.messages.Messages.getString;
 
 /**
- * 
+ *
  * @author Jeff Butler
  */
 public class TableConfiguration extends PropertyHolder {
@@ -74,6 +72,8 @@ public class TableConfiguration extends PropertyHolder {
 
 	private ColumnRenamingRule columnRenamingRule;
 	private boolean isAllColumnDelimitingEnabled;
+
+	private MethodNameConfig methodNameConfig;
 
 	public TableConfiguration(Context context) {
 		super();
@@ -188,7 +188,7 @@ public class TableConfiguration extends PropertyHolder {
 
 	/**
 	 * May return null if the column has not been overridden
-	 * 
+	 *
 	 * @param columnName
 	 * @return the column override (if any) related to this column
 	 */
@@ -295,7 +295,7 @@ public class TableConfiguration extends PropertyHolder {
 	 * This method returns an iterator of Strings. The values are the columns
 	 * that were specified to be ignored in the table, but do not exist in the
 	 * table.
-	 * 
+	 *
 	 * @return an List of Strings - the columns that were improperly configured
 	 *         as ignored columns
 	 */
@@ -510,5 +510,13 @@ public class TableConfiguration extends PropertyHolder {
 
 	public void setAllColumnDelimitingEnabled(boolean isAllColumnDelimitingEnabled) {
 		this.isAllColumnDelimitingEnabled = isAllColumnDelimitingEnabled;
+	}
+
+	public MethodNameConfig getMethodNameConfig() {
+		return methodNameConfig;
+	}
+
+	public void setMethodNameConfig(MethodNameConfig methodNameConfig) {
+		this.methodNameConfig = methodNameConfig;
 	}
 }

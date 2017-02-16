@@ -15,9 +15,6 @@
  */
 package org.mybatis.generator.codegen.mybatis3;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.mybatis.generator.api.GeneratedJavaFile;
 import org.mybatis.generator.api.GeneratedXmlFile;
 import org.mybatis.generator.api.IntrospectedTable;
@@ -29,7 +26,7 @@ import org.mybatis.generator.codegen.AbstractJavaClientGenerator;
 import org.mybatis.generator.codegen.AbstractJavaGenerator;
 import org.mybatis.generator.codegen.AbstractXmlGenerator;
 import org.mybatis.generator.codegen.mybatis3.javamapper.AnnotatedClientGenerator;
-import org.mybatis.generator.codegen.mybatis3.javamapper.JavaMapperGenerator;
+import org.mybatis.generator.codegen.mybatis3.javamapper.ExJavaMapperGenerator;
 import org.mybatis.generator.codegen.mybatis3.javamapper.MixedClientGenerator;
 import org.mybatis.generator.codegen.mybatis3.model.BaseRecordGenerator;
 import org.mybatis.generator.codegen.mybatis3.model.ExampleGenerator;
@@ -39,10 +36,13 @@ import org.mybatis.generator.codegen.mybatis3.xmlmapper.XMLMapperGenerator;
 import org.mybatis.generator.config.PluginConfiguration;
 import org.mybatis.generator.internal.ObjectFactory;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * 
+ *
  * @author Jeff Butler
- * 
+ *
  */
 public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
 	protected List<AbstractJavaGenerator> javaModelGenerators;
@@ -76,7 +76,7 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
 	}
 
 	/**
-	 * 
+	 *
 	 * @param warnings
 	 * @param progressCallback
 	 * @return true if an XML generator is required
@@ -103,13 +103,13 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
 
 		AbstractJavaClientGenerator javaGenerator;
 		if ("XMLMAPPER".equalsIgnoreCase(type)) { //$NON-NLS-1$
-			javaGenerator = new JavaMapperGenerator();
+			javaGenerator = new ExJavaMapperGenerator();
 		} else if ("MIXEDMAPPER".equalsIgnoreCase(type)) { //$NON-NLS-1$
 			javaGenerator = new MixedClientGenerator();
 		} else if ("ANNOTATEDMAPPER".equalsIgnoreCase(type)) { //$NON-NLS-1$
 			javaGenerator = new AnnotatedClientGenerator();
 		} else if ("MAPPER".equalsIgnoreCase(type)) { //$NON-NLS-1$
-			javaGenerator = new JavaMapperGenerator();
+			javaGenerator = new ExJavaMapperGenerator();
 		} else {
 			javaGenerator = (AbstractJavaClientGenerator) ObjectFactory.createInternalObject(type);
 		}
@@ -228,5 +228,13 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
 		} else {
 			return javaClientGenerator.requiresXMLGenerator();
 		}
+	}
+
+	@Override
+	protected void calculateXmlAttributes() {
+		super.calculateXmlAttributes();
+		setInsertStatementId("insert"); //$NON-NLS-1$
+		setInsertSelectiveStatementId("insertSelective"); //$NON-NLS-1$
+
 	}
 }
