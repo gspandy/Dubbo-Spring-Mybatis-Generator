@@ -1,5 +1,7 @@
 package com.dafy.dev.util;
 
+import com.dafy.dev.pojo.ProtocolModel;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.BufferedOutputStream;
@@ -21,11 +23,90 @@ import java.util.regex.Pattern;
  * Created by m000665 on 2017/2/7.
  */
 public class CustomProtocolUtil {
-    public static String parseProtocol(InputStream inputStream, OutputStream outputStream) throws IOException {
-        if(inputStream==null||outputStream==null){
+    public static ProtocolModel parseProtocol(InputStream inputStream) throws IOException {
+        if(inputStream==null){
             throw new IllegalArgumentException("stream can not be null!");
         }
         BufferedReader bufferedReader=new BufferedReader(new InputStreamReader(inputStream));
+
+        ProtocolModel protocolModel=new ProtocolModel();
+
+        String module=bufferedReader.readLine();
+        if(module!=null){
+            Matcher matcher=Pattern.compile("\\w+").matcher(module);
+            if(matcher.find()){
+                module=matcher.group(0);
+            }else {
+                module=null;
+            }
+        }
+
+        protocolModel.module=module;
+        protocolModel.cgiList=new LinkedList<>();
+
+        Pattern pattern=Pattern.compile("###([^\\s#]+)");
+
+        for(String line=bufferedReader.readLine();line!=null;){
+
+            ProtocolModel.CGI curCgi=new ProtocolModel.CGI();
+
+            while (line!=null&&!line.trim().startsWith("CGI")){
+                Matcher matcher=pattern.matcher(line);
+                if (matcher.find()){
+                    curCgi.desc=matcher.group(1);
+                    break;
+                }
+                line=bufferedReader.readLine();
+            }
+
+            while (!line.trim().startsWith("CGI")){
+                line=bufferedReader.readLine();
+            }
+            if(line==null) break;
+
+            curCgi.cgi=line.split(":")[1].trim();
+
+            Matcher matcher=Pattern.compile("[\\w\\d/_]+").matcher(curCgi.cgi);
+            if(matcher.find()){
+                curCgi.cgi=matcher.group();
+            }
+            if(!curCgi.cgi.startsWith("/")) curCgi.cgi="/"+curCgi.cgi;
+
+            for(line=bufferedReader.readLine();line!=null&&!line.trim().startsWith("请求");line=bufferedReader.readLine());
+
+            StringBuffer stringBuffer=new StringBuffer();
+            for(line=bufferedReader.readLine();line!=null&&!line.trim().startsWith("返回");line=bufferedReader.readLine()){
+                stringBuffer.append(line).append("\n");
+            }
+
+            curCgi.request=parseString(stringBuffer.toString().toCharArray());
+
+            stringBuffer=new StringBuffer();
+            for(line=bufferedReader.readLine();line!=null&&!line.trim().startsWith("#");line=bufferedReader.readLine()){
+                stringBuffer.append(line).append("\n");
+            }
+
+            Map<String, Object> resp= parseString(stringBuffer.toString().toCharArray());
+            if(resp!=null&&resp.keySet().size()==4&&resp.containsKey("code")
+                    &&resp.containsKey("sub_code")&&resp.containsKey("msg")&&resp.containsKey("data")){
+                if(resp.get("data") instanceof Map){
+                    curCgi.response= (Map) resp.get("data");
+                }
+            }
+            else {
+                curCgi.response=resp;
+            }
+
+            protocolModel.cgiList.add(curCgi);
+        }
+
+        return protocolModel;
+    }
+
+    public static void convert(ProtocolModel protocolModel,OutputStream outputStream) throws Exception {
+        if(protocolModel==null||outputStream==null){
+            throw new IllegalArgumentException("param can not be null!");
+        }
 
         Map root=new HashMap();
         root.put("cgi_prefix","nothing");
@@ -38,57 +119,29 @@ public class CustomProtocolUtil {
         List cgiList=new LinkedList();
         controllerItem.put("cgi_list",cgiList);
 
-        String module=bufferedReader.readLine();
-        if(module!=null){
-            Matcher matcher=Pattern.compile("\\w+").matcher(module);
-            if(matcher.find()){
-                module=matcher.group(0);
-            }else {
-                module=null;
-            }
-        }
-        for(String line=bufferedReader.readLine();line!=null;line=bufferedReader.readLine()){
-            if(!line.startsWith("CGI")) continue;
+        for(ProtocolModel.CGI cur:protocolModel.cgiList){
 
             Map cgiItem=new HashMap();
             cgiList.add(cgiItem);
             cgiItem.put("desc","nothing");
 
-            String[] cgiArr=line.substring(4,line.length()).split("/");
+            String[] cgiArr=cur.cgi.split("/");
             StringBuffer cgi=new StringBuffer();
             for(int i=cgiArr.length-2;i<cgiArr.length;i++){
-                if(i>=0){
-                    cgi.append(cgiArr[i]);
-                }
+                if(i<0) continue;
+                cgi.append(cgiArr[i]);
+                if(i<cgiArr.length-1) cgi.append("_");
             }
+
             cgiItem.put("cgi",cgi.toString());
-            for(line=bufferedReader.readLine();line!=null&&!line.trim().startsWith("请求");line=bufferedReader.readLine());
+            cgiItem.put("request",cur.request==null||cur.request.isEmpty()?null:cur.request);
+            cgiItem.put("response",cur.response==null||cur.response.isEmpty()?null:cur.response);
 
-            StringBuffer stringBuffer=new StringBuffer();
-            for(line=bufferedReader.readLine();line!=null&&!line.trim().startsWith("返回");line=bufferedReader.readLine()){
-                stringBuffer.append(line).append("\n");
-            }
-
-            cgiItem.put("request",parseString(stringBuffer.toString().toCharArray()));
-            stringBuffer=new StringBuffer();
-            for(line=bufferedReader.readLine();line!=null&&!line.trim().startsWith("#");line=bufferedReader.readLine()){
-                stringBuffer.append(line).append("\n");
-            }
-
-            Map<String, Object> resp= parseString(stringBuffer.toString().toCharArray());
-            if(resp!=null&&resp.keySet().size()==4&&resp.containsKey("code")
-                    &&resp.containsKey("subcode")&&resp.containsKey("msg")&&resp.containsKey("data")){
-                cgiItem.put("response",resp.get("data"));
-            }
-            else {
-                cgiItem.put("response",resp);
-            }
         }
-
         outputStream.write(new ObjectMapper().writeValueAsBytes(root));
         outputStream.flush();
 
-        return module;
+
     }
     public static Map<String, Object> parseString(char[] str) {
         try{
@@ -132,7 +185,7 @@ public class CustomProtocolUtil {
                     fieldBuffer.append(str[point[0]++]);
                 field = fieldBuffer.toString();
                 parseString(str,point,Void.class);
-                while (str[point[0]] != ':')
+                while (point[0] < point[1]&&str[point[0]] != ':')
                     point[0]++;
                 point[0]++;
                 while (point[0] < point[1]&&str[point[0]]!='}') {

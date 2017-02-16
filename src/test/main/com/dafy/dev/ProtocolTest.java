@@ -2,20 +2,24 @@ package com.dafy.dev;
 
 import com.dafy.dev.config.DtoConfig;
 import com.dafy.dev.generator.DtoGenerator;
+import com.dafy.dev.pojo.PostmanModel;
+import com.dafy.dev.pojo.ProtocolModel;
 import com.dafy.dev.util.CustomProtocolUtil;
 import com.dafy.dev.util.PostmanBuilder;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 import org.junit.Test;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by m000665 on 2017/2/8.
@@ -23,32 +27,11 @@ import java.util.UUID;
 public class ProtocolTest {
 
     @Test
-    public void testJson2Pojo() {
-
-        try (InputStream fin = ClassLoader.getSystemResourceAsStream("hqx.txt");
-                FileOutputStream fo = new FileOutputStream("target/hqx.json")) {
-            String module=CustomProtocolUtil.parseProtocol(fin, fo);
-
-            DtoConfig dtoConfig = new DtoConfig();
-            dtoConfig.setDir("target");
-            dtoConfig.setPackageName("com.dafy."+module);
-            dtoConfig.setJsonConfigPath("target/hqx.json");
-            dtoConfig.setReqDtoNameSuffix("Req");
-            dtoConfig.setResDtoNameSuffix("Resp");
-            new DtoGenerator(dtoConfig).generate();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    @Test
     public void postman() throws FileNotFoundException, JsonProcessingException {
 
         Map<String,String> headers=new HashMap<>();
         headers.put("Content-Type","application/json");
-        headers.put("session_key", UUID.randomUUID().toString());
+        headers.put("session_key", "{{session_key}}");
 
         Map<String,Object> jsonBody=new  HashMap<>();
         jsonBody.put("account","13200000");
@@ -61,7 +44,77 @@ public class ProtocolTest {
         jsonBody.put("contacts",contacts);
 
         PostmanBuilder.builder("达飞商城")
-                .addRequest(null,"注册","http://www.baidu.com","POST",headers,new ObjectMapper().writeValueAsString(jsonBody),true)
+                .addRequest("账号","注册","http://{{host}}:{{port}}/","POST",headers,new ObjectMapper().writeValueAsString(jsonBody),true)
                 .out(new FileOutputStream("target/postman.json"));
+    }
+
+    @Test
+    public void mall() throws FileNotFoundException {
+        File dir=new File("D:/git/dafymall_server/docs/协议");
+
+        PostmanBuilder builder=PostmanBuilder.builder("达飞商城");
+
+        for(File file:dir.listFiles()){
+            if(file.isDirectory()) continue;
+            String dst="target/"+file.getName()+".json";
+            try (InputStream fin =new FileInputStream(file); FileOutputStream fo = new FileOutputStream(dst)) {
+
+                ProtocolModel protocolModel=CustomProtocolUtil.parseProtocol(fin);
+                CustomProtocolUtil.convert(protocolModel,fo);
+
+                DtoConfig dtoConfig = new DtoConfig();
+                dtoConfig.setDir("target");
+                dtoConfig.setPackageName("com.dafy.mall."+protocolModel.module+".api");
+                dtoConfig.setJsonConfigPath(dst);
+                dtoConfig.setReqDtoNameSuffix("Req");
+                dtoConfig.setResDtoNameSuffix("Resp");
+                new DtoGenerator(dtoConfig).generate();
+
+                Map<String,String> headers=new HashMap<>();
+                headers.put("Content-Type","application/json");
+                headers.put("session_key", "{{session_key}}");
+
+                ObjectMapper objectMapper=new ObjectMapper();
+
+                for(ProtocolModel.CGI cur:protocolModel.cgiList){
+
+                    String folder=null;
+                    String prefex;
+                    if(file.getName().contains("app")){
+                        folder="app";
+                        prefex="/dafymall_app/v1";
+                    }else {
+                        folder="管理后台";
+                        prefex="/dafymall_app/v1";
+                    }
+
+                    if(!cur.cgi.contains("dafymall_")){
+                        cur.cgi=prefex+cur.cgi;
+                    }
+                    builder.addRequest(folder,
+                            cur.desc,
+                            "http://{{host}}:{{port}}"+cur.cgi,
+                            "POST",
+                            headers,
+                            objectMapper.writeValueAsString(cur.request),
+                            true);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        builder.out(new FileOutputStream("target/达飞商城.json"));
+    }
+
+    @Test
+    public void pattern(){
+        Pattern pattern=Pattern.compile("###([^#]+)###");
+        Matcher matcher=pattern.matcher("###订单列表###");
+        if(matcher.find()){
+           System.out.println(matcher.group(1));
+        }
     }
 }
