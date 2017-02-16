@@ -60,10 +60,8 @@ public class ProtocolTest {
         String contacts[]=new String[]{"a","b","c"};
         jsonBody.put("contacts",contacts);
 
-        PostmanBuilder.builder("达飞商城","好人家")
-                .addFolder("账号")
-                .addRequest("账号","注册","http://www.baidu.com","POST",headers,new ObjectMapper().writeValueAsString(jsonBody),true)
-                .out(new FileOutputStream("target/postman.json"))
-                .release();
+        PostmanBuilder.builder("达飞商城")
+                .addRequest(null,"注册","http://www.baidu.com","POST",headers,new ObjectMapper().writeValueAsString(jsonBody),true)
+                .out(new FileOutputStream("target/postman.json"));
     }
 }
