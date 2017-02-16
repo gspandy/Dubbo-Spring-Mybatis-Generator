@@ -85,7 +85,7 @@ public class ProtocolTest {
                         prefex="/dafymall_app/v1";
                     }else {
                         folder="管理后台";
-                        prefex="/dafymall_app/v1";
+                        prefex="/dafymall_admin/v1";
                     }
 
                     if(!cur.cgi.contains("dafymall_")){
