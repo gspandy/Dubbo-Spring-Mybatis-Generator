@@ -2,8 +2,8 @@
 #项目名称
 name: test
 #项目生成文件输出目录
-output_dir:  "/Users/chunxiaoli/IdeaProjects/"
-#output_dir:  "./"
+#output_dir:  "/Users/chunxiaoli/IdeaProjects/"
+output_dir:  "./"
 type: "rpc"
 #maven groupId
 group_id: "com.dafy.dev"
@@ -26,11 +26,9 @@ mybatis:
   port: "3306"
   username: root
   password: "dafy1024"
-  database: test
+  database: dafy_mall
   encoding: utf-8
   db_type:  "MySQL"
   tables:
-          -   table_name: t_task
-              domain_name: Task
-          -   table_name: t_account
-              domain_name: Account
+          -   table_name: t_goods
+              domain_name: Goods
