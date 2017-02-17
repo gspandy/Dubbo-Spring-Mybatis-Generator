@@ -88,12 +88,12 @@ public class ProtocolTest {
                         prefex="/dafymall_admin/v1";
                     }
 
-                    if(!cur.cgi.contains("dafymall_")){
-                        cur.cgi=prefex+cur.cgi;
+                    if(!cur.url.contains("dafymall_")){
+                        cur.url=prefex+cur.url;
                     }
                     builder.addRequest(folder,
-                            cur.desc,
-                            "http://{{host}}:{{port}}"+cur.cgi,
+                            cur.name,
+                            "http://{{host}}:{{port}}"+cur.url,
                             "POST",
                             headers,
                             objectMapper.writeValueAsString(cur.request),

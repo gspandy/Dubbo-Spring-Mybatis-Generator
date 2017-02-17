@@ -12,8 +12,8 @@ public class ProtocolModel {
     public List<CGI> cgiList;
 
     public static class CGI {
-        public String cgi;
-        public String desc;
+        public String url;
+        public String name;
         public Map    request;
         public Map    response;
     }

@@ -53,7 +53,7 @@ public class CustomProtocolUtil {
             while (line!=null&&!line.trim().startsWith("CGI")){
                 Matcher matcher=pattern.matcher(line);
                 if (matcher.find()){
-                    curCgi.desc=matcher.group(1);
+                    curCgi.name=matcher.group(1);
                     break;
                 }
                 line=bufferedReader.readLine();
@@ -64,13 +64,13 @@ public class CustomProtocolUtil {
             }
             if(line==null) break;
 
-            curCgi.cgi=line.split(":")[1].trim();
+            curCgi.url=line.split(":")[1].trim();
 
-            Matcher matcher=Pattern.compile("[\\w\\d/_]+").matcher(curCgi.cgi);
+            Matcher matcher=Pattern.compile("[\\w\\d/_]+").matcher(curCgi.url);
             if(matcher.find()){
-                curCgi.cgi=matcher.group();
+                curCgi.url=matcher.group();
             }
-            if(!curCgi.cgi.startsWith("/")) curCgi.cgi="/"+curCgi.cgi;
+            if(!curCgi.url.startsWith("/")) curCgi.url="/"+curCgi.url;
 
             for(line=bufferedReader.readLine();line!=null&&!line.trim().startsWith("请求");line=bufferedReader.readLine());
 
@@ -125,7 +125,7 @@ public class CustomProtocolUtil {
             cgiList.add(cgiItem);
             cgiItem.put("desc","nothing");
 
-            String[] cgiArr=cur.cgi.split("/");
+            String[] cgiArr=cur.url.split("/");
             StringBuffer cgi=new StringBuffer();
             for(int i=cgiArr.length-2;i<cgiArr.length;i++){
                 if(i<0) continue;
