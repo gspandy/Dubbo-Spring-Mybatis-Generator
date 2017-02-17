@@ -167,6 +167,7 @@ public class CustomProtocolUtil {
             while (point[0] < point[1] && '0' <= str[point[0]] &&'9' >= str[point[0]])
                 strBuffer.append(str[point[0]++]);
             parseString(str,point,Void.class);
+            BigDecimal bigDecimal=new BigDecimal(strBuffer.toString());
             return (T) new BigDecimal(strBuffer.toString());
         }
         if (type == Map.class) {
@@ -199,7 +200,7 @@ public class CustomProtocolUtil {
                         root.put(field, parseString(str, point, Map.class));
                         continue;
                     } else if ('0' <= str[point[0]] && '9' >= str[point[0]]) {
-                        root.put(field, parseString(str, point, BigDecimal.class));
+                        root.put(field,typeNumber(field, parseString(str, point, BigDecimal.class)));
                         continue;
                     } else if ('[' == str[point[0]]) {
                         point[0]++;
@@ -247,5 +248,16 @@ public class CustomProtocolUtil {
             }
         }
         return null;
+    }
+
+    private static BigDecimal typeNumber(String name,BigDecimal value){
+        if(name.endsWith("_time")||name.endsWith("_id")){
+            return new BigDecimal(Long.MAX_VALUE);
+        }
+        if(name.endsWith("status")){
+            return new BigDecimal(1);
+        }
+
+        return value;
     }
 }
