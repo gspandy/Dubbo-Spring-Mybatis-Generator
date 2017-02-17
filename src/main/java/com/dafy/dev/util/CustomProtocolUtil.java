@@ -251,7 +251,7 @@ public class CustomProtocolUtil {
     }
 
     private static BigDecimal typeNumber(String name,BigDecimal value){
-        if(name.endsWith("_time")||name.endsWith("_id")){
+        if(name.endsWith("_time")){
             return new BigDecimal(Long.MAX_VALUE);
         }
         if(name.endsWith("status")){
