@@ -25,13 +25,13 @@ import org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.AbstractXmlElem
 import static org.mybatis.generator.internal.util.StringUtility.stringHasValue;
 
 /**
- * 
+ *
  * @author Jeff Butler
- * 
+ *
  */
-public class SelectByPrimaryKeyElementGenerator extends AbstractXmlElementGenerator {
+public class ListQueryElementGenerator extends AbstractXmlElementGenerator {
 
-	public SelectByPrimaryKeyElementGenerator() {
+	public ListQueryElementGenerator() {
 		super();
 	}
 
@@ -39,7 +39,7 @@ public class SelectByPrimaryKeyElementGenerator extends AbstractXmlElementGenera
 	public void addElements(XmlElement parentElement) {
 		XmlElement answer = new XmlElement("select"); //$NON-NLS-1$
 
-		answer.addAttribute(new Attribute("id", introspectedTable.getSelectByPrimaryKeyStatementId())); //$NON-NLS-1$
+		answer.addAttribute(new Attribute("id", introspectedTable.getListQueryId())); //$NON-NLS-1$
 		if (introspectedTable.getRules().generateResultMapWithBLOBs()) {
 			answer.addAttribute(new Attribute("resultMap", //$NON-NLS-1$
 					introspectedTable.getResultMapWithBLOBsId()));
@@ -87,7 +87,7 @@ public class SelectByPrimaryKeyElementGenerator extends AbstractXmlElementGenera
 		answer.addElement(new TextElement(sb.toString()));
 
 		boolean and = false;
-		for (IntrospectedColumn introspectedColumn : introspectedTable.getPrimaryKeyColumns()) {
+		for (IntrospectedColumn introspectedColumn : introspectedTable.getAllColumns()) {
 			sb.setLength(0);
 			if (and) {
 				sb.append("  and "); //$NON-NLS-1$

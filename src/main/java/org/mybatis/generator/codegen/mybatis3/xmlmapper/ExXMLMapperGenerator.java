@@ -17,7 +17,7 @@ package org.mybatis.generator.codegen.mybatis3.xmlmapper;
 
 import org.mybatis.generator.api.dom.xml.XmlElement;
 import org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.AbstractXmlElementGenerator;
-import org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.extension.SelectByPrimaryKeyElementGenerator;
+import org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.extension.ListQueryElementGenerator;
 
 /**
  *
@@ -32,12 +32,14 @@ public class ExXMLMapperGenerator extends XMLMapperGenerator{
 
 
 
-	protected void addSelectByPrimaryKeyElement(XmlElement parentElement) {
+	protected void addListQueryElement(XmlElement parentElement) {
 		if (introspectedTable.getRules().generateSelectByPrimaryKey()) {
-			AbstractXmlElementGenerator elementGenerator = new SelectByPrimaryKeyElementGenerator();
+			AbstractXmlElementGenerator elementGenerator = new ListQueryElementGenerator();
 			initializeAndExecuteGenerator(elementGenerator, parentElement);
 		}
 	}
+
+
 
 
 

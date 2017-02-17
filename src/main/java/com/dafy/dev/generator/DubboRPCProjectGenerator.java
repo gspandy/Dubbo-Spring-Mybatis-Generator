@@ -553,6 +553,8 @@ public class DubboRPCProjectGenerator implements Generator {
 
         generator.generate();
     }
+
+
     //spring auto config
     private void createSpringBootAutoConfigFiles(String parentDir){
         String base = projectGenerator.getResourceBaseDir(parentDir);

@@ -33,10 +33,59 @@ public class ExJavaMapperGenerator extends JavaMapperGenerator {
 		super(true);
 	}
 
+
+	@Override
+	protected void addDeleteByPrimaryKeyMethod(Interface interfaze) {
+		if (introspectedTable.getRules().generateDeleteByPrimaryKey()) {
+			AbstractJavaMapperMethodGenerator methodGenerator = new DeleteByPrimaryKeyMethodGenerator();
+			initializeAndExecuteGenerator(methodGenerator, interfaze);
+		}
+	}
+
+	@Override
+	protected void addInsertMethod(Interface interfaze) {
+		if (introspectedTable.getRules().generateInsert()) {
+			AbstractJavaMapperMethodGenerator methodGenerator = new InsertMethodGenerator();
+			initializeAndExecuteGenerator(methodGenerator, interfaze);
+		}
+	}
+
+	@Override
 	protected void addInsertSelectiveMethod(Interface interfaze) {
 		if (introspectedTable.getRules().generateInsertSelective()) {
 			AbstractJavaMapperMethodGenerator methodGenerator = new InsertSelectiveMethodGenerator();
 			initializeAndExecuteGenerator(methodGenerator, interfaze);
 		}
+	}
+
+	@Override
+	protected void addUpdateByPrimaryKeySelectiveMethod(Interface interfaze) {
+		if (introspectedTable.getRules().generateUpdateByPrimaryKeySelective()) {
+			AbstractJavaMapperMethodGenerator methodGenerator = new UpdateByPrimaryKeySelectiveMethodGenerator();
+			initializeAndExecuteGenerator(methodGenerator, interfaze);
+		}
+	}
+
+	@Override
+	protected void addUpdateByPrimaryKeyWithBLOBsMethod(Interface interfaze) {
+		if (introspectedTable.getRules().generateUpdateByPrimaryKeyWithBLOBs()) {
+			AbstractJavaMapperMethodGenerator methodGenerator = new UpdateByPrimaryKeyWithBLOBsMethodGenerator();
+			initializeAndExecuteGenerator(methodGenerator, interfaze);
+		}
+	}
+
+	@Override
+	protected void addUpdateByPrimaryKeyWithoutBLOBsMethod(Interface interfaze) {
+		if (introspectedTable.getRules().generateUpdateByPrimaryKeyWithoutBLOBs()) {
+			AbstractJavaMapperMethodGenerator methodGenerator = new UpdateByPrimaryKeyWithoutBLOBsMethodGenerator();
+			initializeAndExecuteGenerator(methodGenerator, interfaze);
+		}
+	}
+
+	//todo 生成list方法
+	@Override
+	protected void addListQueryMethod(Interface interfaze) {
+		AbstractJavaMapperMethodGenerator methodGenerator = new ListMethodGenerator();
+		initializeAndExecuteGenerator(methodGenerator, interfaze);
 	}
 }
