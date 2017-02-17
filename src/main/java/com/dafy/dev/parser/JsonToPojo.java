@@ -132,6 +132,15 @@ public final class JsonToPojo {
 										   boolean serializable,
 										   boolean addJsonAnnotation) {
 
+		if(className.endsWith("List")){
+			className=className.substring(0,className.length()-4)+"Item";
+		}else if(className.endsWith("Arr")){
+			className=className.substring(0,className.length()-3)+"Item";
+		}
+		else if(className.endsWith("Array")){
+			className=className.substring(0,className.length()-5)+"Item";
+		}
+
 		JClass narrowClass = codeModel.ref(Object.class);
 		if (array.size() > 0) {
 			String elementName = className;
