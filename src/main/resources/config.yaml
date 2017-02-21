@@ -1,0 +1,36 @@
+---
+name: test
+#dir:  "/Users/chunxiaoli/IdeaProjects/OneCollection"
+dir:  "/Users/chunxiaoli/"
+webservers:
+    -
+      web_server_name:  app
+      jsonfile: "app.json"
+services:
+    # 公共服务
+    -
+      owner: qixiang
+      rpc_name: common
+      tables: "t_app,t_log"
+    #任务池
+    -
+      owner:  wangliang
+      rpc_name: task
+      tables: "t_task,t_goods"
+    #甲方
+    -
+      owner:  qixiang
+      rpc_name: user
+      tables: "t_user"
+    #订单
+    -
+      owner:  chunxiao
+      rpc_name: order
+      tables: "t_order"
+
+
+
+
+
+
+

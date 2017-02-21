@@ -1,0 +1,47 @@
+{
+  "cgi_prefix": "onecollection_app",
+  "cgi_list": [
+    {
+      "cgi": "show_task_detail",
+      "request": {
+        "task_id": "123123"
+      },
+      "response": {
+        "order_no": "123123",
+        "task_id": "123123",
+        "customer_name": "",
+        "days_remaining": 2,
+        "loan_money": 10000,
+        "overdue_day": 123,
+        "collection_records": [
+          {
+            "record_id": 1,
+            "collection_staff_name": "催收员名字",
+            "submit_time": "123123",
+            "collection_way": "上门催收",
+            "collection_result": "承诺还款",
+            "remark": ""
+          }
+        ],
+        "repay_evidences": [
+          {
+            "repay_evidence_id": 1,
+            "collection_staff_name": "催收员名字",
+            "submit_time": "123123",
+            "status_value": "拒绝",
+            "status": 1,
+            "reason": "",
+            "repay_type": "汇款",
+            "remark": ""
+          }
+        ],
+        "loan_info": {
+          "loan_money": 10000,
+          "task_type": "小额贷款",
+          "task_status": 1
+        }
+      }
+    }
+  ]
+}
+
