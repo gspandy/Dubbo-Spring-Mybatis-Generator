@@ -32,7 +32,7 @@ import org.mybatis.generator.codegen.mybatis3.model.BaseRecordGenerator;
 import org.mybatis.generator.codegen.mybatis3.model.ExampleGenerator;
 import org.mybatis.generator.codegen.mybatis3.model.PrimaryKeyGenerator;
 import org.mybatis.generator.codegen.mybatis3.model.RecordWithBLOBsGenerator;
-import org.mybatis.generator.codegen.mybatis3.xmlmapper.XMLMapperGenerator;
+import org.mybatis.generator.codegen.mybatis3.xmlmapper.ExXMLMapperGenerator;
 import org.mybatis.generator.config.PluginConfiguration;
 import org.mybatis.generator.internal.ObjectFactory;
 
@@ -67,7 +67,7 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
 	protected void calculateXmlMapperGenerator(AbstractJavaClientGenerator javaClientGenerator, List<String> warnings,
 			ProgressCallback progressCallback) {
 		if (javaClientGenerator == null) {
-			xmlMapperGenerator = new XMLMapperGenerator();
+			xmlMapperGenerator = new ExXMLMapperGenerator();
 		} else {
 			xmlMapperGenerator = javaClientGenerator.getMatchedXMLGenerator();
 		}
@@ -109,6 +109,7 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
 		} else if ("ANNOTATEDMAPPER".equalsIgnoreCase(type)) { //$NON-NLS-1$
 			javaGenerator = new AnnotatedClientGenerator();
 		} else if ("MAPPER".equalsIgnoreCase(type)) { //$NON-NLS-1$
+			//todo
 			javaGenerator = new ExJavaMapperGenerator();
 		} else {
 			javaGenerator = (AbstractJavaClientGenerator) ObjectFactory.createInternalObject(type);

@@ -30,5 +30,5 @@ mybatis:
   encoding: utf-8
   db_type:  "MySQL"
   tables:
-          -   table_name: t_goods
-              domain_name: Goods
+          -   table_name: t_brand
+              domain_name: Brand

@@ -5,6 +5,7 @@ import com.dafy.dev.config.ParameterInfo;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +20,14 @@ public class CodeGenUtil {
 
                 List<MethodInfo> list=new ArrayList<>();
                 for(Method m:methods){
+                    Type retType= m.getGenericReturnType();
+
+
+
+
                     Class returnType=m.getReturnType();
+
+
                     Class[] types= m.getParameterTypes();
                     Parameter[] parameters= m.getParameters();
                     List<ParameterInfo> parameterInfos=new ArrayList<>();
