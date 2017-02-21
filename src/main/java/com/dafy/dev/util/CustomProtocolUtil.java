@@ -89,9 +89,7 @@ public class CustomProtocolUtil {
             Map<String, Object> resp= parseString(stringBuffer.toString().toCharArray());
             if(resp!=null&&resp.keySet().size()==4&&resp.containsKey("code")
                     &&resp.containsKey("sub_code")&&resp.containsKey("msg")&&resp.containsKey("data")){
-                if(resp.get("data") instanceof Map){
-                    curCgi.response= (Map) resp.get("data");
-                }
+                curCgi.response= resp.get("data");
             }
             else {
                 curCgi.response=resp;
@@ -135,7 +133,8 @@ public class CustomProtocolUtil {
 
             cgiItem.put("cgi",cgi.toString());
             cgiItem.put("request",cur.request==null||cur.request.isEmpty()?null:cur.request);
-            cgiItem.put("response",cur.response==null||cur.response.isEmpty()?null:cur.response);
+
+           cgiItem.put("response",cur.response==null?null:cur.response);
 
         }
         outputStream.write(new ObjectMapper().writeValueAsBytes(root));

@@ -15,7 +15,7 @@ public class ProtocolModel {
         public String url;
         public String name;
         public Map    request;
-        public Map    response;
+        public Object    response;
     }
 
 }
