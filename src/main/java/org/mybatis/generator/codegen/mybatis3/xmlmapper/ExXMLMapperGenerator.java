@@ -33,10 +33,8 @@ public class ExXMLMapperGenerator extends XMLMapperGenerator{
 
 
 	protected void addListQueryElement(XmlElement parentElement) {
-		if (introspectedTable.getRules().generateSelectByPrimaryKey()) {
-			AbstractXmlElementGenerator elementGenerator = new ListQueryElementGenerator();
-			initializeAndExecuteGenerator(elementGenerator, parentElement);
-		}
+		AbstractXmlElementGenerator elementGenerator = new ListQueryElementGenerator();
+		initializeAndExecuteGenerator(elementGenerator, parentElement);
 	}
 
 

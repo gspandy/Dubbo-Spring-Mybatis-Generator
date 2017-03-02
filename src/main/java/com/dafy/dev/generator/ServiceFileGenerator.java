@@ -67,6 +67,7 @@ public class ServiceFileGenerator {
             }
 
             b.returns(returnType);
+            //b.returns(info.getGenericReturnType());
 
             for (ParameterInfo p : info.getParameterInfoList()) {
                 TypeName typeName = resolveDtoTypeFromClass(p.getTypeFullClassName());

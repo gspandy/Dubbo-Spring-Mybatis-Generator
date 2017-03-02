@@ -72,7 +72,7 @@ public class XMLMapperGenerator extends AbstractXmlGenerator {
 		addUpdateByPrimaryKeyWithBLOBsElement(answer);
 		addUpdateByPrimaryKeyWithoutBLOBsElement(answer);
 		//todo
-		addListQueryElement(answer);
+		//addListQueryElement(answer);
 		return answer;
 	}
 

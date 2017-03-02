@@ -22,9 +22,6 @@ public class CodeGenUtil {
                 for(Method m:methods){
                     Type retType= m.getGenericReturnType();
 
-
-
-
                     Class returnType=m.getReturnType();
 
 
@@ -39,6 +36,7 @@ public class CodeGenUtil {
                         parameterInfo.setType(types[i]);
                         parameterInfo.setName(p.getName());
                         parameterInfo.setTypeFullClassName(types[i].getName());
+                        parameterInfo.setParameterizedType(p.getParameterizedType());
                         parameterInfos.add(parameterInfo);
                         i++;
                     }
@@ -47,6 +45,7 @@ public class CodeGenUtil {
                     info.setParameterInfoList(parameterInfos);
                     info.setName(m.getName());
                     info.setReturnTypeFullClassName(returnType.getName());
+                    info.setGenericReturnType(retType);
                     list.add(info);
                 }
                 return list;

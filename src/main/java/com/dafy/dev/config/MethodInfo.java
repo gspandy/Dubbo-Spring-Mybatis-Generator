@@ -1,5 +1,6 @@
 package com.dafy.dev.config;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 /**
@@ -10,6 +11,8 @@ public class MethodInfo {
     private String returnTypeFullClassName;
 
     private Class returnType;
+
+    private Type  genericReturnType;
 
     private List<ParameterInfo> parameterInfoList;
 
@@ -43,5 +46,13 @@ public class MethodInfo {
 
     public void setReturnType(Class returnType) {
         this.returnType = returnType;
+    }
+
+    public Type getGenericReturnType() {
+        return genericReturnType;
+    }
+
+    public void setGenericReturnType(Type genericReturnType) {
+        this.genericReturnType = genericReturnType;
     }
 }

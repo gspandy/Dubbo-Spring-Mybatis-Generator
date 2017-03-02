@@ -73,12 +73,15 @@ public class DaoFileGenerator {
             MethodSpec.Builder b = MethodSpec.methodBuilder(info.getName())
                     .addModifiers(Modifier.PUBLIC);
 
-            if(JavaFileGenerator.isPrimaryType(info.getReturnTypeFullClassName())){
+            //todo
+            /*if(JavaFileGenerator.isPrimaryType(info.getReturnTypeFullClassName())){
                 b.returns(JavaFileGenerator.resolvePrimaryType(info.getReturnTypeFullClassName()));
             }else {
                 TypeName returnType=JavaFileGenerator.resolveType(info.getReturnTypeFullClassName());
                 b.returns(returnType);
-            }
+            }*/
+            //b.addTypeVariable()
+            b.returns(info.getGenericReturnType());
 
             for (ParameterInfo p : info.getParameterInfoList()) {
                 TypeName typeName= JavaFileGenerator.resolveType(p.getTypeFullClassName());

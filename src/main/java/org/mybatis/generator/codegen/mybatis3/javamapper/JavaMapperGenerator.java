@@ -88,7 +88,7 @@ public class JavaMapperGenerator extends AbstractJavaClientGenerator {
 		addUpdateByPrimaryKeyWithBLOBsMethod(interfaze);
 		addUpdateByPrimaryKeyWithoutBLOBsMethod(interfaze);
 
-		addListQueryMethod(interfaze);
+		//addListQueryMethod(interfaze);
 
 		List<CompilationUnit> answer = new ArrayList<CompilationUnit>();
 		if (context.getPlugins().clientGenerated(interfaze, null, introspectedTable)) {
