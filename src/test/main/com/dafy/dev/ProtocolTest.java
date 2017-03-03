@@ -1,5 +1,6 @@
 package com.dafy.dev;
 
+import com.alibaba.dubbo.rpc.support.ProtocolUtils;
 import com.dafy.dev.config.DtoConfig;
 import com.dafy.dev.generator.DtoGenerator;
 import com.dafy.dev.pojo.PostmanModel;
@@ -17,6 +18,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -55,7 +57,7 @@ public class ProtocolTest {
         PostmanBuilder builder=PostmanBuilder.builder("达飞商城");
 
         for(File file:dir.listFiles()){
-            if(file.isDirectory()) continue;
+            if(file.isDirectory()||!file.getName().startsWith("app商品")) continue;
             String dst="target/"+file.getName()+".json";
             try (InputStream fin =new FileInputStream(file); FileOutputStream fo = new FileOutputStream(dst)) {
 
@@ -116,5 +118,23 @@ public class ProtocolTest {
         if(matcher.find()){
            System.out.println(matcher.group(1));
         }
+    }
+
+    @Test
+    public void json(){
+        String str="[{\n" +
+                "\n" +
+                "    cat_name:\"\",//类目名称\n" +
+                "    sort_order:12,//排序号\n" +
+                "    second_cat_id:1, //类目id\n" +
+                "    third_cat_list:[{\n" +
+                "            image:\"\" //展示图片\n" +
+                "            cat_name:\"\",//类目名称\n" +
+                "            sort_order:12,//排序号\n" +
+                "            third_cat_id:1, //三级类目id\n" +
+                "     }]\n" +
+                "}]";
+        char arr[]=str.toCharArray();
+        List json=CustomProtocolUtil.parseString(arr,new int[]{0,arr.length},List.class);
     }
 }

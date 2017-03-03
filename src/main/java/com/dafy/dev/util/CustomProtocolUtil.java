@@ -1,10 +1,8 @@
 package com.dafy.dev.util;
 
 import com.dafy.dev.pojo.ProtocolModel;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,6 +30,7 @@ public class CustomProtocolUtil {
         ProtocolModel protocolModel=new ProtocolModel();
 
         String module=bufferedReader.readLine();
+        System.out.println(module);
         if(module!=null){
             Matcher matcher=Pattern.compile("\\w+").matcher(module);
             if(matcher.find()){
@@ -47,7 +46,7 @@ public class CustomProtocolUtil {
         Pattern pattern=Pattern.compile("###([^\\s#]+)");
 
         for(String line=bufferedReader.readLine();line!=null;){
-
+            System.out.println(line);
             ProtocolModel.CGI curCgi=new ProtocolModel.CGI();
 
             while (line!=null&&!line.trim().startsWith("CGI")){
@@ -57,10 +56,12 @@ public class CustomProtocolUtil {
                     break;
                 }
                 line=bufferedReader.readLine();
+                System.out.println(line);
             }
 
             while (!line.trim().startsWith("CGI")){
                 line=bufferedReader.readLine();
+                System.out.println(line);
             }
             if(line==null) break;
 
@@ -72,27 +73,49 @@ public class CustomProtocolUtil {
             }
             if(!curCgi.url.startsWith("/")) curCgi.url="/"+curCgi.url;
 
-            for(line=bufferedReader.readLine();line!=null&&!line.trim().startsWith("请求");line=bufferedReader.readLine());
+            for(line=bufferedReader.readLine();line!=null&&!line.trim().startsWith("请求");line=bufferedReader.readLine()){
+                System.out.println(line);
+            }
+            System.out.println(line);
 
             StringBuffer stringBuffer=new StringBuffer();
             for(line=bufferedReader.readLine();line!=null&&!line.trim().startsWith("返回");line=bufferedReader.readLine()){
                 stringBuffer.append(line).append("\n");
+                System.out.println(line);
             }
+            System.out.println(line);
 
-            curCgi.request=parseString(stringBuffer.toString().toCharArray());
+            if(!stringBuffer.toString().trim().isEmpty()){
+                try{
+                    char[] req=stringBuffer.toString().toCharArray();
+                    curCgi.request=parseString(req,new int[]{0,req.length},Map.class);
+                }catch (Throwable e){
+                    e.printStackTrace();
+                }
+            }
 
             stringBuffer=new StringBuffer();
             for(line=bufferedReader.readLine();line!=null&&!line.trim().startsWith("#");line=bufferedReader.readLine()){
                 stringBuffer.append(line).append("\n");
+                System.out.println(line);
             }
 
-            Map<String, Object> resp= parseString(stringBuffer.toString().toCharArray());
-            if(resp!=null&&resp.keySet().size()==4&&resp.containsKey("code")
-                    &&resp.containsKey("sub_code")&&resp.containsKey("msg")&&resp.containsKey("data")){
-                curCgi.response= resp.get("data");
-            }
-            else {
-                curCgi.response=resp;
+            if(!stringBuffer.toString().trim().isEmpty()){
+                char[] res=stringBuffer.toString().toCharArray();
+                try{
+                    Map resp= parseString(res,new int[]{0,res.length},Map.class);
+                    if(resp!=null&&resp.keySet().size()==4&&resp.containsKey("code")
+                            &&resp.containsKey("sub_code")&&resp.containsKey("msg")&&resp.containsKey("data")){
+                        curCgi.response= resp.get("data");
+                    }
+                }catch (Throwable e){
+                    try{
+                        curCgi.response= parseString(res,new int[]{0,res.length},List.class);
+                    }catch (Throwable a){
+                        e.printStackTrace();
+                    }
+
+                }
             }
 
             protocolModel.cgiList.add(curCgi);
@@ -142,18 +165,15 @@ public class CustomProtocolUtil {
 
 
     }
-    public static Map<String, Object> parseString(char[] str) {
-        try{
-            return parseString(str, new int[]{0, str.length}, Map.class);
-        }catch (Throwable e){
-            e.printStackTrace();
-        }
-        return null;
-    }
 
-    private static <T> T parseString(char[] str, int[] point, Class<T> type) {
+    public static <T> T parseString(char[] str, int[] point, Class<T> type) {
 
         if (type == String.class) {
+            if(str[point[0]]!='"'){
+                throw new IllegalArgumentException(new String(str,0,point[0]));
+            }
+
+            point[0]++;
             StringBuffer strBuffer = new StringBuffer();
             while (point[0] < point[1] && str[point[0]] != '"')
                 strBuffer.append(str[point[0]++]);
@@ -166,33 +186,68 @@ public class CustomProtocolUtil {
             while (point[0] < point[1] && '0' <= str[point[0]] &&'9' >= str[point[0]])
                 strBuffer.append(str[point[0]++]);
             parseString(str,point,Void.class);
-            BigDecimal bigDecimal=new BigDecimal(strBuffer.toString());
             return (T) new BigDecimal(strBuffer.toString());
         }
         if (type == Map.class) {
+            parseString(str,point,Void.class);
+
             Map<String, Object> root = new HashMap<String, Object>();
             String field;
-            parseString(str,point,Void.class);
-            while (point[0] < point[1] && '{' != str[point[0]])
-                point[0]++;
+//            while (point[0] < point[1] && '{' != str[point[0]])
+//                point[0]++;
+
+            if(str[point[0]]!='{'){
+                throw new IllegalArgumentException(new String(str,0,point[0]));
+            }
+            point[0]++;
+
             while (point[0] < point[1]&&str[point[0]]!='}') {
-                point[0]++;
+
                 parseString(str,point,Void.class);
-                while (point[0] < point[1] && !Pattern.matches("[\\w_]", str[point[0]] + ""))
+
+                if(!Pattern.matches("[\\w_]", str[point[0]] + "")&&'"'!=str[point[0]]){
+                    throw new IllegalArgumentException(new String(str,0,point[0]));
+                }
+
+//                while (point[0] < point[1] && !Pattern.matches("[\\w_]", str[point[0]] + ""))
+//                {
+//                    point[0]++;
+//                }
+                boolean standard=false;
+                if('"'==str[point[0]]){
                     point[0]++;
+                    standard=true;
+                }
+
                 StringBuffer fieldBuffer = new StringBuffer();
                 while (point[0] < point[1] && Pattern.matches("[\\w\\d_]", str[point[0]] + ""))
+                {
                     fieldBuffer.append(str[point[0]++]);
+                }
                 field = fieldBuffer.toString();
-                parseString(str,point,Void.class);
-                while (point[0] < point[1]&&str[point[0]] != ':')
+
+                if(standard) {
+                    if('"'!=str[point[0]]){
+                        throw new IllegalArgumentException(new String(str,0,point[0]));
+                    }
                     point[0]++;
+                }
+
+                parseString(str,point,Void.class);
+
+//                while (point[0] < point[1]&&str[point[0]] != ':')
+//                    point[0]++;
+                if(':'!=str[point[0]]){
+                    throw new IllegalArgumentException(new String(str,0,point[0]));
+                }
+
                 point[0]++;
-                while (point[0] < point[1]&&str[point[0]]!='}') {
-                    int last=point[0];
-                    parseString(str,point,Void.class);
+                parseString(str,point,Void.class);
+                int last=point[0];
+                while (point[0] < point[1]&&str[point[0]]!='}'&& '，' != str[point[0]]&& ',' != str[point[0]]&&last==point[0]) {
+                    last=point[0];
+//                    parseString(str,point,Void.class);
                     if (str[point[0]] == '"') {
-                        point[0]++;
                         root.put(field, parseString(str, point, String.class));
                         continue;
                     } else if ('{' == str[point[0]]) {
@@ -202,25 +257,44 @@ public class CustomProtocolUtil {
                         root.put(field,typeNumber(field, parseString(str, point, BigDecimal.class)));
                         continue;
                     } else if ('[' == str[point[0]]) {
-                        point[0]++;
                         root.put(field, parseString(str, point, List.class));
                         continue;
-                    }else if('，' == str[point[0]]||',' == str[point[0]]||last!=point[0]){
-                        break;
                     }
+//                    else if('，' == str[point[0]]||',' == str[point[0]]||last!=point[0]){
+//                        break;
+//                    }
+
+                    throw new IllegalArgumentException(new String(str,0,point[0]));
+
+                }
+
+                if('，' == str[point[0]]||',' == str[point[0]]){
                     point[0]++;
+                    parseString(str,point,Void.class);
                 }
             }
+
+            if('}'!=str[point[0]]){
+                throw new IllegalArgumentException(new String(str,0,point[0]));
+            }
+
             point[0]++;
             parseString(str,point,Void.class);
             return (T) root;
         }
         if (type == List.class) {
+            parseString(str,point,Void.class);
+
+            if('['!=str[point[0]]){
+                throw new IllegalArgumentException(new String(str,0,point[0]));
+            }
+            point[0]++;
+
             List objectList = new ArrayList();
             while (point[0] < point[1] && str[point[0]] != ']') {
                 parseString(str,point,Void.class);
+
                 if (str[point[0]] == '"') {
-                    point[0]++;
                     objectList.add( parseString(str, point, String.class));
                     continue;
                 } else if ('{' == str[point[0]]) {
@@ -230,18 +304,24 @@ public class CustomProtocolUtil {
                     objectList.add(parseString(str, point, BigDecimal.class));
                     continue;
                 } else if ('[' == str[point[0]]) {
-                    point[0]++;
                     objectList.add( parseString(str, point, List.class));
                     continue;
                 }
-                point[0]++;
+                if(',' == str[point[0]]||',' == str[point[0]]){
+                    point[0]++;
+                    continue;
+                }
+                throw new IllegalArgumentException(new String(str,0,point[0]));
+            }
+            if(']'!=str[point[0]]){
+                throw new IllegalArgumentException(new String(str,0,point[0]));
             }
             point[0]++;
             parseString(str,point,Void.class);
             return (T) objectList;
         }else if(type==Void.class){
             while (point[0]<point[1]&&Pattern.matches("\\s", str[point[0]] + "")) point[0]++;
-            if(point[0]<point[1]&&str[point[0]]=='/'){
+            if(point[0]<point[1]-1&&str[point[0]]=='/'&&str[point[0]+1]=='/'){
                 while (point[0]<point[1]&&str[point[0]]!='\n') point[0]++;
                 parseString(str,point,Void.class);
             }
