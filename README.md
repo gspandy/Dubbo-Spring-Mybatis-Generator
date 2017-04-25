@@ -16,15 +16,15 @@
 
 生成的单个rpc目录结构如下
     - api层(service api interface)
-    ![](https://coding.net/u/chunxiao/p/project-generator/git/raw/master/api.png)
+    ![](http://olvjmlrso.bkt.clouddn.com/api.png)
     - service 实现层(provider)
-    ![](https://coding.net/u/chunxiao/p/project-generator/git/raw/master/provider.png)
+    ![](http://olvjmlrso.bkt.clouddn.com/provider.png)
 
 生成的单个web目录结构如下
-![](https://coding.net/u/chunxiao/p/project-generator/git/raw/master/web.png)
+![](http://olvjmlrso.bkt.clouddn.com/web.png)
 
 生成所有目录结构如下
-![](https://coding.net/u/chunxiao/p/project-generator/git/raw/master/all.png)
+![](http://olvjmlrso.bkt.clouddn.com/all.png)
 
 ## Usage
 - step1. 安装JDK8(框架代码用了J8,生成的项目不要求)
@@ -42,7 +42,7 @@
 
 ## Configuration
 **!!注意 配置文件是yaml格式  [在线编辑yaml](http://codebeautify.org/yaml-validator)  完整配置及默认值请参考源码 [config.yaml](http://10.8.15.73/dafy_server/Dubbo-Spring-Mybatis-Generator/raw/master/src/main/resources/template/all_config.yaml)**
-![](https://coding.net/u/chunxiao/p/project-generator/git/raw/master/config.png)
+![](http://olvjmlrso.bkt.clouddn.com/config.png)
 ## Bugs
    写的比较匆忙 测试不是很充分 边界条件的bug估计不少
    MBG mybatis 会对定义成text等大字段生成继承结构的pojo 会有一些小bug
