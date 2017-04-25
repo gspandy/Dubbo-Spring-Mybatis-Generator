@@ -5,7 +5,12 @@ import com.dafy.dev.codegen.ClassLoaderUtil;
 import com.dafy.dev.config.*;
 import com.dafy.dev.pojo.GlobalConfig;
 import com.dafy.dev.pojo.TableInfo;
-import com.dafy.dev.util.*;
+import com.dafy.dev.util.BannerUtil;
+import com.dafy.dev.util.CodeGenUtil;
+import com.dafy.dev.util.FileUtil;
+import com.dafy.dev.util.PomUtil;
+import com.dafy.dev.util.SourceCodeUtil;
+import com.dafy.dev.util.StringUtil;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
 import org.slf4j.Logger;
@@ -35,7 +40,6 @@ public class DubboRPCProjectGenerator implements Generator {
 
     private String apiPomFile;
 
-
     private List<TableInfo> tableList;
 
     private GlobalConfig globalConfig;
@@ -51,11 +55,11 @@ public class DubboRPCProjectGenerator implements Generator {
     public DubboRPCProjectGenerator(GlobalConfig globalConfig) {
         validateConfig(globalConfig);
 
-        this.globalConfig=globalConfig;
+        this.globalConfig = globalConfig;
         this.name = globalConfig.getName();
         this.dubboConfig = ConfigDefault.getDefaultDubboConfig();
         this.config = ConfigGenerator.generateProjectConfig(this.globalConfig);
-        this.tableList=globalConfig.getMybatisConfig().getTableInfoList();
+        this.tableList = globalConfig.getMybatisConfig().getTableInfoList();
         this.projectGenerator = new ProjectGenerator(this.config);
 
     }
@@ -64,7 +68,6 @@ public class DubboRPCProjectGenerator implements Generator {
     private void validateConfig(GlobalConfig config) {
 
     }
-
 
     @Override
     public void generate() {
@@ -81,13 +84,13 @@ public class DubboRPCProjectGenerator implements Generator {
         modules.add(getProviderModuleName());
         //create root pom
 
-        String template=this.globalConfig.getServiceParentPomTemplatePath();
+        String template = this.globalConfig.getServiceParentPomTemplatePath();
 
-        template=StringUtil.isEmpty(template)?ConfigDefault.POM_TEMPLATE_ROOT:template;
+        template = StringUtil.isEmpty(template) ? ConfigDefault.POM_TEMPLATE_ROOT : template;
 
         String pom = projectGenerator.createRootPomFile(modules, null, template,
-                        projectGenerator.getConfig().getDir(),
-                        projectGenerator.getConfig().getProjectName());
+                projectGenerator.getConfig().getDir(),
+                projectGenerator.getConfig().getProjectName());
 
         logger.info("pom :{}", pom);
         createApiDir(pom);
@@ -112,8 +115,8 @@ public class DubboRPCProjectGenerator implements Generator {
 
         String module = getApiModuleName();
 
-        String template=this.globalConfig.getServiceApiPomTemplatePath();
-        template=StringUtil.isEmpty(template)?ConfigDefault.POM_TEMPLATE_API:template;
+        String template = this.globalConfig.getServiceApiPomTemplatePath();
+        template = StringUtil.isEmpty(template) ? ConfigDefault.POM_TEMPLATE_API : template;
 
         this.apiPomFile = projectGenerator
                 .createPomFile(pom, template, apiDir, module);
@@ -130,38 +133,37 @@ public class DubboRPCProjectGenerator implements Generator {
         //new JavaFileGenerator(cfg).generateInterface();
         //List<Class>daoCls=getDaoList();
 
-        List<ServiceConfig.ServiceDaoInfo> list=getDaoInfoList();
+        List<ServiceConfig.ServiceDaoInfo> list = getDaoInfoList();
 
-        ServiceConfig serviceConfig=new ServiceConfig();
+        ServiceConfig serviceConfig = new ServiceConfig();
 
         serviceConfig.setDtoPackageName(getDtoPackage());
         //serviceConfig.setDaoList(daoCls);
         serviceConfig.setDaoInfos(list);
 
-        new ServiceFileGenerator(cfg,serviceConfig).generateServiceInterfaceFile();
+        new ServiceFileGenerator(cfg, serviceConfig).generateServiceInterfaceFile();
 
         JavaFileConfig implCfg = new JavaFileConfig();
         implCfg.setJavaFileDoc(this.name + " RPC interface impl");
-        implCfg.setClassName(getServiceName()+"Impl");
-        implCfg.setPackageName(getProviderPackage()+".impl");
+        implCfg.setClassName(getServiceName() + "Impl");
+        implCfg.setPackageName(getProviderPackage() + ".impl");
         implCfg.setOutDir(projectGenerator.getMavenSourceCodeDir(getProviderDir()));
 
-        String serviceFullName=getApiServicePackage()+"."+getServiceName();
+        String serviceFullName = getApiServicePackage() + "." + getServiceName();
 
-
-
-        new ServiceFileGenerator(implCfg,serviceConfig).generateServiceImplFile(serviceFullName);
+        new ServiceFileGenerator(implCfg, serviceConfig).generateServiceImplFile(serviceFullName);
     }
 
     private String getApiSourceCodeDir() {
         String dir = projectGenerator.getSourceCodeBaseDir(getApiDir(), this.name) + File.separator
-                +this.globalConfig.getApiDirName();
+                + this.globalConfig.getApiDirName();
         logger.info("ApiSourceCodeDir:{}", dir);
         return dir;
     }
 
     private String getApiModuleName() {
-        return projectGenerator.getConfig().getProjectName() + "-"+this.globalConfig.getApiDirName();
+        return projectGenerator.getConfig().getProjectName() + "-" + this.globalConfig
+                .getApiDirName();
     }
 
     private String getApiDir() {
@@ -179,7 +181,8 @@ public class DubboRPCProjectGenerator implements Generator {
     }
 
     private String getProviderModuleName() {
-        return projectGenerator.getConfig().getProjectName() + "-"+this.globalConfig.getProviderDirName();
+        return projectGenerator.getConfig().getProjectName() + "-" + this.globalConfig
+                .getProviderDirName();
     }
 
     private void createProviderDir(String pom) {
@@ -196,9 +199,9 @@ public class DubboRPCProjectGenerator implements Generator {
         createDubboFile(providerDir);
 
         projectGenerator.createLauncherFile(providerDir, this.name +
-                        "."+this.globalConfig.getProviderDirName(),
-                this.name + ""+
-        SourceCodeUtil.getFirstUppercase(this.globalConfig.getProviderDirName()));
+                        "." + this.globalConfig.getProviderDirName(),
+                this.name + "" +
+                        SourceCodeUtil.getFirstUppercase(this.globalConfig.getProviderDirName()));
 
         createProviderHookFile();
 
@@ -206,8 +209,8 @@ public class DubboRPCProjectGenerator implements Generator {
 
         createProviderPom(pom);
 
-        if(this.tableList!=null){
-            for (TableInfo t:this.tableList) {
+        if (this.tableList != null) {
+            for (TableInfo t : this.tableList) {
                 t.setDomainName(getDomainName(t));
             }
         }
@@ -215,25 +218,25 @@ public class DubboRPCProjectGenerator implements Generator {
         createOrm(moduleName, providerDir);
 
         //load denpendencies...
-        this.classLoader= ClassLoaderUtil.loadAllClass(getDir());
+        this.classLoader = ClassLoaderUtil.loadAllClass(getDir());
 
-        if(this.tableList!=null){
+        if (this.tableList != null) {
 
             createDaoFiles();
 
             createDtoFromPojo();
 
-            this.classLoader= ClassLoaderUtil.loadAllClass(getDir());
+            this.classLoader = ClassLoaderUtil.loadAllClass(getDir());
 
             createUtilFiles();
         }
 
         //update classloader
-        this.classLoader= ClassLoaderUtil.loadAllClass(getDir());
+        this.classLoader = ClassLoaderUtil.loadAllClass(getDir());
 
-        GeneratorContext.classLoader=this.classLoader;
+        GeneratorContext.classLoader = this.classLoader;
 
-        GeneratorContext.utilPackage=getProviderUtilPackage();
+        GeneratorContext.utilPackage = getProviderUtilPackage();
 
         createService();
 
@@ -245,40 +248,41 @@ public class DubboRPCProjectGenerator implements Generator {
 
         createLogConfig();
 
-        this.classLoader= ClassLoaderUtil.loadAllClass(getDir());
+        this.classLoader = ClassLoaderUtil.loadAllClass(getDir());
 
         createTest();
 
     }
 
-    private String getDomainName(TableInfo t){
-        return  StringUtil.isEmpty(t.getDomainName())?
-                SourceCodeUtil.covertClassName(t.getTableName().startsWith("t_")?t.getTableName().substring(2,
-                        t.getTableName().length()):t.getTableName()):t.getDomainName();
+    private String getDomainName(TableInfo t) {
+        return StringUtil.isEmpty(t.getDomainName()) ?
+                SourceCodeUtil.covertClassName(
+                        t.getTableName().startsWith("t_") ? t.getTableName().substring(2,
+                                t.getTableName().length()) : t.getTableName()) : t.getDomainName();
     }
 
-    private void createUtilFiles(){
+    private void createUtilFiles() {
         //new DtoUtilFileGenerator(config).generateDtoUtilFile();
 
-        for (TableInfo t: this.tableList){
-            String pojoName= SourceCodeUtil.covertClassName(t.getDomainName());
-            String pojoClsFullName=getPojoPackage()+"."+pojoName;
-            String dtoClsFullName=getDtoPackage()+"."+pojoName+"Dto";
-            Class pojoCls= ClassLoaderUtil.load(pojoClsFullName,this.classLoader);
-            Class dtoCls= ClassLoaderUtil.load(dtoClsFullName,this.classLoader);
+        for (TableInfo t : this.tableList) {
+            String pojoName = SourceCodeUtil.covertClassName(t.getDomainName());
+            String pojoClsFullName = getPojoPackage() + "." + pojoName;
+            String dtoClsFullName = getDtoPackage() + "." + pojoName + "Dto";
+            Class pojoCls = ClassLoaderUtil.load(pojoClsFullName, this.classLoader);
+            Class dtoCls = ClassLoaderUtil.load(dtoClsFullName, this.classLoader);
 
-            DtoUtilConfig config=new DtoUtilConfig();
+            DtoUtilConfig config = new DtoUtilConfig();
             config.setPackageName(getProviderUtilPackage());
             config.setOutDir(getProviderBaseDir());
 
-            new DtoUtilFileGenerator(config).generateDtoUtilFile(pojoCls,dtoCls);
+            new DtoUtilFileGenerator(config).generateDtoUtilFile(pojoCls, dtoCls);
         }
-
 
     }
 
-    private void createLogConfig(){
-        this.projectGenerator.createLogConfigFile(getProviderDir(),this.globalConfig.getLogConfigFilePath());
+    private void createLogConfig() {
+        this.projectGenerator
+                .createLogConfigFile(getProviderDir(), this.globalConfig.getLogConfigFilePath());
     }
 
     private void createOrm(String moduleName, String providerDir) {
@@ -286,22 +290,20 @@ public class DubboRPCProjectGenerator implements Generator {
 
         //createMybatisFiles(this.tableConfig);
         //todo
-        if(this.tableList!=null){
+        if (this.tableList != null) {
             createMybatisFiles(this.tableList);
             createMybatisPropertiesFile(getProviderDir());
-        }else {
+        } else {
             logger.warn("table list is null....");
         }
-
-
 
     }
 
     private void createProviderPom(String pom) {
         String providerDir = getProviderDir();
         String module = getProviderModuleName();
-        String template=this.globalConfig.getServiceProviderPomTemplatePath();
-        template=StringUtil.isEmpty(template)?ConfigDefault.POM_TEMPLATE_PROVIDER:template;
+        String template = this.globalConfig.getServiceProviderPomTemplatePath();
+        template = StringUtil.isEmpty(template) ? ConfigDefault.POM_TEMPLATE_PROVIDER : template;
         createPomFile(null, pom, template, providerDir, module);
     }
 
@@ -365,16 +367,16 @@ public class DubboRPCProjectGenerator implements Generator {
                 .generateBaseTestCaseFile(packageName + "." + baseTestClass,
                         getProviderHookFullName());
 
-        String serviceFullClassName=getApiPackage() + "." + getServiceName();
+        String serviceFullClassName = getApiPackage() + "." + getServiceName();
 
-        String servicePath= projectGenerator.getMavenSourceCodeDir(getApiDir())+ File.separator
-                +SourceCodeUtil.convertPackage2Dir(serviceFullClassName)+".java";
+        String servicePath = projectGenerator.getMavenSourceCodeDir(getApiDir()) + File.separator
+                + SourceCodeUtil.convertPackage2Dir(serviceFullClassName) + ".java";
 
-        Class serviceCls= ClassLoaderUtil.loadClass(servicePath,this.classLoader);
+        Class serviceCls = ClassLoaderUtil.loadClass(servicePath, this.classLoader);
 
         new SpringBootDubboJavaFileGenerator(serviceDaoCfg)
                 .generateTestCaseFile(packageName + "." + baseTestClass,
-                        serviceFullClassName,serviceCls);
+                        serviceFullClassName, serviceCls);
 
     }
 
@@ -392,11 +394,12 @@ public class DubboRPCProjectGenerator implements Generator {
     }
 
     private String getProviderPackage() {
-        return projectGenerator.getPackageName(this.name) + "."+this.globalConfig.getProviderDirName();
+        return projectGenerator.getPackageName(this.name) + "." + this.globalConfig
+                .getProviderDirName();
     }
 
     private String getApiPackage() {
-        return projectGenerator.getPackageName(this.name) + "."+this.globalConfig.getApiDirName();
+        return projectGenerator.getPackageName(this.name) + "." + this.globalConfig.getApiDirName();
     }
 
     //生成 config/module-mybatis-config.properties文件
@@ -404,9 +407,9 @@ public class DubboRPCProjectGenerator implements Generator {
 
         String propertySourceValue = "classpath:" + getMybatisPropertiesConfigPath(moduleName);
 
-        String mapperScanValue = this.config.getGroupId() + "." + moduleName + "."+
-                this.globalConfig.getProviderDirName()+"."
-                +this.globalConfig.getOrmDirName();
+        String mapperScanValue = this.config.getGroupId() + "." + moduleName + "." +
+                this.globalConfig.getProviderDirName() + "."
+                + this.globalConfig.getOrmDirName();
         JavaFileConfig cfg = new JavaFileConfig();
         cfg.setJavaFileDoc("mybatis config");
         cfg.setClassName(SourceCodeUtil.convertFieldUppercase(classNamePrefix));
@@ -420,7 +423,6 @@ public class DubboRPCProjectGenerator implements Generator {
         return module + "-mybatis-config.properties";
     }
 
-
     private void createMybatisFiles(List<TableInfo> tableList) {
         for (TableInfo tableItem : tableList) {
             createMybatisFile(tableItem);
@@ -430,9 +432,10 @@ public class DubboRPCProjectGenerator implements Generator {
     private void createMybatisFile(TableInfo tableItem) {
         String mavenBase = projectGenerator.getMavenBaseDir(getProviderDir());
         MybatisConfig cfg = ConfigGenerator
-                .generateMybatisConfig(this.globalConfig,tableItem,getProviderPackage());
+                .generateMybatisConfig(this.globalConfig, tableItem, getProviderPackage());
 
         cfg.setProjectDir(mavenBase);
+
         MyBatisGenerator myBatisGenerator = new MyBatisGenerator(cfg);
 
         myBatisGenerator.generate();
@@ -443,61 +446,62 @@ public class DubboRPCProjectGenerator implements Generator {
     }
 
     private String getDtoPackage() {
-        return getApiPackage() + "."+this.globalConfig.getDtoDirName();
+        return getApiPackage() + "." + this.globalConfig.getDtoDirName();
     }
 
-
-    private String getApiDtoDir(){
-        return getApiBaseDir()+File.separator+globalConfig.getDtoDirName()+File.separator+"response";
+    private String getApiDtoDir() {
+        return getApiBaseDir() + File.separator + globalConfig.getDtoDirName() + File.separator
+                + "response";
     }
 
     private void createDtoFromPojo() {
-        String dir=getProviderPojoDir();
-        File f=new File(dir);
-        if(f.exists()){
-            File[] files=f.listFiles();
-            for (File file:files){
-                if(file.isFile()&&file.getPath().endsWith(".java")){
-                    Class pojoCls = ClassLoaderUtil.loadClass(file.getPath(),this.classLoader);
-                    String apiBaseDir=getApiBaseDir();
+        String dir = getProviderPojoDir();
+        File f = new File(dir);
+        if (f.exists()) {
+            File[] files = f.listFiles();
+            for (File file : files) {
+                if (file.isFile() && file.getPath().endsWith(".java")) {
+                    Class pojoCls = ClassLoaderUtil.loadClass(file.getPath(), this.classLoader);
+                    String apiBaseDir = getApiBaseDir();
                     DtoConfig dtoConfig = new DtoConfig();
                     dtoConfig.setDir(apiBaseDir);
                     dtoConfig.setPackageName(getDtoPackage());
 
                     String daoDir = getDaoPackage();
 
-                    String targetClassFullName=getApiDtoPackage()+"."+file.getName().replace(".java","")+"Dto";
+                    String targetClassFullName =
+                            getApiDtoPackage() + "." + file.getName().replace(".java", "") + "Dto";
 
-                    new DtoGenerator(dtoConfig).generateFromPojoClass(pojoCls,targetClassFullName);
+                    new DtoGenerator(dtoConfig).generateFromPojoClass(pojoCls, targetClassFullName);
                 }
             }
         }
 
-
     }
 
     public List<Class> getDaoList() {
-        if(this.daoList!=null){
+        if (this.daoList != null) {
             return this.daoList;
         }
-        this.daoList=loadClassFromDir(getProviderDaoDir());
+        this.daoList = loadClassFromDir(getProviderDaoDir());
         return this.daoList;
     }
 
     public List<ServiceConfig.ServiceDaoInfo> getDaoInfoList() {
 
-        if(this.serviceDaoInfos!=null){
+        if (this.serviceDaoInfos != null) {
             return this.serviceDaoInfos;
         }
-        this.serviceDaoInfos=new ArrayList<>();
-        this.daoList=loadClassFromDir(getProviderDaoDir());
-        this.daoList.forEach(item->{
-            String name=item.getSimpleName();
-            if(name.endsWith("Dao")){
-                name=name.replace("Dao","");
-                Class pojo= ClassLoaderUtil
-                        .loadClass(getProviderPojoDir()+File.separator+name+".java",this.classLoader);
-                ServiceConfig.ServiceDaoInfo info=new ServiceConfig.ServiceDaoInfo();
+        this.serviceDaoInfos = new ArrayList<>();
+        this.daoList = loadClassFromDir(getProviderDaoDir());
+        this.daoList.forEach(item -> {
+            String name = item.getSimpleName();
+            if (name.endsWith("Dao")) {
+                name = name.replace("Dao", "");
+                Class pojo = ClassLoaderUtil
+                        .loadClass(getProviderPojoDir() + File.separator + name + ".java",
+                                this.classLoader);
+                ServiceConfig.ServiceDaoInfo info = new ServiceConfig.ServiceDaoInfo();
                 info.setDao(item);
                 info.setPojo(pojo);
                 serviceDaoInfos.add(info);
@@ -507,22 +511,20 @@ public class DubboRPCProjectGenerator implements Generator {
         return serviceDaoInfos;
     }
 
-
     //生成appplication.properties
     private void createApplicationPropertiesFile(String parentDir) {
 
-        String templatePath= this.globalConfig.getApplicationPropertiesTemplatePath();
+        String templatePath = this.globalConfig.getApplicationPropertiesTemplatePath();
         String base = projectGenerator.getResourceBaseDir(parentDir);
         String path = base + File.separator + this.globalConfig.getConfigDirName() +
                 File.separator + "application.properties";
-        if(!StringUtil.isEmpty(templatePath)){
-            FileUtil.copy(templatePath,path);
-        }else {
-            InputStream inputStream=this.getClass().getClassLoader().
+        if (!StringUtil.isEmpty(templatePath)) {
+            FileUtil.copy(templatePath, path);
+        } else {
+            InputStream inputStream = this.getClass().getClassLoader().
                     getResourceAsStream("template/application.properties");
-            FileUtil.save(inputStream,path);
+            FileUtil.save(inputStream, path);
         }
-
 
         //todo
         /**/
@@ -540,7 +542,7 @@ public class DubboRPCProjectGenerator implements Generator {
         /*com.dafy.mybatis.typeAlias.account=com.dafy.collection.account.provider.pojo
         com.dafy.mybatis.mapper.account=mybatis/AccountMapper.xml*/
 
-        generator.set("com.dafy.mybatis.typeAlias." + this.name, getProviderPackage() + "."+
+        generator.set("com.dafy.mybatis.typeAlias." + this.name, getProviderPackage() + "." +
                 this.globalConfig.getPojoDirName());
 
         for (String table : GeneratorContext.getTableList(this.globalConfig)) {
@@ -554,11 +556,10 @@ public class DubboRPCProjectGenerator implements Generator {
         generator.generate();
     }
 
-
     //spring auto config
-    private void createSpringBootAutoConfigFiles(String parentDir){
+    private void createSpringBootAutoConfigFiles(String parentDir) {
         String base = projectGenerator.getResourceBaseDir(parentDir);
-        String path = base + File.separator + "META-INF"+File.separator+"spring.factories";
+        String path = base + File.separator + "META-INF" + File.separator + "spring.factories";
         PropertyConfig config = new PropertyConfig();
         config.setPath(path);
 
@@ -571,20 +572,21 @@ public class DubboRPCProjectGenerator implements Generator {
     }
 
     private String getMapperXmlName(String tableName) {
-        String mapperPostName=SourceCodeUtil.getFirstUppercase(this.globalConfig.getMapperXmlFilePost());
-        return SourceCodeUtil.uppercase(tableName, false) + mapperPostName+".xml";
+        String mapperPostName = SourceCodeUtil
+                .getFirstUppercase(this.globalConfig.getMapperXmlFilePost());
+        return SourceCodeUtil.uppercase(tableName, false) + mapperPostName + ".xml";
     }
 
     private String getApiDtoPackage() {
-        return getApiPackage() + "."+this.globalConfig.getDtoDirName();
+        return getApiPackage() + "." + this.globalConfig.getDtoDirName();
     }
 
     private String getDaoPackage() {
-        return getProviderPackage() + "."+this.globalConfig.getDaoDirName();
+        return getProviderPackage() + "." + this.globalConfig.getDaoDirName();
     }
 
     private String getPojoPackage() {
-        return getProviderPackage() + "."+this.globalConfig.getPojoDirName();
+        return getProviderPackage() + "." + this.globalConfig.getPojoDirName();
     }
 
     private String getProviderUtilPackage() {
@@ -592,75 +594,74 @@ public class DubboRPCProjectGenerator implements Generator {
     }
 
     private String getOrmPackage() {
-        return getProviderPackage() + "."+this.globalConfig.getOrmDirName();
+        return getProviderPackage() + "." + this.globalConfig.getOrmDirName();
     }
 
     private String getDaoFullName(String domainName) {
         String entity = SourceCodeUtil.getFirstUppercase(domainName);
-        String daoInterfaceName = entity + SourceCodeUtil.getFirstUppercase(this.globalConfig.getDaoDirName());
+        String daoInterfaceName =
+                entity + SourceCodeUtil.getFirstUppercase(this.globalConfig.getDaoDirName());
         logger.debug("daoInterfaceName:{}", daoInterfaceName);
 
-        return getProviderPackage() + "."+this.globalConfig.getDaoDirName()+"." + daoInterfaceName;
+        return getProviderPackage() + "." + this.globalConfig.getDaoDirName() + "."
+                + daoInterfaceName;
     }
 
-    private String getDir(){
+    private String getDir() {
         return new File(getApiDir()).getParent();
     }
 
-    private String getApiBaseDir(){
+    private String getApiBaseDir() {
         return projectGenerator.getMavenSourceCodeDir(getApiDir());
     }
 
     //
-    private String getProviderBaseDir(){
+    private String getProviderBaseDir() {
         return projectGenerator.getMavenSourceCodeDir(getProviderDir());
     }
 
-    private String getProviderBasePackageDir(){
-        return getProviderBaseDir()+SourceCodeUtil.convertPackage2Dir(getProviderPackage());
+    private String getProviderBasePackageDir() {
+        return getProviderBaseDir() + SourceCodeUtil.convertPackage2Dir(getProviderPackage());
     }
 
-    private String getApiBasePackageDir(){
-        return getApiBaseDir()+SourceCodeUtil.convertPackage2Dir(getApiPackage());
+    private String getApiBasePackageDir() {
+        return getApiBaseDir() + SourceCodeUtil.convertPackage2Dir(getApiPackage());
     }
 
-    private String getProviderPojoDir(){
-        return getProviderBaseDir()+SourceCodeUtil.convertPackage2Dir(getPojoPackage());
+    private String getProviderPojoDir() {
+        return getProviderBaseDir() + SourceCodeUtil.convertPackage2Dir(getPojoPackage());
     }
 
-    private String getProviderOrmDir(){
-        return getProviderBaseDir()+SourceCodeUtil.convertPackage2Dir(getOrmPackage());
+    private String getProviderOrmDir() {
+        return getProviderBaseDir() + SourceCodeUtil.convertPackage2Dir(getOrmPackage());
     }
 
-    private String getProviderDaoDir(){
-        return getProviderBaseDir()+SourceCodeUtil.convertPackage2Dir(getDaoPackage());
+    private String getProviderDaoDir() {
+        return getProviderBaseDir() + SourceCodeUtil.convertPackage2Dir(getDaoPackage());
     }
 
-
-
-    private void createDaoFiles(){
-        for(TableInfo t:this.tableList){
+    private void createDaoFiles() {
+        for (TableInfo t : this.tableList) {
             createDaoFile(t.getDomainName());
         }
     }
 
     //生成dao
     private void createDaoFile(String domainName) {
-        List<Class> classList=loadClassFromDir(getProviderOrmDir());
-        classList.forEach(cls->{
-            List<MethodInfo> methodInfos= CodeGenUtil.getMethods(cls);
-            doCreateDaoFile(domainName,methodInfos);
+        List<Class> classList = loadClassFromDir(getProviderOrmDir());
+        classList.forEach(cls -> {
+            List<MethodInfo> methodInfos = CodeGenUtil.getMethods(cls);
+            doCreateDaoFile(domainName, methodInfos);
         });
     }
 
-
-    private List<Class> loadClassFromDir(String dir){
-        List<Class>classes=new ArrayList<>();
-        File files[]=new File(dir).listFiles();
-        if(files!=null&&files.length>0){
-            for(File f:files){
-                if(FileUtil.isJavaFile(f)){
-                    Class cls= ClassLoaderUtil.loadClass(f.getPath(),this.classLoader);
+    private List<Class> loadClassFromDir(String dir) {
+        List<Class> classes = new ArrayList<>();
+        File files[] = new File(dir).listFiles();
+        if (files != null && files.length > 0) {
+            for (File f : files) {
+                if (FileUtil.isJavaFile(f)) {
+                    Class cls = ClassLoaderUtil.loadClass(f.getPath(), this.classLoader);
                     classes.add(cls);
                 }
             }
@@ -668,15 +669,16 @@ public class DubboRPCProjectGenerator implements Generator {
         return classes;
     }
 
-    private void doCreateDaoFile(String domainName,List<MethodInfo> methodInfos){
+    private void doCreateDaoFile(String domainName, List<MethodInfo> methodInfos) {
         String entity = SourceCodeUtil.getFirstUppercase(domainName);
 
         String daoPackage = getDaoPackage();
         String daoImplPackage = daoPackage + ".impl";
 
-        String baseDir =getProviderBaseDir();
+        String baseDir = getProviderBaseDir();
 
-        String daoInterfaceName = entity +SourceCodeUtil.getFirstUppercase(this.globalConfig.getDaoDirName())  ;
+        String daoInterfaceName =
+                entity + SourceCodeUtil.getFirstUppercase(this.globalConfig.getDaoDirName());
 
         JavaFileConfig daoCfg = new JavaFileConfig();
 
@@ -693,19 +695,19 @@ public class DubboRPCProjectGenerator implements Generator {
         daoImplCfg.setOutDir(baseDir);
         daoImplCfg.setMethodInfos(methodInfos);
 
-        String mapperSuffix=SourceCodeUtil.getFirstUppercase(this.globalConfig.getMapperXmlFilePost());
+        String mapperSuffix = SourceCodeUtil
+                .getFirstUppercase(this.globalConfig.getMapperXmlFilePost());
 
-        String mapperFile=getProviderOrmDir()+File.separator+
-                SourceCodeUtil.getFirstUppercase(entity) + mapperSuffix+".java";
+        String mapperFile = getProviderOrmDir() + File.separator +
+                SourceCodeUtil.getFirstUppercase(entity) + mapperSuffix + ".java";
 
-        DaoConfig daoConfig=new DaoConfig();
+        DaoConfig daoConfig = new DaoConfig();
 
-        daoConfig.setMapper(ClassLoaderUtil.loadClass(mapperFile,this.classLoader));
+        daoConfig.setMapper(ClassLoaderUtil.loadClass(mapperFile, this.classLoader));
 
+        DaoConfig daoConfigImpl = new DaoConfig();
 
-        DaoConfig daoConfigImpl=new DaoConfig();
-
-        daoConfigImpl.setMapper(ClassLoaderUtil.loadClass(mapperFile,this.classLoader));
+        daoConfigImpl.setMapper(ClassLoaderUtil.loadClass(mapperFile, this.classLoader));
 
 
 
@@ -726,21 +728,18 @@ public class DubboRPCProjectGenerator implements Generator {
 
         //todo generate dao
 
+        doCreateDaoFile(daoCfg, daoConfig);
 
-        doCreateDaoFile(daoCfg,daoConfig);
-
-        doCreateDaoFile(daoImplCfg,daoConfigImpl);
-
+        doCreateDaoFile(daoImplCfg, daoConfigImpl);
 
     }
 
-    private void doCreateDaoFile(JavaFileConfig javaFileConfig,DaoConfig daoConfig){
-        new DaoFileGenerator(javaFileConfig,daoConfig).generateDaoImpl();
+    private void doCreateDaoFile(JavaFileConfig javaFileConfig, DaoConfig daoConfig) {
+        new DaoFileGenerator(javaFileConfig, daoConfig).generateDaoImpl();
     }
-
 
     private String getServiceName() {
-        return SourceCodeUtil.covertClassName(this.name +SourceCodeUtil.getFirstUppercase(
+        return SourceCodeUtil.covertClassName(this.name + SourceCodeUtil.getFirstUppercase(
                 this.globalConfig.getServiceFilePost()));
     }
 
@@ -766,8 +765,8 @@ public class DubboRPCProjectGenerator implements Generator {
 
         List<String> daos = new ArrayList<>();
 
-        for (TableInfo item: this.tableList) {
-            String table=item.getTableName();
+        for (TableInfo item : this.tableList) {
+            String table = item.getTableName();
             String entity = SourceCodeUtil.jsontoUpperCase(
                     table.startsWith("t_") ? table.substring(2, table.length()) : table);
             daos.add(getDaoFullName(entity));
@@ -779,8 +778,8 @@ public class DubboRPCProjectGenerator implements Generator {
 
     }
 
-    private String getApiServicePackage(){
-        return   getApiPackage();
+    private String getApiServicePackage() {
+        return getApiPackage();
     }
 
     private String getProviderHookFullName() {

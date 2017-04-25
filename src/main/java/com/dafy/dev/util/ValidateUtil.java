@@ -14,6 +14,11 @@ public class ValidateUtil {
         /*if(!FileUtil.checkPermission(config.getDir())){
             msgs.add(config.getDir()+" permission deny");
         }*/
+        if(!DBConnTestUtil.testDBConn(config.getMybatisConfig())){
+            msgs.add("数据库配置有误");
+        }
+
+
         return msgs;
     }
 }

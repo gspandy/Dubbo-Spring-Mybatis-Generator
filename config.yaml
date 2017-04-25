@@ -1,12 +1,12 @@
 ---
 #项目名称
-name: test
+name: goodsorder
 #项目生成文件输出目录
 #output_dir:  "/Users/chunxiaoli/IdeaProjects/"
 output_dir:  "./"
 type: "rpc"
 #maven groupId
-group_id: "com.dafy.dev"
+group_id: "com.dafy.mall"
 #dubbo rpc owner
 owner: chuxniao
 
@@ -23,12 +23,12 @@ application_properties_template_path: "application.properties"
 #mybatis config
 mybatis:
   host: "10.8.15.65"
-  port: "3306"
+  port: "3307"
   username: root
-  password: "dafy1024"
+  password: "4r3e2w1q"
   database: dafy_mall
   encoding: utf-8
   db_type:  "MySQL"
   tables:
-          -   table_name: t_brand
-              domain_name: Brand
+          -   table_name: t_goods_order
+              domain_name: GoodsOrder
