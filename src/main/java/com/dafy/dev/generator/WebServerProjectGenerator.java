@@ -4,7 +4,7 @@ import com.dafy.dev.config.*;
 import com.dafy.dev.pojo.CgiConfig;
 import com.dafy.dev.pojo.CgiInfo;
 import com.dafy.dev.pojo.ControllerConfig;
-import com.dafy.dev.pojo.GlobalConfig;
+import com.dafy.dev.config.GlobalConfig;
 import com.dafy.dev.util.FileUtil;
 import com.dafy.dev.util.SourceCodeUtil;
 import com.dafy.dev.util.StringUtil;

@@ -1,6 +1,5 @@
 package com.dafy.dev.config;
 
-import com.dafy.dev.pojo.GlobalConfig;
 import com.dafy.dev.pojo.TableInfo;
 import com.dafy.dev.util.ObjectConvertUtil;
 import com.dafy.dev.util.StringUtil;
@@ -43,6 +42,8 @@ public class ConfigGenerator {
 
         defaultConfig.setReqDtoNameSuffix(ConfigDefault.GLOBAL_DTO_REQ_SUFFIX);
         defaultConfig.setResDtoNameSuffix(ConfigDefault.GLOBAL_DTO_RES_SUFFIX);
+
+        defaultConfig.setSpringAutoConfigFullClassPath(ConfigDefault.SPRING_AUTO_CONFIG_FULLCLASSPATH);
 
 
         //template

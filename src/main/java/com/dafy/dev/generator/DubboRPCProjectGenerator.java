@@ -3,7 +3,7 @@ package com.dafy.dev.generator;
 import com.dafy.dev.GeneratorContext;
 import com.dafy.dev.codegen.ClassLoaderUtil;
 import com.dafy.dev.config.*;
-import com.dafy.dev.pojo.GlobalConfig;
+import com.dafy.dev.config.GlobalConfig;
 import com.dafy.dev.pojo.TableInfo;
 import com.dafy.dev.util.BannerUtil;
 import com.dafy.dev.util.CodeGenUtil;
@@ -545,13 +545,19 @@ public class DubboRPCProjectGenerator implements Generator {
         generator.set("com.dafy.mybatis.typeAlias." + this.name, getProviderPackage() + "." +
                 this.globalConfig.getPojoDirName());
 
-        for (String table : GeneratorContext.getTableList(this.globalConfig)) {
-            String domain = SourceCodeUtil
-                    .uppercase(table.startsWith("t_") ? table.substring(2, table.length()) : table,
-                            true);
-            generator.set("com.dafy.mybatis.mapper." + domain,
-                    "mybatis/" + getMapperXmlName(domain));
+
+        List<String> tables = GeneratorContext.getTableList(this.globalConfig);
+        if(tables!=null){
+            for (String table : tables) {
+                String domain = SourceCodeUtil
+                        .uppercase(table.startsWith("t_") ? table.substring(2, table.length()) : table, true);
+                generator.set("com.dafy.mybatis.mapper." + domain,
+                        "mybatis/" + getMapperXmlName(domain));
+            }
+        }else {
+            logger.error("table list is null or empty,please check your mybatis config");
         }
+
 
         generator.generate();
     }
@@ -567,7 +573,7 @@ public class DubboRPCProjectGenerator implements Generator {
 
         //todo configurable
         generator.set("org.springframework.boot.autoconfigure.EnableAutoConfiguration",
-                "com.dafy.dev.config.MybatisAutoConfiguration");
+                globalConfig.getSpringAutoConfigFullClassPath());
         generator.generate();
     }
 

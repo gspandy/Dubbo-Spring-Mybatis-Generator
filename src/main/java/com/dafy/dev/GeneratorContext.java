@@ -1,7 +1,7 @@
 package com.dafy.dev;
 
 import com.dafy.dev.codegen.ClassLoaderUtil;
-import com.dafy.dev.pojo.GlobalConfig;
+import com.dafy.dev.config.GlobalConfig;
 import com.dafy.dev.pojo.TableInfo;
 import com.dafy.dev.util.FileUtil;
 

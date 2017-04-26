@@ -1,6 +1,6 @@
 package com.dafy.dev.util;
 
-import com.dafy.dev.pojo.GlobalConfig;
+import com.dafy.dev.config.GlobalConfig;
 
 import java.util.ArrayList;
 import java.util.List;

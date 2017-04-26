@@ -4,7 +4,7 @@ import com.dafy.dev.config.ConfigGenerator;
 import com.dafy.dev.generator.DubboRPCProjectGenerator;
 import com.dafy.dev.generator.WebServerProjectGenerator;
 import com.dafy.dev.generator.YamlConfigGenerator;
-import com.dafy.dev.pojo.GlobalConfig;
+import com.dafy.dev.config.GlobalConfig;
 import com.dafy.dev.pojo.ServiceInfo;
 import com.dafy.dev.pojo.TableInfo;
 import com.dafy.dev.pojo.WebServerInfo;

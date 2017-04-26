@@ -1,6 +1,6 @@
 package com.dafy.dev.util;
 
-import com.dafy.dev.pojo.GlobalConfig;
+import com.dafy.dev.config.GlobalConfig;
 import com.dafy.dev.pojo.WebConfig;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;

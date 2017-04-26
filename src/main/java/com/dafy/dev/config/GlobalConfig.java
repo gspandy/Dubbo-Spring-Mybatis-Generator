@@ -1,6 +1,7 @@
-package com.dafy.dev.pojo;
+package com.dafy.dev.config;
 
-import com.dafy.dev.config.MybatisConfig;
+import com.dafy.dev.pojo.ServiceInfo;
+import com.dafy.dev.pojo.WebServerInfo;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
@@ -68,6 +69,17 @@ public class GlobalConfig {
     private String constantsDir;
 
     private String controllerDir;
+
+    //spring 自动配置类路径
+    private String springAutoConfigFullClassPath;
+
+    public String getSpringAutoConfigFullClassPath() {
+        return springAutoConfigFullClassPath;
+    }
+
+    public void setSpringAutoConfigFullClassPath(String springAutoConfigFullClassPath) {
+        this.springAutoConfigFullClassPath = springAutoConfigFullClassPath;
+    }
 
     public String getConstantsDir() {
         return constantsDir;

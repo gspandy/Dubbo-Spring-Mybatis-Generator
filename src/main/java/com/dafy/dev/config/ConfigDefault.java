@@ -67,6 +67,8 @@ public class ConfigDefault {
     public static final String  LOG_CONFIG_FILE="template/logback.xml";
     public static final String  LOG_CONFIG_DIR="";
 
+    public static final String  SPRING_AUTO_CONFIG_FULLCLASSPATH="com.dafy.dev.config.MybatisAutoConfiguration";
+
 
 
 
