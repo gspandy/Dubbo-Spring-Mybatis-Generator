@@ -52,9 +52,10 @@ public class DubboRPCProjectGenerator implements Generator {
 
     private List<ServiceConfig.ServiceDaoInfo> serviceDaoInfos;
 
+    private String rootPomPath;
+
     public DubboRPCProjectGenerator(GlobalConfig globalConfig) {
         validateConfig(globalConfig);
-
         this.globalConfig = globalConfig;
         this.name = globalConfig.getName();
         this.dubboConfig = ConfigDefault.getDefaultDubboConfig();
@@ -78,7 +79,12 @@ public class DubboRPCProjectGenerator implements Generator {
 
     private void createSubModuleDir() {
         BannerUtil.log("createSubModuleDir");
+        createRootPom();
+        createApiDir();
+        createProviderDir();
+    }
 
+    private void createRootPom(){
         List<String> modules = new ArrayList<>();
         modules.add(getApiModuleName());
         modules.add(getProviderModuleName());
@@ -88,21 +94,18 @@ public class DubboRPCProjectGenerator implements Generator {
 
         template = StringUtil.isEmpty(template) ? ConfigDefault.POM_TEMPLATE_ROOT : template;
 
-        String pom = projectGenerator.createRootPomFile(modules, null, template,
+        this.rootPomPath = projectGenerator.createRootPomFile(modules, null, template,
                 projectGenerator.getConfig().getDir(),
                 projectGenerator.getConfig().getProjectName());
 
-        logger.info("pom :{}", pom);
-        createApiDir(pom);
-        createProviderDir(pom);
+        logger.info("pom :{}", rootPomPath);
     }
 
     @SuppressWarnings("unchecked")
-    private void createApiDir(String pom) {
-        logger.info("createApiDir:{}", pom);
+    private void createApiDir() {
+        logger.info("createApiDir:{}");
         String apiDir = getApiDir();
         FileUtil.createDir(apiDir);
-
         //创建maven结构
         projectGenerator.createMavenStructure(apiDir);
 
@@ -111,7 +114,12 @@ public class DubboRPCProjectGenerator implements Generator {
             FileUtil.createDir(subDir);
         }
 
-        //generateServiceInterface(apiDir);
+        createApiPom();
+
+
+    }
+
+    private void createApiPom(){
 
         String module = getApiModuleName();
 
@@ -119,7 +127,7 @@ public class DubboRPCProjectGenerator implements Generator {
         template = StringUtil.isEmpty(template) ? ConfigDefault.POM_TEMPLATE_API : template;
 
         this.apiPomFile = projectGenerator
-                .createPomFile(pom, template, apiDir, module);
+                .createPomFile(this.rootPomPath, template, getApiDir(), module);
     }
 
     //生成api service
@@ -185,7 +193,7 @@ public class DubboRPCProjectGenerator implements Generator {
                 .getProviderDirName();
     }
 
-    private void createProviderDir(String pom) {
+    private void createProviderDir() {
         String providerDir = getProviderDir();
         FileUtil.createDir(providerDir);
 
@@ -207,7 +215,7 @@ public class DubboRPCProjectGenerator implements Generator {
 
         String moduleName = this.name;
 
-        createProviderPom(pom);
+        createProviderPom();
 
         if (this.tableList != null) {
             for (TableInfo t : this.tableList) {
@@ -262,8 +270,6 @@ public class DubboRPCProjectGenerator implements Generator {
     }
 
     private void createUtilFiles() {
-        //new DtoUtilFileGenerator(config).generateDtoUtilFile();
-
         for (TableInfo t : this.tableList) {
             String pojoName = SourceCodeUtil.covertClassName(t.getDomainName());
             String pojoClsFullName = getPojoPackage() + "." + pojoName;
@@ -299,12 +305,12 @@ public class DubboRPCProjectGenerator implements Generator {
 
     }
 
-    private void createProviderPom(String pom) {
+    private void createProviderPom() {
         String providerDir = getProviderDir();
         String module = getProviderModuleName();
         String template = this.globalConfig.getServiceProviderPomTemplatePath();
         template = StringUtil.isEmpty(template) ? ConfigDefault.POM_TEMPLATE_PROVIDER : template;
-        createPomFile(null, pom, template, providerDir, module);
+        createPomFile(null, this.rootPomPath, template, providerDir, module);
     }
 
     public void createPomFile(List<String> modules, String parentTemplate,
@@ -472,7 +478,7 @@ public class DubboRPCProjectGenerator implements Generator {
                     String targetClassFullName =
                             getApiDtoPackage() + "." + file.getName().replace(".java", "") + "Dto";
 
-                    new DtoGenerator(dtoConfig).generateFromPojoClass(pojoCls, targetClassFullName);
+                    new DtoFileGenerator(dtoConfig).generateFromPojoClass(pojoCls, targetClassFullName);
                 }
             }
         }

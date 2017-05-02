@@ -37,8 +37,8 @@ public class PomGenerator {
 
     private Model model;
 
-    public PomGenerator(ProjectConfig parentConfig, PomConfig config) {
-        this.parentConfig = parentConfig;
+    public PomGenerator(ProjectConfig projectConfig, PomConfig config) {
+        this.parentConfig = projectConfig;
         this.config = config;
         this.mavenXpp3Writer = new MavenXpp3Writer();
         this.mavenXpp3Reader = new MavenXpp3Reader();

@@ -1,14 +1,16 @@
 ---
 #项目名称
-name: goodsorder
+name: Gaia1
 #项目生成文件输出目录
 #output_dir:  "/Users/chunxiaoli/IdeaProjects/"
-output_dir:  "./"
+#output_dir:  "./"
 type: "rpc"
 #maven groupId
-group_id: "com.dafy.mall"
+group_id: "com.chunxiaoli.gaia"
 #dubbo rpc owner
 owner: chuxniao
+
+
 
 #json_file controller cgi protocol file
 cgi_json_file: "app.json"

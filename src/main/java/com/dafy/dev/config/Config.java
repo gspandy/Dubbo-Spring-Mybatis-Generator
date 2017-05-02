@@ -17,7 +17,12 @@ public class Config {
             "util"
     };
     public static final String[] API_SUB_DIRS=new String[]{
-            "dto/request","dto/response","common","config","constants","util"
+            "dto/request",
+            "dto/response",
+            "common",
+            "config",
+            "constants",
+            "util"
     };
 
     public static final String[] PROVIDER_SUB_DIRS=new String[]{

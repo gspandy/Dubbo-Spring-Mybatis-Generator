@@ -151,5 +151,14 @@ public class SourceCodeUtil {
         return fullClassName.substring(0, idx);
     }
 
+    public static String getGetterName(String fieldName){
+        String prefix="get";
+        return prefix+ SourceCodeUtil.convertMethodUppercase(fieldName);
+    }
+
+    public static String getSetterName(String fieldName){
+        return "set"+SourceCodeUtil.convertMethodUppercase(fieldName);
+    }
+
 
 }

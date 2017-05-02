@@ -126,7 +126,6 @@ public class DtoUtilFileGenerator implements Generator{
     }
 
     private FieldSpec getLogger(String clsName) {
-        //private Logger logger= LoggerFactory.getLogger(AccountServiceImpl.class);
         return FieldSpec
                 .builder(Logger.class, "logger", Modifier.PRIVATE, Modifier.FINAL, Modifier.STATIC)
                 .initializer("$T.$N($N)", LoggerFactory.class, "getLogger", clsName + ".class")

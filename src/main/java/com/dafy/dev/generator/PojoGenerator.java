@@ -77,7 +77,7 @@ public class PojoGenerator {
             }
 
             //toString方法 todo
-            //generateToString(definedClass,className,fields,map);
+            //generateToString(definedClass,classFullName,fields,map);
 
 
         } catch (JClassAlreadyExistsException e) {
@@ -136,16 +136,27 @@ public class PojoGenerator {
      */
 
     //todo
-    private void generateToString(JDefinedClass definedClass, String className, Field[] fields, HashMap<String, JFieldVar> map){
+    private void generateToString(JDefinedClass definedClass,
+                                  String className, Field[] fields,
+                                  HashMap<String, JFieldVar> map){
         JMethod toStringMethod=definedClass.method(JMod.PUBLIC,String.class,"toString");
         StringBuilder builder=new StringBuilder();
+        JBlock body = toStringMethod.body();
         builder.append(className).append("{");
         for (Field field:fields) {
-            builder.append(field.getName()).append("=").append(map.get(field.getName())).append(",");
+            JVar key= null;
+            try {
+                key = body.decl(codeModel.parseType("String"),field.getName()+"=");
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+            if(key!=null){
+                body.assignPlus(key,map.get(field.getName()));
+            }
 
         }
         builder.append("}");
-        toStringMethod.body()._return(JExpr.lit(builder.toString()));
+
     }
 
     private String getGetterName(String fieldName,JType fieldType){
