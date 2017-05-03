@@ -18,4 +18,12 @@ public class PojoTest {
         pojoConfig.setToString(true);
         new PojoFileGenerator(pojoConfig).generate(User.class,"UserDto");
     }
+
+    @Test
+    public void testCreatePojo1(){
+        PojoConfig pojoConfig = new PojoConfig();
+        pojoConfig.setOutDir("");
+        pojoConfig.setPackageName("abc");
+        new PojoFileGenerator(pojoConfig).generate(User.class,"UserDto");
+    }
 }
