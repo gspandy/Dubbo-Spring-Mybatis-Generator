@@ -7,8 +7,15 @@ import com.dafy.dev.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.tools.*;
+import javax.tools.Diagnostic;
+import javax.tools.DiagnosticCollector;
+import javax.tools.JavaCompiler;
+import javax.tools.JavaFileObject;
+import javax.tools.StandardJavaFileManager;
+import javax.tools.StandardLocation;
+import javax.tools.ToolProvider;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -136,7 +143,12 @@ public class ClassLoaderUtil {
 
     public static String compilerFiles(String inputDir, String outDir) {
         if (!StringUtil.isEmpty(inputDir)) {
-            List<File> files = FileUtil.getAllJavaFiles(inputDir,true);
+            List<File> files = FileUtil.getAllFilesByFilter(inputDir, new FileFilter() {
+                @Override
+                public boolean accept(File pathname) {
+                    return FileUtil.isJavaFile(pathname);
+                }
+            }, true);
 
             if (files != null && files.size() > 0) {
                 if(!new File(outDir).exists()){
@@ -162,12 +174,33 @@ public class ClassLoaderUtil {
                     List<String>options=new ArrayList<>();
                     options.add("-verbose");
                     options.add("-parameters");
+                    String dir="/Users/chunxiaoli/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/"
+                            + "ideaIU/171.4073.35/786e3fdca7eda7f1d3256aa96489b32fbcdd60b2/ideaIU-171.4073.35/lib/";
+
+                    //options.addAll(Arrays.asList("-classpath",System.getProperty("java.class.path")));
+                    String libs=System.getProperty("idea.plugins.path");
+                    String libdir="/Users/chunxiaoli/Library/Caches/IntelliJIdea2017.1/plugins-sandbox/plugins/";
+                    /*String classpath=buildClassPath("/Users/chunxiaoli/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIU/171.4073.35/786e3fdca7eda7f1d3256aa96489b32fbcdd60b2/ideaIU-171.4073.35/lib*//*");*/
+                    //System.out.println("classpath for plugin:"+classpath);
+                    //options.addAll(Arrays.asList("-classpath",classpath));
 
                     StandardJavaFileManager sjfm = compiler
                             .getStandardFileManager(diagnostics, null, null);
+
+                    List<File> clsPath=FileUtil.getAllFilesByFilter(libs, new FileFilter() {
+                        @Override
+                        public boolean accept(File pathname) {
+                            return pathname.getAbsolutePath().endsWith(".jar");
+                        }
+                    },true);
+                    clsPath.forEach(item->{
+                        System.out.println(item.getAbsolutePath());
+                    });
                     try {
                         sjfm.setLocation(StandardLocation.CLASS_OUTPUT,
                                 Collections.singleton(new File(outDir)));
+                       sjfm.setLocation(StandardLocation.CLASS_PATH,clsPath);
+                        //sjfm.setLocation(StandardLocation.CLASS_PATH,Collections.singleton(new File(jar)));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -203,6 +236,24 @@ public class ClassLoaderUtil {
             }
         }
         return null;
+    }
+
+    public static String buildClassPath(String dir) {
+        StringBuilder sb = new StringBuilder();
+        int j=0;
+
+        List<File> files = FileUtil.getAllFilesByFilter(dir, new FileFilter() {
+            @Override
+            public boolean accept(File pathname) {
+                return pathname.getAbsolutePath().endsWith(".jar");
+            }
+        }, true);
+        int i=0;
+        for (File f : files) {
+            sb.append(f.getAbsolutePath());
+            sb.append(i++==files.size()-1?"":",");
+        }
+        return sb.toString();
     }
 
     public static Class loadClass(String file, ClassLoader classLoader) {

@@ -32,6 +32,9 @@ public class ProjectGenerator implements Generator{
     private  MybatisConfig mybatisConfig;
 
 
+    public ProjectGenerator(){
+    }
+
     @SuppressWarnings("unchecked")
     public ProjectGenerator(ProjectConfig config){
         checkConfig(config);

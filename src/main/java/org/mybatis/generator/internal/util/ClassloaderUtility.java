@@ -61,7 +61,8 @@ public class ClassloaderUtility {
 			}
 		}
 
-		ClassLoader parent = Thread.currentThread().getContextClassLoader();
+		//ClassLoader parent = Thread.currentThread().getContextClassLoader();
+		ClassLoader parent = ClassloaderUtility.class.getClassLoader();
 
 		URLClassLoader ucl = new URLClassLoader(urls.toArray(new URL[urls.size()]), parent);
 

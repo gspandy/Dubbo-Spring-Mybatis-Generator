@@ -69,12 +69,12 @@ public class DtoFileGenerator implements Generator {
                 if(cgiInfo.getRequest()!=null){
                     String request = new Gson().toJson(cgiInfo.getRequest());
                     JsonToPojo.fromJsonNode(new Gson().fromJson(request,JsonElement.class),requestDtoFullName,
-                            new File(this.dtoConfig.getDir()),true,true);
+                            new File(this.dtoConfig.getDir()),true,true,true);
                 }
                 if(cgiInfo.getResponse()!=null){
                     String response = new Gson().toJson(cgiInfo.getResponse());
                     JsonToPojo.fromJsonNode(new Gson().fromJson(response,JsonElement.class),responseDtoFullName,
-                            new File(this.dtoConfig.getDir()),true,true);
+                            new File(this.dtoConfig.getDir()),true,true,true);
                 }
 
 
@@ -99,6 +99,7 @@ public class DtoFileGenerator implements Generator {
         PojoConfig pojoConfig = new PojoConfig();
         pojoConfig.setOutDir(dtoConfig.getDir());
         pojoConfig.setPackageName(dtoConfig.getPackageName());
+        pojoConfig.setToString(true);
         new PojoFileGenerator(pojoConfig).generate(sourceCls, targetClassFullName);
 
     }

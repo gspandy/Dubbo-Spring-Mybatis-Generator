@@ -87,10 +87,10 @@ public class DtoGenerator implements Generator{
 
 
                     JsonToPojo.fromJsonNode(request,requestDtoFullName,
-                            new File(this.dtoConfig.getDir()),true,true);
+                            new File(this.dtoConfig.getDir()),true,true,true);
 
                     JsonToPojo.fromJsonNode(response,responseDtoFullName,
-                            new File(this.dtoConfig.getDir()),true,true);
+                            new File(this.dtoConfig.getDir()),true,true,true);
                 }
 
             }

@@ -4,7 +4,12 @@ import com.dafy.dev.config.JavaFileConfig;
 import com.dafy.dev.config.MethodInfo;
 import com.dafy.dev.config.ParameterInfo;
 import com.dafy.dev.util.SourceCodeUtil;
-import com.squareup.javapoet.*;
+import com.squareup.javapoet.ClassName;
+import com.squareup.javapoet.FieldSpec;
+import com.squareup.javapoet.JavaFile;
+import com.squareup.javapoet.MethodSpec;
+import com.squareup.javapoet.TypeName;
+import com.squareup.javapoet.TypeSpec;
 import com.sun.codemodel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +40,14 @@ public class JavaFileGenerator {
         this.classLoader = classLoader;
     }
 
+    public JavaFileConfig getJavaFileConfig() {
+        return javaFileConfig;
+    }
+
+    public void setJavaFileConfig(JavaFileConfig javaFileConfig) {
+        this.javaFileConfig = javaFileConfig;
+    }
+
     public static FieldSpec getLogger(String clsName) {
         //private Logger logger= LoggerFactory.getLogger(AccountServiceImpl.class);
         return FieldSpec
@@ -43,13 +56,15 @@ public class JavaFileGenerator {
                 .build();
     }
 
-
-    public JavaFileGenerator(JavaFileConfig javaFileConfig){
-        this.javaFileConfig=javaFileConfig;
+    public JavaFileGenerator() {
     }
 
-    public  void generator(){
-        switch (javaFileConfig.getKind()){
+    public JavaFileGenerator(JavaFileConfig javaFileConfig) {
+        this.javaFileConfig = javaFileConfig;
+    }
+
+    public void generator() {
+        switch (javaFileConfig.getKind()) {
             case CLASS:
                 break;
             case INTERFACE:
@@ -62,15 +77,19 @@ public class JavaFileGenerator {
 
     }
 
-    public  void generateInterface(){
-        TypeSpec.Builder builder  = TypeSpec.interfaceBuilder(javaFileConfig.getClassName())
+    public void generateInterface() {
+        generateInterface(this.javaFileConfig);
+    }
+
+    public void generateInterface(JavaFileConfig javaFileConfig) {
+        TypeSpec.Builder builder = TypeSpec.interfaceBuilder(javaFileConfig.getClassName())
                 .addJavadoc(javaFileConfig.getJavaFileDoc())
                 .addModifiers(Modifier.PUBLIC);
 
-        if(javaFileConfig.getInterfaces()!=null){
-            for (String methodName:javaFileConfig.getInterfaces()){
+        if (javaFileConfig.getInterfaces() != null) {
+            for (String methodName : javaFileConfig.getInterfaces()) {
                 MethodSpec m = MethodSpec.methodBuilder(methodName)
-                        .addModifiers(Modifier.PUBLIC,Modifier.ABSTRACT)
+                        .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
                         .addParameter(String[].class, "args")
                         .build();
                 builder.addMethod(m);
@@ -80,8 +99,12 @@ public class JavaFileGenerator {
         doGenerate(builder);
     }
 
-    public  void generateProviderHookFile(){
-        TypeSpec.Builder builder  = TypeSpec.classBuilder(javaFileConfig.getClassName())
+    public void generateProviderHookFile() {
+        generateProviderHookFile(this.javaFileConfig);
+    }
+
+    public void generateProviderHookFile(JavaFileConfig javaFileConfig) {
+        TypeSpec.Builder builder = TypeSpec.classBuilder(javaFileConfig.getClassName())
                 .addJavadoc(javaFileConfig.getJavaFileDoc())
                 .addModifiers(Modifier.PUBLIC);
 
@@ -90,9 +113,9 @@ public class JavaFileGenerator {
         doGenerate(builder);
     }
 
-    public   String doGenerate(TypeSpec.Builder builder){
-        TypeSpec typeSpec= builder.build();
-        JavaFile javaFile = JavaFile.builder(javaFileConfig.getPackageName(),typeSpec).build();
+    public String doGenerate(TypeSpec.Builder builder) {
+        TypeSpec typeSpec = builder.build();
+        JavaFile javaFile = JavaFile.builder(javaFileConfig.getPackageName(), typeSpec).build();
         try {
             //javaFile.writeTo(System.out);
             File dir = new File(javaFileConfig.getOutDir());
@@ -108,35 +131,26 @@ public class JavaFileGenerator {
 
     }
 
-
-
-    private String getFinalPath(){
-        return javaFileConfig.getOutDir()+File.separator
-                +SourceCodeUtil.convertPackage2Dir(javaFileConfig.getPackageName())
-                +File.separator+javaFileConfig.getClassName()+".java";
+    private String getFinalPath() {
+        return javaFileConfig.getOutDir() + File.separator
+                + SourceCodeUtil.convertPackage2Dir(javaFileConfig.getPackageName())
+                + File.separator + javaFileConfig.getClassName() + ".java";
     }
 
     public void generateDaoImpl(HashMap<String, String> fields,
                                 String returnType,
-                                String interfaceName,String packageName) {
-
+                                String interfaceName, String packageName) {
 
         JCodeModel codeModel = new JCodeModel();
 
-
-        JPackage jPackage= codeModel._package(packageName);
-
-
+        JPackage jPackage = codeModel._package(packageName);
 
         JDefinedClass definedClass;
-
-
 
         try {
             definedClass = jPackage._class(this.javaFileConfig.getClassName());
 
             definedClass._implements(codeModel.ref(interfaceName));
-
 
             definedClass.annotate(Component.class);
 
@@ -149,7 +163,8 @@ public class JavaFileGenerator {
 
                 fieldType = codeModel.ref(fieldMap.getKey());
 
-                JFieldVar fieldVar = definedClass.field(JMod.PRIVATE, fieldType, SourceCodeUtil.covertFieldName(fieldName));
+                JFieldVar fieldVar = definedClass
+                        .field(JMod.PRIVATE, fieldType, SourceCodeUtil.covertFieldName(fieldName));
 
                 fieldVar.annotate(javax.annotation.Resource.class);
 
@@ -157,25 +172,24 @@ public class JavaFileGenerator {
 
                 map.put(fieldName, fieldVar);
 
-                if(this.javaFileConfig.getMethodInfos()!=null){
-                    for(MethodInfo m:this.javaFileConfig.getMethodInfos()){
-                        JMethod method= definedClass.method(JMod.PUBLIC,codeModel.ref(m.getReturnTypeFullClassName()),m.getName());
-                        for(ParameterInfo p:m.getParameterInfoList()){
-                            method.param(codeModel.ref(p.getTypeFullClassName()),p.getName());
+                if (this.javaFileConfig.getMethodInfos() != null) {
+                    for (MethodInfo m : this.javaFileConfig.getMethodInfos()) {
+                        JMethod method = definedClass
+                                .method(JMod.PUBLIC, codeModel.ref(m.getReturnTypeFullClassName()),
+                                        m.getName());
+                        for (ParameterInfo p : m.getParameterInfoList()) {
+                            method.param(codeModel.ref(p.getTypeFullClassName()), p.getName());
                         }
-                        JBlock block=method.body();
+                        JBlock block = method.body();
                         block.directStatement("//todo");
                         block._return(JExpr._null());
                     }
                 }
             }
 
-
-
         } catch (JClassAlreadyExistsException e) {
             e.printStackTrace();
         }
-
 
         try {
             codeModel.build(new File(javaFileConfig.getOutDir()));
@@ -185,18 +199,18 @@ public class JavaFileGenerator {
         }
     }
 
-    public static boolean isPrimaryType(String type){
-        return type.equals("int")||type.equals("char")
-                ||type.equals("long")||type.equals("double")
-                ||type.equals("float")||type.equals("byte")
-                ||type.equals("boolean");
+    public static boolean isPrimaryType(String type) {
+        return type.equals("int") || type.equals("char")
+                || type.equals("long") || type.equals("double")
+                || type.equals("float") || type.equals("byte")
+                || type.equals("boolean");
     }
 
-    public static boolean isPrimaryWrapperType(String type){
-        return type.equals("Integer")||type.equals("Long")
-                ||type.equals("Character")||type.equals("Float")
-                ||type.equals("Double")||type.equals("Byte")
-                ||type.equals("Boolean");
+    public static boolean isPrimaryWrapperType(String type) {
+        return type.equals("Integer") || type.equals("Long")
+                || type.equals("Character") || type.equals("Float")
+                || type.equals("Double") || type.equals("Byte")
+                || type.equals("Boolean");
     }
 
     public static ClassName resolveClassName(String fullName) {
@@ -208,28 +222,28 @@ public class JavaFileGenerator {
     }
 
     public static Class resolvePrimaryType(String fullName) {
-        Class typeName=null;
-        switch (fullName){
+        Class typeName = null;
+        switch (fullName) {
             case "int":
-                typeName=Integer.TYPE;
+                typeName = Integer.TYPE;
                 break;
             case "char":
-                typeName=Character.TYPE;
+                typeName = Character.TYPE;
                 break;
             case "long":
-                typeName=Long.TYPE;
+                typeName = Long.TYPE;
                 break;
             case "float":
-                typeName=Float.TYPE;
+                typeName = Float.TYPE;
                 break;
             case "double":
-                typeName=Double.TYPE;
+                typeName = Double.TYPE;
                 break;
             case "byte":
-                typeName=Byte.TYPE;
+                typeName = Byte.TYPE;
                 break;
             case "boolean":
-                typeName=Boolean.TYPE;
+                typeName = Boolean.TYPE;
                 break;
 
         }
@@ -237,63 +251,38 @@ public class JavaFileGenerator {
     }
 
     public static TypeName getPrimaryType(String fullName) {
-        Class typeName=null;
-        switch (fullName){
-            case "int":
-                typeName=Integer.class;
-                break;
-            case "char":
-                typeName=Character.class;
-                break;
-            case "long":
-                typeName=Long.class;
-                break;
-            case "float":
-                typeName=Float.class;
-                break;
-            case "double":
-                typeName=Double.class;
-                break;
-            case "byte":
-                typeName=Byte.class;
-                break;
-            case "boolean":
-                typeName=Boolean.class;
-                break;
-
-        }
-        return typeName==null?null:ClassName.get(typeName);
+        Class typeName = getPrimaryClass(fullName);
+        return typeName == null ? null : ClassName.get(typeName);
     }
 
     public static Class getPrimaryClass(String fullName) {
-        Class typeName=null;
-        switch (fullName){
+        Class typeName = null;
+        switch (fullName) {
             case "int":
-                typeName=Integer.class;
+                typeName = Integer.class;
                 break;
             case "char":
-                typeName=Character.class;
+                typeName = Character.class;
                 break;
             case "long":
-                typeName=Long.class;
+                typeName = Long.class;
                 break;
             case "float":
-                typeName=Float.class;
+                typeName = Float.class;
                 break;
             case "double":
-                typeName=Double.class;
+                typeName = Double.class;
                 break;
             case "byte":
-                typeName=Byte.class;
+                typeName = Byte.class;
                 break;
             case "boolean":
-                typeName=Boolean.class;
+                typeName = Boolean.class;
                 break;
 
         }
         return typeName;
     }
-
 
     public static String getClassName(String fullClassName) {
         int idx = fullClassName.lastIndexOf(".");
@@ -303,10 +292,7 @@ public class JavaFileGenerator {
     public static String getPackageName(String fullClassName) {
 
         int idx = fullClassName.lastIndexOf(".");
-        return idx>0?fullClassName.substring(0, idx):fullClassName;
+        return idx > 0 ? fullClassName.substring(0, idx) : fullClassName;
     }
-
-
-
 
 }

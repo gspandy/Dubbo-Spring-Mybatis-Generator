@@ -274,6 +274,7 @@ public class DubboRPCProjectGenerator implements Generator {
             String pojoName = SourceCodeUtil.covertClassName(t.getDomainName());
             String pojoClsFullName = getPojoPackage() + "." + pojoName;
             String dtoClsFullName = getDtoPackage() + "." + pojoName + "Dto";
+
             Class pojoCls = ClassLoaderUtil.load(pojoClsFullName, this.classLoader);
             Class dtoCls = ClassLoaderUtil.load(dtoClsFullName, this.classLoader);
 
@@ -408,7 +409,7 @@ public class DubboRPCProjectGenerator implements Generator {
         return projectGenerator.getPackageName(this.name) + "." + this.globalConfig.getApiDirName();
     }
 
-    //生成 config/module-mybatis-config.properties文件
+
     private void createMybatisConfig(String moduleName, String classNamePrefix, String dir) {
 
         String propertySourceValue = "classpath:" + getMybatisPropertiesConfigPath(moduleName);
@@ -465,22 +466,27 @@ public class DubboRPCProjectGenerator implements Generator {
         File f = new File(dir);
         if (f.exists()) {
             File[] files = f.listFiles();
-            for (File file : files) {
-                if (file.isFile() && file.getPath().endsWith(".java")) {
-                    Class pojoCls = ClassLoaderUtil.loadClass(file.getPath(), this.classLoader);
-                    String apiBaseDir = getApiBaseDir();
-                    DtoConfig dtoConfig = new DtoConfig();
-                    dtoConfig.setDir(apiBaseDir);
-                    dtoConfig.setPackageName(getDtoPackage());
+            if(files!=null){
+                for (File file : files) {
+                    if (file.isFile() && file.getPath().endsWith(".java")) {
+                        Class pojoCls = ClassLoaderUtil.loadClass(file.getPath(), this.classLoader);
+                        String apiBaseDir = getApiBaseDir();
+                        DtoConfig dtoConfig = new DtoConfig();
+                        dtoConfig.setDir(apiBaseDir);
+                        dtoConfig.setPackageName(getDtoPackage());
 
-                    String daoDir = getDaoPackage();
+                        String daoDir = getDaoPackage();
 
-                    String targetClassFullName =
-                            getApiDtoPackage() + "." + file.getName().replace(".java", "") + "Dto";
+                        String targetClassFullName =
+                                getApiDtoPackage() + "." + file.getName().replace(".java", "") + "Dto";
 
-                    new DtoFileGenerator(dtoConfig).generateFromPojoClass(pojoCls, targetClassFullName);
+                        new DtoFileGenerator(dtoConfig).generateFromPojoClass(pojoCls, targetClassFullName);
+                    }
                 }
+            }else {
+                logger.error("get provider pojo files empty or null...:{}",getProviderPojoDir());
             }
+
         }
 
     }
@@ -536,7 +542,7 @@ public class DubboRPCProjectGenerator implements Generator {
         /**/
 
     }
-
+    //生成 config/module-mybatis-config.properties文件
     private void createMybatisPropertiesFile(String parentDir) {
         String base = projectGenerator.getResourceBaseDir(parentDir);
         String path = base + File.separator + getMybatisPropertiesConfigPath(this.name);

@@ -47,6 +47,17 @@ public class SpringBootDubboJavaFileGenerator implements Generator {
 
     private JavaFileConfig    javaFileConfig;
 
+    public JavaFileGenerator getGenerator() {
+        return generator;
+    }
+
+    public void setGenerator(JavaFileGenerator generator) {
+        this.generator = generator;
+    }
+
+    public SpringBootDubboJavaFileGenerator() {
+    }
+
     public SpringBootDubboJavaFileGenerator(JavaFileConfig config) {
         this.javaFileConfig = config;
         generator = new JavaFileGenerator(config);

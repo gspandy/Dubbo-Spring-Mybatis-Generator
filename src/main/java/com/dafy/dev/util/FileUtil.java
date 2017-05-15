@@ -165,7 +165,7 @@ public class FileUtil {
         return f!=null&&f.isFile()&&f.getName().endsWith(".java");
     }
 
-    public static File[] getAllJavaFiles(String dir){
+    public static File[] getAllFilesByFilter(String dir){
 
         if(StringUtil.isEmpty(dir)){
             return null;
@@ -179,25 +179,26 @@ public class FileUtil {
 
     }
 
-    public static List<File> getAllJavaFiles(String dir, boolean recursive){
+    public static List<File> getAllFilesByFilter(String dir, FileFilter fileFilter, boolean recursive){
         List<File> ret=new ArrayList<>();
         if(recursive){
             File[]files=new File(dir).listFiles();
             if(files!=null&&files.length>0){
                 for(File f:files){
                     if(f.isDirectory()){
-                        ret.addAll(getAllJavaFiles(f.getPath(),true));
-                    }else if(FileUtil.isJavaFile(f)) {
+                        ret.addAll(getAllFilesByFilter(f.getPath(),fileFilter,true));
+                    }else if(fileFilter.accept(f)) {
                         ret.add(f);
                     }
                 }
             }
         }else {
-             File[]arr=getAllJavaFiles(dir);
+             File[]arr= getAllFilesByFilter(dir);
              if(arr!=null){
                  ret=Arrays.stream(arr).collect(Collectors.toList());
              }
         }
         return ret;
     }
+
 }

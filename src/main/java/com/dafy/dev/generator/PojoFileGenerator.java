@@ -35,7 +35,7 @@ public class PojoFileGenerator {
 
         FieldSpec logger = getLogger(className);
 
-        builder.addField(logger);
+        //builder.addField(logger);
 
         if (pojoConfig.isSerializable()) {
 
@@ -85,9 +85,7 @@ public class PojoFileGenerator {
     */
     private MethodSpec.Builder getToStringMethod(Class cls,String className) {
         String name = "toString";
-        MethodSpec.Builder mBuilder = MethodSpec
-                .methodBuilder(name)
-                .addModifiers(Modifier.PUBLIC);
+        MethodSpec.Builder mBuilder = MethodSpec.methodBuilder(name).addModifiers(Modifier.PUBLIC);
         mBuilder.returns(String.class);
         Field[] fields = cls.getDeclaredFields();
         StringBuffer sb = new StringBuffer();
@@ -122,7 +120,7 @@ public class PojoFileGenerator {
         String fieldName = field.getName();
         MethodSpec.Builder mBuilder = MethodSpec
                 .methodBuilder(SourceCodeUtil.getGetterName(fieldName))
-                .addModifiers(Modifier.PUBLIC);
+                .addModifiers(Modifier.PUBLIC).returns(field.getType());
         mBuilder.addStatement("return this.$N", fieldName);
         return mBuilder;
 

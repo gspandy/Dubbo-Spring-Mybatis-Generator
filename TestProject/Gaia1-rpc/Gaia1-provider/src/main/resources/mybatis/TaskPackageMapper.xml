@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chunxiaoli.gaia.Gaia1.provider.orm.TaskPackageMapper" >
+  <resultMap id="BaseResultMap" type="com.chunxiaoli.gaia.Gaia1.provider.pojo.TaskPackage" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="first_party_companys" property="firstPartyCompanys" jdbcType="VARCHAR" />
+    <result column="first_party_name" property="firstPartyName" jdbcType="VARCHAR" />
+    <result column="outsource_company_name" property="outsourceCompanyName" jdbcType="VARCHAR" />
+    <result column="task_type" property="taskType" jdbcType="VARCHAR" />
+    <result column="entrust_batch_no" property="entrustBatchNo" jdbcType="VARCHAR" />
+    <result column="present_address" property="presentAddress" jdbcType="VARCHAR" />
+    <result column="residence_address" property="residenceAddress" jdbcType="VARCHAR" />
+    <result column="phase_range" property="phaseRange" jdbcType="VARCHAR" />
+    <result column="task_time_range" property="taskTimeRange" jdbcType="VARCHAR" />
+    <result column="loan_money_range" property="loanMoneyRange" jdbcType="VARCHAR" />
+    <result column="pub_date" property="pubDate" jdbcType="VARCHAR" />
+    <result column="task_num" property="taskNum" jdbcType="INTEGER" />
+    <result column="entrust_time_range" property="entrustTimeRange" jdbcType="VARCHAR" />
+    <result column="rate_dependence_time" property="rateDependenceTime" jdbcType="VARCHAR" />
+    <result column="other_limit" property="otherLimit" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="source" property="source" jdbcType="INTEGER" />
+    <result column="upload_batch_no" property="uploadBatchNo" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, first_party_companys, first_party_name, outsource_company_name, task_type, entrust_batch_no, 
+    present_address, residence_address, phase_range, task_time_range, loan_money_range, 
+    pub_date, task_num, entrust_time_range, rate_dependence_time, other_limit, state, 
+    create_time, update_time, source, upload_batch_no
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_task_package
+    where id = #{id}
+  </select>
+  <insert id="insert" parameterType="com.chunxiaoli.gaia.Gaia1.provider.pojo.TaskPackage" >
+    insert into t_task_package (id, first_party_companys, first_party_name, outsource_company_name, 
+      task_type, entrust_batch_no, present_address, residence_address, phase_range, 
+      task_time_range, loan_money_range, pub_date, task_num, entrust_time_range, 
+      rate_dependence_time, other_limit, state, create_time, update_time, source, 
+      upload_batch_no)
+    values (#{id}, #{firstPartyCompanys}, #{firstPartyName}, #{outsourceCompanyName}, 
+      #{taskType}, #{entrustBatchNo}, #{presentAddress}, #{residenceAddress}, #{phaseRange}, 
+      #{taskTimeRange}, #{loanMoneyRange}, #{pubDate}, #{taskNum}, #{entrustTimeRange}, 
+      #{rateDependenceTime}, #{otherLimit}, #{state}, #{createTime}, #{updateTime}, #{source}, 
+      #{uploadBatchNo})
+  </insert>
+  <insert id="insertSelective" parameterType="com.chunxiaoli.gaia.Gaia1.provider.pojo.TaskPackage" >
+    insert into t_task_package
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="firstPartyCompanys != null" >
+        first_party_companys,
+      </if>
+      <if test="firstPartyName != null" >
+        first_party_name,
+      </if>
+      <if test="outsourceCompanyName != null" >
+        outsource_company_name,
+      </if>
+      <if test="taskType != null" >
+        task_type,
+      </if>
+      <if test="entrustBatchNo != null" >
+        entrust_batch_no,
+      </if>
+      <if test="presentAddress != null" >
+        present_address,
+      </if>
+      <if test="residenceAddress != null" >
+        residence_address,
+      </if>
+      <if test="phaseRange != null" >
+        phase_range,
+      </if>
+      <if test="taskTimeRange != null" >
+        task_time_range,
+      </if>
+      <if test="loanMoneyRange != null" >
+        loan_money_range,
+      </if>
+      <if test="pubDate != null" >
+        pub_date,
+      </if>
+      <if test="taskNum != null" >
+        task_num,
+      </if>
+      <if test="entrustTimeRange != null" >
+        entrust_time_range,
+      </if>
+      <if test="rateDependenceTime != null" >
+        rate_dependence_time,
+      </if>
+      <if test="otherLimit != null" >
+        other_limit,
+      </if>
+      <if test="state != null" >
+        state,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="source != null" >
+        source,
+      </if>
+      <if test="uploadBatchNo != null" >
+        upload_batch_no,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id},
+      </if>
+      <if test="firstPartyCompanys != null" >
+        #{firstPartyCompanys},
+      </if>
+      <if test="firstPartyName != null" >
+        #{firstPartyName},
+      </if>
+      <if test="outsourceCompanyName != null" >
+        #{outsourceCompanyName},
+      </if>
+      <if test="taskType != null" >
+        #{taskType},
+      </if>
+      <if test="entrustBatchNo != null" >
+        #{entrustBatchNo},
+      </if>
+      <if test="presentAddress != null" >
+        #{presentAddress},
+      </if>
+      <if test="residenceAddress != null" >
+        #{residenceAddress},
+      </if>
+      <if test="phaseRange != null" >
+        #{phaseRange},
+      </if>
+      <if test="taskTimeRange != null" >
+        #{taskTimeRange},
+      </if>
+      <if test="loanMoneyRange != null" >
+        #{loanMoneyRange},
+      </if>
+      <if test="pubDate != null" >
+        #{pubDate},
+      </if>
+      <if test="taskNum != null" >
+        #{taskNum},
+      </if>
+      <if test="entrustTimeRange != null" >
+        #{entrustTimeRange},
+      </if>
+      <if test="rateDependenceTime != null" >
+        #{rateDependenceTime},
+      </if>
+      <if test="otherLimit != null" >
+        #{otherLimit},
+      </if>
+      <if test="state != null" >
+        #{state},
+      </if>
+      <if test="createTime != null" >
+        #{createTime},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime},
+      </if>
+      <if test="source != null" >
+        #{source},
+      </if>
+      <if test="uploadBatchNo != null" >
+        #{uploadBatchNo},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.chunxiaoli.gaia.Gaia1.provider.pojo.TaskPackage" >
+    update t_task_package
+    <set >
+      <if test="firstPartyCompanys != null" >
+        first_party_companys = #{firstPartyCompanys},
+      </if>
+      <if test="firstPartyName != null" >
+        first_party_name = #{firstPartyName},
+      </if>
+      <if test="outsourceCompanyName != null" >
+        outsource_company_name = #{outsourceCompanyName},
+      </if>
+      <if test="taskType != null" >
+        task_type = #{taskType},
+      </if>
+      <if test="entrustBatchNo != null" >
+        entrust_batch_no = #{entrustBatchNo},
+      </if>
+      <if test="presentAddress != null" >
+        present_address = #{presentAddress},
+      </if>
+      <if test="residenceAddress != null" >
+        residence_address = #{residenceAddress},
+      </if>
+      <if test="phaseRange != null" >
+        phase_range = #{phaseRange},
+      </if>
+      <if test="taskTimeRange != null" >
+        task_time_range = #{taskTimeRange},
+      </if>
+      <if test="loanMoneyRange != null" >
+        loan_money_range = #{loanMoneyRange},
+      </if>
+      <if test="pubDate != null" >
+        pub_date = #{pubDate},
+      </if>
+      <if test="taskNum != null" >
+        task_num = #{taskNum},
+      </if>
+      <if test="entrustTimeRange != null" >
+        entrust_time_range = #{entrustTimeRange},
+      </if>
+      <if test="rateDependenceTime != null" >
+        rate_dependence_time = #{rateDependenceTime},
+      </if>
+      <if test="otherLimit != null" >
+        other_limit = #{otherLimit},
+      </if>
+      <if test="state != null" >
+        state = #{state},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime},
+      </if>
+      <if test="source != null" >
+        source = #{source},
+      </if>
+      <if test="uploadBatchNo != null" >
+        upload_batch_no = #{uploadBatchNo},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.chunxiaoli.gaia.Gaia1.provider.pojo.TaskPackage" >
+    update t_task_package
+    set first_party_companys = #{firstPartyCompanys},
+      first_party_name = #{firstPartyName},
+      outsource_company_name = #{outsourceCompanyName},
+      task_type = #{taskType},
+      entrust_batch_no = #{entrustBatchNo},
+      present_address = #{presentAddress},
+      residence_address = #{residenceAddress},
+      phase_range = #{phaseRange},
+      task_time_range = #{taskTimeRange},
+      loan_money_range = #{loanMoneyRange},
+      pub_date = #{pubDate},
+      task_num = #{taskNum},
+      entrust_time_range = #{entrustTimeRange},
+      rate_dependence_time = #{rateDependenceTime},
+      other_limit = #{otherLimit},
+      state = #{state},
+      create_time = #{createTime},
+      update_time = #{updateTime},
+      source = #{source},
+      upload_batch_no = #{uploadBatchNo}
+    where id = #{id}
+  </update>
+</mapper>
