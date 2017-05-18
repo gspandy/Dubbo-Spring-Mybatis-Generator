@@ -86,12 +86,19 @@ public class Main {
 
     }
 
-    public static void run(InputStream configInputStream) {
+    public static int generate(){
+        GlobalConfig config= (GlobalConfig) ObjectConvertUtil.merge(ConfigGenerator.getDefault(),new GlobalConfig());
+        generateRpc(config);
+        return 1;
+    }
+
+    public static int run(InputStream configInputStream) {
         GlobalConfig config = null;
         config = ConfigUtil.parseConfig(configInputStream);
         if (config == null) {
             logger.error("can not load config exit");
-            exit(1);
+            return 1;
+            //exit(1);
         }
 
         //合并配置
@@ -116,8 +123,10 @@ public class Main {
                     useAge("type invalid");
 
             }
+            return 0;
         }
         err.forEach(System.err::println);
+        return -1;
     }
 
     private static void useAge(){

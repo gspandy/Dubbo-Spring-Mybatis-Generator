@@ -226,6 +226,7 @@ public class DubboRPCProjectGenerator implements Generator {
         createOrm(moduleName, providerDir);
 
         //load denpendencies...
+        //this.classLoader = ClassLoaderUtil.loadAllClass(new String[]{getProviderOrmDir(),getProviderPojoDir()});
         this.classLoader = ClassLoaderUtil.loadAllClass(getDir());
 
         if (this.tableList != null) {
@@ -295,7 +296,6 @@ public class DubboRPCProjectGenerator implements Generator {
     private void createOrm(String moduleName, String providerDir) {
         createMybatisConfig(moduleName, moduleName, providerDir);
 
-        //createMybatisFiles(this.tableConfig);
         //todo
         if (this.tableList != null) {
             createMybatisFiles(this.tableList);
@@ -538,9 +538,6 @@ public class DubboRPCProjectGenerator implements Generator {
             FileUtil.save(inputStream, path);
         }
 
-        //todo
-        /**/
-
     }
     //生成 config/module-mybatis-config.properties文件
     private void createMybatisPropertiesFile(String parentDir) {
@@ -577,6 +574,9 @@ public class DubboRPCProjectGenerator implements Generator {
     //spring auto config
     private void createSpringBootAutoConfigFiles(String parentDir) {
         String base = projectGenerator.getResourceBaseDir(parentDir);
+
+        FileUtil.createDir(base + File.separator + "META-INF");
+
         String path = base + File.separator + "META-INF" + File.separator + "spring.factories";
         PropertyConfig config = new PropertyConfig();
         config.setPath(path);
@@ -680,7 +680,11 @@ public class DubboRPCProjectGenerator implements Generator {
             for (File f : files) {
                 if (FileUtil.isJavaFile(f)) {
                     Class cls = ClassLoaderUtil.loadClass(f.getPath(), this.classLoader);
-                    classes.add(cls);
+                    if(cls!=null){
+                        classes.add(cls);
+                    }else {
+                        logger.error("load class {} error",f.getAbsoluteFile());
+                    }
                 }
             }
         }
@@ -726,25 +730,6 @@ public class DubboRPCProjectGenerator implements Generator {
         DaoConfig daoConfigImpl = new DaoConfig();
 
         daoConfigImpl.setMapper(ClassLoaderUtil.loadClass(mapperFile, this.classLoader));
-
-
-
-
-        /*String mapperType =
-                getProviderPackage() + "."+this.globalConfig.getOrmDirName()+"." +
-                        SourceCodeUtil.getFirstUppercase(entity)
-                        + mapperSuffix;
-
-        HashMap<String, String> fields = new HashMap<>();
-
-        fields.put(mapperType, SourceCodeUtil.convertFieldUppercase(entity + mapperSuffix));*/
-
-
-
-        /*new SpringBootDubboJavaFileGenerator(daoImplCfg).generateDaoImpl(fields, returnType,
-                getDaoFullName(domainName), daoImplPackage);*/
-
-        //todo generate dao
 
         doCreateDaoFile(daoCfg, daoConfig);
 

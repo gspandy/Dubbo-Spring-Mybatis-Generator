@@ -53,8 +53,6 @@ public class ClassLoaderUtil {
         return null;
     }
 
-
-
     public static String resolveFullName(String sourceCode) {
         return resolvePackage(sourceCode) + "." + resolveClassName(sourceCode);
     }
@@ -80,15 +78,15 @@ public class ClassLoaderUtil {
     }
 
     public static Class loadFromFile(String file) {
-        Class ret=null;
-        try{
-            ret=loadFromSource(FileUtil.readFromFile(file));
-            if(ret==null){
+        Class ret = null;
+        try {
+            ret = loadFromSource(FileUtil.readFromFile(file));
+            if (ret == null) {
                 logger.error("Class not found try to compiler and reload");
-                loadAllClass(file.replace(".java",""));
-                ret=loadFromSource(FileUtil.readFromFile(file));
+                loadAllClass(file.replace(".java", ""));
+                ret = loadFromSource(FileUtil.readFromFile(file));
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return ret;
@@ -141,7 +139,13 @@ public class ClassLoaderUtil {
         return cls;
     }
 
-    public static String compilerFiles(String inputDir, String outDir) {
+    /**
+     * @param inputDir
+     * @param outDir
+     * @param libDir   依赖的jar包 classpath
+     * @return
+     */
+    public static String compilerFiles(String inputDir, String outDir, String libDir) {
         if (!StringUtil.isEmpty(inputDir)) {
             List<File> files = FileUtil.getAllFilesByFilter(inputDir, new FileFilter() {
                 @Override
@@ -151,10 +155,9 @@ public class ClassLoaderUtil {
             }, true);
 
             if (files != null && files.size() > 0) {
-                if(!new File(outDir).exists()){
+                if (!new File(outDir).exists()) {
                     FileUtil.createDir(outDir);
                 }
-
 
                 JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
                 DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
@@ -169,38 +172,28 @@ public class ClassLoaderUtil {
                     clsList.add(resolveFullName(source));
                 }
 
-                if(compilationUnits.size()>0){
+                if (compilationUnits.size() > 0) {
                     // Compiler options
-                    List<String>options=new ArrayList<>();
+                    List<String> options = new ArrayList<>();
                     options.add("-verbose");
                     options.add("-parameters");
-                    String dir="/Users/chunxiaoli/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/"
-                            + "ideaIU/171.4073.35/786e3fdca7eda7f1d3256aa96489b32fbcdd60b2/ideaIU-171.4073.35/lib/";
-
-                    //options.addAll(Arrays.asList("-classpath",System.getProperty("java.class.path")));
-                    String libs=System.getProperty("idea.plugins.path");
-                    String libdir="/Users/chunxiaoli/Library/Caches/IntelliJIdea2017.1/plugins-sandbox/plugins/";
-                    /*String classpath=buildClassPath("/Users/chunxiaoli/.gradle/caches/modules-2/files-2.1/com.jetbrains.intellij.idea/ideaIU/171.4073.35/786e3fdca7eda7f1d3256aa96489b32fbcdd60b2/ideaIU-171.4073.35/lib*//*");*/
-                    //System.out.println("classpath for plugin:"+classpath);
-                    //options.addAll(Arrays.asList("-classpath",classpath));
 
                     StandardJavaFileManager sjfm = compiler
                             .getStandardFileManager(diagnostics, null, null);
 
-                    List<File> clsPath=FileUtil.getAllFilesByFilter(libs, new FileFilter() {
-                        @Override
-                        public boolean accept(File pathname) {
-                            return pathname.getAbsolutePath().endsWith(".jar");
-                        }
-                    },true);
-                    clsPath.forEach(item->{
-                        System.out.println(item.getAbsolutePath());
-                    });
+                    List<File> clsPath = new ArrayList<>();
+                    if (!StringUtil.isEmpty(libDir)) {
+                        clsPath = FileUtil.getAllFilesByFilter(libDir, new FileFilter() {
+                            @Override
+                            public boolean accept(File pathname) {
+                                return pathname.getAbsolutePath().endsWith(".jar");
+                            }
+                        }, true);
+                    }
                     try {
                         sjfm.setLocation(StandardLocation.CLASS_OUTPUT,
                                 Collections.singleton(new File(outDir)));
-                       sjfm.setLocation(StandardLocation.CLASS_PATH,clsPath);
-                        //sjfm.setLocation(StandardLocation.CLASS_PATH,Collections.singleton(new File(jar)));
+                        //sjfm.setLocation(StandardLocation.CLASS_PATH, clsPath);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -208,13 +201,14 @@ public class ClassLoaderUtil {
                     JavaCompiler.CompilationTask task = compiler.getTask(null, sjfm, diagnostics,
                             options, null, compilationUnits);
 
-                    boolean success=false;
+                    boolean success = false;
                     try {
                         success = task.call();
                     } catch (Throwable e) {
                         e.printStackTrace();
                         System.out.println(
-                                "load class from " + inputDir + " cls" + compilationUnits + " error " + e);
+                                "load class from " + inputDir + " cls" + compilationUnits
+                                        + " error " + e);
                     }
 
                     for (Diagnostic diagnostic : diagnostics.getDiagnostics()) {
@@ -240,7 +234,7 @@ public class ClassLoaderUtil {
 
     public static String buildClassPath(String dir) {
         StringBuilder sb = new StringBuilder();
-        int j=0;
+        int j = 0;
 
         List<File> files = FileUtil.getAllFilesByFilter(dir, new FileFilter() {
             @Override
@@ -248,10 +242,10 @@ public class ClassLoaderUtil {
                 return pathname.getAbsolutePath().endsWith(".jar");
             }
         }, true);
-        int i=0;
+        int i = 0;
         for (File f : files) {
             sb.append(f.getAbsolutePath());
-            sb.append(i++==files.size()-1?"":",");
+            sb.append(i++ == files.size() - 1 ? "" : ",");
         }
         return sb.toString();
     }
@@ -260,7 +254,8 @@ public class ClassLoaderUtil {
         String source = FileUtil.readFromFile(file);
         if (!StringUtil.isEmpty(source)) {
             try {
-                return Class.forName(resolveFullName(source), true, classLoader);
+                String fullName= resolveFullName(source);
+                return Class.forName(fullName, true, classLoader);
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
@@ -281,11 +276,22 @@ public class ClassLoaderUtil {
         return null;
     }
 
-    public static ClassLoader loadAllClass(String classDir){
-        ClassLoader classLoader=null;
-        ClassLoaderUtil.compilerFiles(classDir, ClassLoaderUtil.tmp);
+    public static ClassLoader loadAllClass(String classDir) {
+        return loadAllClass(new String[]{classDir});
+    }
+
+    public static ClassLoader loadAllClass(String ... classDir) {
+       return loadAllClass(null,classDir);
+    }
+
+    public static ClassLoader loadAllClass(String libDir,String ... classDir) {
+        ClassLoader classLoader = null;
+        for (String dir:classDir){
+            ClassLoaderUtil.compilerFiles(dir, ClassLoaderUtil.tmp,libDir);
+        }
         try {
-            classLoader = URLClassLoader.newInstance(new URL[] { new File(ClassLoaderUtil.tmp).toURI().toURL() });
+            classLoader = URLClassLoader
+                    .newInstance(new URL[] { new File(ClassLoaderUtil.tmp).toURI().toURL() });
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }

@@ -1,6 +1,6 @@
 ---
 #项目名称
-name: Gaia1
+name: Test
 #项目生成文件输出目录
 #output_dir:  "/Users/chunxiaoli/IdeaProjects/"
 output_dir:  "./"
