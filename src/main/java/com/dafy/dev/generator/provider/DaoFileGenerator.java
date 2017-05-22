@@ -1,9 +1,10 @@
-package com.dafy.dev.generator;
+package com.dafy.dev.generator.provider;
 
 import com.dafy.dev.config.DaoConfig;
 import com.dafy.dev.config.JavaFileConfig;
 import com.dafy.dev.config.MethodInfo;
 import com.dafy.dev.config.ParameterInfo;
+import com.dafy.dev.generator.common.JavaFileGenerator;
 import com.dafy.dev.util.CodeGenUtil;
 import com.dafy.dev.util.SourceCodeUtil;
 import com.squareup.javapoet.FieldSpec;

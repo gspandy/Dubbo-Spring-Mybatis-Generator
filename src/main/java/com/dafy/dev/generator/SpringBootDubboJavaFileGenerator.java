@@ -4,6 +4,8 @@ import com.dafy.dev.codegen.ClassLoaderUtil;
 import com.dafy.dev.config.JavaFileConfig;
 import com.dafy.dev.config.MethodInfo;
 import com.dafy.dev.config.ParameterInfo;
+import com.dafy.dev.generator.common.Generator;
+import com.dafy.dev.generator.common.JavaFileGenerator;
 import com.dafy.dev.pojo.ControllerConfig;
 import com.dafy.dev.util.SourceCodeUtil;
 import com.dafy.dev.util.launcher.DubboServiceLauncherTemplate;
@@ -291,12 +293,6 @@ public class SpringBootDubboJavaFileGenerator implements Generator {
     public void generateBaseTestCaseFile(String baseTestFullName, String hookClassFullName) {
 
         String clsName = JavaFileGenerator.getClassName(baseTestFullName);
-        /*
-            @RunWith(SpringJUnit4ClassRunner.class)
-            @SpringApplicationConfiguration(classes = AccountProviderHook.class)
-            @Transactional
-            @TransactionConfiguration(defaultRollback = true)
-         */
 
         ClassName hookCls = JavaFileGenerator.resolveClassName(hookClassFullName);
 

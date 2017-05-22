@@ -129,6 +129,7 @@ public class ConfigGenerator {
         return cfg;
     }
 
+
     public static GlobalConfig cloneConfig(GlobalConfig from){
         GlobalConfig cfg = new GlobalConfig();
         ObjectConvertUtil.merge(from,cfg);

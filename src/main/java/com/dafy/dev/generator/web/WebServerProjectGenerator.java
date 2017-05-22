@@ -1,10 +1,20 @@
-package com.dafy.dev.generator;
+package com.dafy.dev.generator.web;
 
-import com.dafy.dev.config.*;
+import com.dafy.dev.config.Config;
+import com.dafy.dev.config.ConfigDefault;
+import com.dafy.dev.config.ConfigGenerator;
+import com.dafy.dev.config.DtoConfig;
+import com.dafy.dev.config.GlobalConfig;
+import com.dafy.dev.config.JavaFileConfig;
+import com.dafy.dev.config.PropertyConfig;
+import com.dafy.dev.generator.maven.MavenDirUtil;
+import com.dafy.dev.generator.provider.DtoGenerator;
+import com.dafy.dev.generator.ProjectGenerator;
+import com.dafy.dev.generator.common.Generator;
+import com.dafy.dev.generator.common.PropertiesGenerator;
 import com.dafy.dev.pojo.CgiConfig;
 import com.dafy.dev.pojo.CgiInfo;
 import com.dafy.dev.pojo.ControllerConfig;
-import com.dafy.dev.config.GlobalConfig;
 import com.dafy.dev.util.FileUtil;
 import com.dafy.dev.util.SourceCodeUtil;
 import com.dafy.dev.util.StringUtil;
@@ -81,7 +91,7 @@ public class WebServerProjectGenerator implements Generator {
                 this.projectGenerator.getConfig().getProjectName());
 
         //创建maven结构
-        projectGenerator.createMavenStructure(getRootDir());
+        MavenDirUtil.createBaseMavenStructure(getRootDir());
 
         //生成子目录
         createSubDirs(getRootDir());
@@ -110,7 +120,7 @@ public class WebServerProjectGenerator implements Generator {
     //创建目录结构
     private void createSubDirs(String parentDir) {
         for (String sub : Config.WEB_SERVER_DIRS) {
-            String subDir = projectGenerator.getSourceCodeBaseDir(parentDir,
+            String subDir = MavenDirUtil.getSourceCodeBaseDirOfGroup(parentDir,
                     this.projectGenerator.getConfig().getProjectName())
                     + File.separator + sub;
             FileUtil.createDir(subDir);
@@ -122,8 +132,8 @@ public class WebServerProjectGenerator implements Generator {
         DtoConfig dtoConfig = new DtoConfig();
         dtoConfig.setReqDtoNameSuffix(this.globalConfig.getReqDtoNameSuffix());
         dtoConfig.setResDtoNameSuffix(this.globalConfig.getResDtoNameSuffix());
-        dtoConfig.setDir(projectGenerator.getMavenSourceCodeDir(dir));
-        String packageName = projectGenerator.getBasePackage(project);
+        dtoConfig.setDir(MavenDirUtil.getMavenSourceCodeDir(dir));
+        String packageName = MavenDirUtil.getBasePackage(projectGenerator.getConfig().getGroupId(),project);
 
         logger.debug("createDtoFromJson:{}", packageName);
         dtoConfig.setPackageName(packageName);
@@ -144,7 +154,7 @@ public class WebServerProjectGenerator implements Generator {
 
     //生成appplication.properties
     private void createApplicationPropertiesFile(String parentDir) {
-        String base = projectGenerator.getResourceBaseDir(parentDir);
+        String base = MavenDirUtil.getResourceBaseDir(parentDir);
         String path = base + File.separator + "config" + File.separator + "application.properties";
 
         PropertyConfig config = new PropertyConfig();
@@ -182,7 +192,7 @@ public class WebServerProjectGenerator implements Generator {
             cfg.setJavaFileDoc("Controller");
             cfg.setClassName(SourceCodeUtil.getClassName(className));
             cfg.setPackageName(this.projectGenerator.getPackageName(packageNamePrefix));
-            cfg.setOutDir(this.projectGenerator.getMavenSourceCodeDir(dir));
+            cfg.setOutDir(MavenDirUtil.getMavenSourceCodeDir(dir));
 
             new ControllerJavaFileGenerator(cfg,dtoGenerator.getDtoConfig()).generateControllerFile(item,configClass);
         });

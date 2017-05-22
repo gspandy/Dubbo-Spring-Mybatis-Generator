@@ -1,4 +1,4 @@
-package com.dafy.dev.generator;
+package com.dafy.dev.generator.common;
 
 import com.dafy.dev.config.JavaFileConfig;
 import com.dafy.dev.config.MethodInfo;

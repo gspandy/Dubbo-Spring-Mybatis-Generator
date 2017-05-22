@@ -119,7 +119,7 @@ public class ObjectConvertUtil {
     }
 
 
-    public static Object merge(Object source, Object target){
+    public  static <T>  T merge(T source, T target){
 
         if(source!=null&&target!=null){
             Field[] oldFields= source.getClass().getDeclaredFields();
@@ -128,7 +128,7 @@ public class ObjectConvertUtil {
 
             //生成新对象
             //Object ret=cloneObject(target);
-            Object ret=target;
+            T ret=target;
 
             for (Field field:oldFields){
                 boolean needUpdateValue=false;

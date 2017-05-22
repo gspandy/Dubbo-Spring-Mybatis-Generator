@@ -2,7 +2,7 @@ package com.dafy.dev.pojo;
 
 import com.dafy.dev.config.PojoConfig;
 import com.dafy.dev.data.User;
-import com.dafy.dev.generator.PojoFileGenerator;
+import com.dafy.dev.generator.common.PojoFileGenerator;
 import org.junit.Test;
 
 /**

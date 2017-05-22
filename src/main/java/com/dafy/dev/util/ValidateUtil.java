@@ -9,6 +9,8 @@ import java.util.List;
  * Created by chunxiaoli on 12/29/16.
  */
 public class ValidateUtil {
+
+
     public static List<String> validateConfig(GlobalConfig config){
         List<String> msgs=new ArrayList<>();
         /*if(!FileUtil.checkPermission(config.getDir())){
@@ -20,5 +22,9 @@ public class ValidateUtil {
 
 
         return msgs;
+    }
+
+    public static boolean isGroupId(String groupId){
+        return !StringUtil.isEmpty(groupId)&&groupId.contains(".");
     }
 }

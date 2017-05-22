@@ -1,8 +1,11 @@
-package com.dafy.dev.generator;
+package com.dafy.dev.generator.web;
 
 import com.dafy.dev.codegen.ClassLoaderUtil;
 import com.dafy.dev.config.DtoConfig;
 import com.dafy.dev.config.JavaFileConfig;
+import com.dafy.dev.generator.ProjectGenerator;
+import com.dafy.dev.generator.common.Generator;
+import com.dafy.dev.generator.common.JavaFileGenerator;
 import com.dafy.dev.pojo.CgiConfig;
 import com.dafy.dev.pojo.CgiInfo;
 import com.dafy.dev.pojo.ControllerConfig;

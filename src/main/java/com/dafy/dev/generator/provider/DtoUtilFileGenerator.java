@@ -1,9 +1,10 @@
-package com.dafy.dev.generator;
+package com.dafy.dev.generator.provider;
 
 import com.dafy.dev.annotation.DtoField;
 import com.dafy.dev.annotation.DtoFieldIgnore;
 import com.dafy.dev.config.DtoUtilConfig;
 import com.dafy.dev.config.ServiceConfig;
+import com.dafy.dev.generator.common.Generator;
 import com.dafy.dev.util.SourceCodeUtil;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;
@@ -21,7 +22,7 @@ import java.util.List;
 /**
  * Created by chunxiaoli on 10/20/16.
  */
-public class DtoUtilFileGenerator implements Generator{
+public class DtoUtilFileGenerator implements Generator {
 
 
     private DtoUtilConfig dtoConfig;

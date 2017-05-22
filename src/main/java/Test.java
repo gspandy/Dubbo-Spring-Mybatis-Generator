@@ -1,7 +1,7 @@
 import com.dafy.dev.config.DtoConfig;
 import com.dafy.dev.config.DtoUtilConfig;
-import com.dafy.dev.generator.DtoGenerator;
-import com.dafy.dev.generator.WebServerProjectGenerator;
+import com.dafy.dev.generator.provider.DtoGenerator;
+import com.dafy.dev.generator.web.WebServerProjectGenerator;
 import com.dafy.dev.pojo.TableInfo;
 import com.dafy.dev.util.ObjectConvertUtil;
 

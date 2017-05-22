@@ -1,6 +1,7 @@
 package com.dafy.dev.generator;
 
 
+import com.dafy.dev.config.CommonConfig;
 import com.dafy.dev.config.ConfigDefault;
 import com.dafy.dev.config.JavaFileConfig;
 import com.dafy.dev.config.MybatisConfig;
@@ -30,9 +31,9 @@ import java.util.Map;
  *
  *  通用java maven项目生成器
  */
-public class ProjectGenerator implements Generator {
+public class CommonGenerator implements Generator {
 
-    private static final Logger logger= LoggerFactory.getLogger(ProjectGenerator.class);
+    private static final Logger logger= LoggerFactory.getLogger(CommonGenerator.class);
 
 
     private ProjectConfig config;
@@ -44,11 +45,11 @@ public class ProjectGenerator implements Generator {
     private  MybatisConfig mybatisConfig;
 
 
-    public ProjectGenerator(){
+    public CommonGenerator(){
     }
 
     @SuppressWarnings("unchecked")
-    public ProjectGenerator(ProjectConfig config){
+    public CommonGenerator(ProjectConfig config){
         checkConfig(config);
         this.pomConfig=createRootPomConfig(config);
         this.config=config;
@@ -190,8 +191,12 @@ public class ProjectGenerator implements Generator {
         return generator.getOutputPomFilePath();
     }
 
-    public  String getPackageName(String prefix){
+    public   String getPackageName(String prefix){
         return this.getConfig().getGroupId()+"."+prefix;
+    }
+
+    public static   String getPackageName(CommonConfig config, String prefix){
+        return config.getGroupId()+"."+prefix;
     }
 
 
@@ -199,7 +204,7 @@ public class ProjectGenerator implements Generator {
 
 
     //生成入口文件
-    public void createLauncherFile(String dir, String packageNamePrefix,String launcherName){
+    public  void createLauncherFile(String dir, String packageNamePrefix,String launcherName){
         JavaFileConfig cfg= new JavaFileConfig();
         cfg.setJavaFileDoc("测试接口");
         cfg.setClassName(SourceCodeUtil.convertFieldUppercase(launcherName));

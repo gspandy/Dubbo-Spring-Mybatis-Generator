@@ -1,6 +1,7 @@
-package com.dafy.dev.generator;
+package com.dafy.dev.generator.dubbo;
 
 import com.dafy.dev.config.DubboConfig;
+import com.dafy.dev.generator.ProjectGenerator;
 import com.dafy.dev.util.FileUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,22 +35,6 @@ public class DubboConfigGenerator {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-
-
-        /*try {
-            Match match= $(inputStream);
-            List<String>s= match.namespacePrefixes();
-            logger.debug("ns:{}",s);
-
-            $(match).append("<dubbo:service interface=\"com.dafy.collection.account.api.AccountService\" ref=\"accountService\" timeout=\"3000\"/>").write(new File("dubbo.xml"));
-
-
-        } catch (SAXException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
-
     }
 
     public void writer(FileOutputStream out, DubboConfig config){

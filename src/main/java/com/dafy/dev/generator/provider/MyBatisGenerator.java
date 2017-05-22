@@ -1,4 +1,4 @@
-package com.dafy.dev.generator;
+package com.dafy.dev.generator.provider;
 
 import com.dafy.dev.config.MybatisConfig;
 import com.dafy.dev.mybatis.DatabaseConfig;

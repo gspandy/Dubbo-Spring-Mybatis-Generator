@@ -1,4 +1,4 @@
-package com.dafy.dev.generator;
+package com.dafy.dev.generator.common;
 
 /**
  * Created by chunxiaoli on 10/20/16.

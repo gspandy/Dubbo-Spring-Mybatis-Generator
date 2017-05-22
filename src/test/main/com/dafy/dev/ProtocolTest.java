@@ -1,9 +1,7 @@
 package com.dafy.dev;
 
-import com.alibaba.dubbo.rpc.support.ProtocolUtils;
 import com.dafy.dev.config.DtoConfig;
-import com.dafy.dev.generator.DtoGenerator;
-import com.dafy.dev.pojo.PostmanModel;
+import com.dafy.dev.generator.provider.DtoGenerator;
 import com.dafy.dev.pojo.ProtocolModel;
 import com.dafy.dev.util.CustomProtocolUtil;
 import com.dafy.dev.util.PostmanBuilder;

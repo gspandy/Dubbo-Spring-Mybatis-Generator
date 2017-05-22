@@ -1,8 +1,9 @@
-package com.dafy.dev.generator;
+package com.dafy.dev.generator.provider;
 
 import com.dafy.dev.GeneratorContext;
 import com.dafy.dev.codegen.ClassLoaderUtil;
 import com.dafy.dev.config.*;
+import com.dafy.dev.generator.common.JavaFileGenerator;
 import com.dafy.dev.util.CodeGenUtil;
 import com.dafy.dev.util.SourceCodeUtil;
 import com.squareup.javapoet.*;

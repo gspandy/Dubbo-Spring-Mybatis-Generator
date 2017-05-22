@@ -1,7 +1,11 @@
 package com.dafy.dev.project;
 
+import com.dafy.dev.config.ConfigGenerator;
+import com.dafy.dev.config.GlobalConfig;
 import com.dafy.dev.config.ProjectConfig;
 import com.dafy.dev.generator.ProjectGenerator;
+import com.dafy.dev.generator.dubbo.DubboRPCProjectGenerator;
+import com.dafy.dev.util.ObjectConvertUtil;
 import org.junit.Test;
 
 /**
@@ -15,13 +19,26 @@ public class ProjectGeneratorTest {
     static {
         projectConfig.setDir("");
         projectConfig.setDir("abc");
-
         projectGenerator.setConfig(projectConfig);
     }
 
     @Test
     public void testProjectGenerator(){
         projectGenerator.getProjectDir();
+    }
+
+    @Test
+    public void testCreateApi(){
+        GlobalConfig config = new GlobalConfig();
+        config.setDir("./");
+        config.setName("tt");
+        config.setPojoDirName("a");
+        config.setGroupId("com.chunxiao.hh");
+
+        GlobalConfig merge = ObjectConvertUtil.merge(config, ConfigGenerator.getDefault());
+
+        new DubboRPCProjectGenerator(merge).createApiDir();
+        new DubboRPCProjectGenerator(merge).createProviderDir();
     }
 
 

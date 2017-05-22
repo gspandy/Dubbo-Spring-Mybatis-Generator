@@ -1,7 +1,9 @@
-package com.dafy.dev.generator;
+package com.dafy.dev.generator.provider;
 
 import com.dafy.dev.codegen.ClassLoaderUtil;
 import com.dafy.dev.config.DtoConfig;
+import com.dafy.dev.generator.common.Generator;
+import com.dafy.dev.generator.common.PojoGenerator;
 import com.dafy.dev.parser.JsonToPojo;
 import com.dafy.dev.util.SourceCodeUtil;
 import com.dafy.dev.util.StringUtil;
@@ -17,7 +19,7 @@ import java.lang.reflect.Field;
 /**
  * Created by chunxiaoli on 10/20/16.
  */
-public class DtoGenerator implements Generator{
+public class DtoGenerator implements Generator {
 
     private static final Logger logger = LoggerFactory.getLogger(DtoGenerator.class);
     private DtoConfig dtoConfig;

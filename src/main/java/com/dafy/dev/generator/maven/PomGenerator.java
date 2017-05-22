@@ -1,4 +1,4 @@
-package com.dafy.dev.generator;
+package com.dafy.dev.generator.maven;
 
 import com.dafy.dev.config.PomConfig;
 import com.dafy.dev.config.ProjectConfig;

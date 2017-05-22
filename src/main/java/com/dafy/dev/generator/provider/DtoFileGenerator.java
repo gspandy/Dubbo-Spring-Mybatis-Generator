@@ -1,7 +1,9 @@
-package com.dafy.dev.generator;
+package com.dafy.dev.generator.provider;
 
 import com.dafy.dev.config.DtoConfig;
 import com.dafy.dev.config.PojoConfig;
+import com.dafy.dev.generator.common.Generator;
+import com.dafy.dev.generator.common.PojoFileGenerator;
 import com.dafy.dev.parser.JsonToPojo;
 import com.dafy.dev.pojo.CgiConfig;
 import com.dafy.dev.pojo.CgiInfo;
