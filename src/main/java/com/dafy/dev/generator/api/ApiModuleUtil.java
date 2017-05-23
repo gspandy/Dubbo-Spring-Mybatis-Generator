@@ -3,6 +3,7 @@ package com.dafy.dev.generator.api;
 import com.dafy.dev.config.api.ApiConfig;
 import com.dafy.dev.generator.CommonGenerator;
 import com.dafy.dev.generator.maven.MavenDirUtil;
+import com.dafy.dev.util.SourceCodeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,6 +53,24 @@ public class ApiModuleUtil {
     public static String getApiServicePackage(ApiConfig config) {
         return getApiPackage(config);
     }
+
+    private static String getServiceName(ApiConfig config) {
+        return SourceCodeUtil.covertClassName(config.getName() + SourceCodeUtil.getFirstUppercase(
+                config.getServiceFilePost()));
+    }
+
+
+
+    public static String getServiceFullClassName(ApiConfig config) {
+        return ApiModuleUtil.getApiPackage(config) + "." + getServiceName(config);
+    }
+
+    public static String getServicePath(ApiConfig config) {
+        return MavenDirUtil.getMavenSourceCodeDir(ApiModuleUtil.getApiDir(config)) + File.separator
+                + SourceCodeUtil.convertPackage2Dir(getServiceFullClassName(config)) + ".java";
+    }
+
+
 
 
 }

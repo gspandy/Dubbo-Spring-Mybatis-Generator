@@ -1,13 +1,13 @@
 package com.dafy.dev.config.provider;
 
-import com.dafy.dev.config.CommonConfig;
 import com.dafy.dev.config.MybatisConfig;
+import com.dafy.dev.config.api.ApiConfig;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Created by chunxiaoli on 5/19/17.
  */
-public class ProviderConfig extends CommonConfig{
+public class ProviderConfig extends ApiConfig{
     @JsonProperty("provider_dir_name")
     private String providerDirName;
 
@@ -29,7 +29,26 @@ public class ProviderConfig extends CommonConfig{
     @JsonProperty("mybatis")
     private MybatisConfig mybatisConfig;
 
+
+    private String mapperXmlFilePost;
+
+    private String serviceFilePost;
+
     private String serviceProviderPomTemplatePath;
+
+
+    @JsonProperty("log_config_file")
+    private String logConfigFilePath;
+
+    @JsonProperty("application_properties_template_path")
+    private String applicationPropertiesTemplatePath;
+
+    @JsonProperty("config_dir_name")
+    private String configDirName;
+
+    //spring 自动配置类路径
+    private String springAutoConfigFullClassPath;
+
 
     public String getProviderDirName() {
         return providerDirName;
@@ -93,5 +112,53 @@ public class ProviderConfig extends CommonConfig{
 
     public void setServiceProviderPomTemplatePath(String serviceProviderPomTemplatePath) {
         this.serviceProviderPomTemplatePath = serviceProviderPomTemplatePath;
+    }
+
+    public String getMapperXmlFilePost() {
+        return mapperXmlFilePost;
+    }
+
+    public void setMapperXmlFilePost(String mapperXmlFilePost) {
+        this.mapperXmlFilePost = mapperXmlFilePost;
+    }
+
+    public String getServiceFilePost() {
+        return serviceFilePost;
+    }
+
+    public void setServiceFilePost(String serviceFilePost) {
+        this.serviceFilePost = serviceFilePost;
+    }
+
+    public String getLogConfigFilePath() {
+        return logConfigFilePath;
+    }
+
+    public void setLogConfigFilePath(String logConfigFilePath) {
+        this.logConfigFilePath = logConfigFilePath;
+    }
+
+    public String getApplicationPropertiesTemplatePath() {
+        return applicationPropertiesTemplatePath;
+    }
+
+    public void setApplicationPropertiesTemplatePath(String applicationPropertiesTemplatePath) {
+        this.applicationPropertiesTemplatePath = applicationPropertiesTemplatePath;
+    }
+
+    public String getSpringAutoConfigFullClassPath() {
+        return springAutoConfigFullClassPath;
+    }
+
+    public void setSpringAutoConfigFullClassPath(String springAutoConfigFullClassPath) {
+        this.springAutoConfigFullClassPath = springAutoConfigFullClassPath;
+    }
+
+    public String getConfigDirName() {
+        return configDirName;
+    }
+
+    public void setConfigDirName(String configDirName) {
+        this.configDirName = configDirName;
     }
 }

@@ -70,6 +70,8 @@ public class GlobalConfig {
 
     private String controllerDir;
 
+
+
     //spring 自动配置类路径
     private String springAutoConfigFullClassPath;
 
@@ -411,4 +413,6 @@ public class GlobalConfig {
     public void setVersion(String version) {
         this.version = version;
     }
+
+
 }

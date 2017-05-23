@@ -16,7 +16,7 @@ public class ApiConfig extends CommonConfig{
 
     private String serviceApiPomTemplatePath;
 
-
+    private String serviceFilePost;
 
     public String getApiDirName() {
         return apiDirName;
@@ -40,5 +40,13 @@ public class ApiConfig extends CommonConfig{
 
     public void setServiceApiPomTemplatePath(String serviceApiPomTemplatePath) {
         this.serviceApiPomTemplatePath = serviceApiPomTemplatePath;
+    }
+
+    public String getServiceFilePost() {
+        return serviceFilePost;
+    }
+
+    public void setServiceFilePost(String serviceFilePost) {
+        this.serviceFilePost = serviceFilePost;
     }
 }
