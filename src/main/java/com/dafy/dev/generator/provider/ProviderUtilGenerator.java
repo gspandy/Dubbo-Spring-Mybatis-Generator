@@ -4,6 +4,7 @@ import com.dafy.dev.codegen.ClassLoaderUtil;
 import com.dafy.dev.config.DtoUtilConfig;
 import com.dafy.dev.config.provider.ProviderConfig;
 import com.dafy.dev.generator.api.ApiModuleUtil;
+import com.dafy.dev.generator.project.DtoUtilFileGenerator;
 import com.dafy.dev.pojo.TableInfo;
 import com.dafy.dev.util.SourceCodeUtil;
 

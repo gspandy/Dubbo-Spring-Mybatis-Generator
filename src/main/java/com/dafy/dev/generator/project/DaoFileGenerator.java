@@ -1,4 +1,4 @@
-package com.dafy.dev.generator.provider;
+package com.dafy.dev.generator.project;
 
 import com.dafy.dev.config.DaoConfig;
 import com.dafy.dev.config.JavaFileConfig;

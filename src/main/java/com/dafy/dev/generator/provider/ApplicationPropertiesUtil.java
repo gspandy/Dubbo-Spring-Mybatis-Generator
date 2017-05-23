@@ -18,7 +18,7 @@ public class ApplicationPropertiesUtil {
 
         String templatePath = config.getApplicationPropertiesTemplatePath();
         String base = MavenDirUtil.getResourceBaseDir(ProviderUtil.getProviderDir(config));
-        String path = base + File.separator + config.getConfigDirName() +
+        String path = base + File.separator + ProviderUtil.getResourceConfigDir(config) +
                 File.separator + "application.properties";
         if (!StringUtil.isEmpty(templatePath)) {
             FileUtil.copy(templatePath, path);

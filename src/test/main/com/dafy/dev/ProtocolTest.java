@@ -1,7 +1,7 @@
 package com.dafy.dev;
 
 import com.dafy.dev.config.DtoConfig;
-import com.dafy.dev.generator.provider.DtoGenerator;
+import com.dafy.dev.generator.project.DtoGenerator;
 import com.dafy.dev.pojo.ProtocolModel;
 import com.dafy.dev.util.CustomProtocolUtil;
 import com.dafy.dev.util.PostmanBuilder;

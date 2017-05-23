@@ -5,6 +5,7 @@ import com.dafy.dev.config.DaoConfig;
 import com.dafy.dev.config.JavaFileConfig;
 import com.dafy.dev.config.MethodInfo;
 import com.dafy.dev.config.provider.ProviderConfig;
+import com.dafy.dev.generator.project.DaoFileGenerator;
 import com.dafy.dev.pojo.TableInfo;
 import com.dafy.dev.util.CodeGenUtil;
 import com.dafy.dev.util.SourceCodeUtil;

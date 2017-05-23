@@ -8,7 +8,7 @@ import com.dafy.dev.config.GlobalConfig;
 import com.dafy.dev.config.JavaFileConfig;
 import com.dafy.dev.config.PropertyConfig;
 import com.dafy.dev.generator.maven.MavenDirUtil;
-import com.dafy.dev.generator.provider.DtoGenerator;
+import com.dafy.dev.generator.project.DtoGenerator;
 import com.dafy.dev.generator.ProjectGenerator;
 import com.dafy.dev.generator.common.Generator;
 import com.dafy.dev.generator.common.PropertiesGenerator;

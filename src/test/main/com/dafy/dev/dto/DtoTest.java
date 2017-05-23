@@ -1,7 +1,7 @@
 package com.dafy.dev.dto;
 
 import com.dafy.dev.config.DtoConfig;
-import com.dafy.dev.generator.provider.DtoFileGenerator;
+import com.dafy.dev.generator.project.DtoFileGenerator;
 import org.junit.Test;
 
 import static com.dafy.dev.config.ConfigDefault.GLOBAL_DTO_REQ_SUFFIX;

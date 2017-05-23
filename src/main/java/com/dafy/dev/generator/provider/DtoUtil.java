@@ -4,6 +4,7 @@ import com.dafy.dev.codegen.ClassLoaderUtil;
 import com.dafy.dev.config.DtoConfig;
 import com.dafy.dev.config.provider.ProviderConfig;
 import com.dafy.dev.generator.api.ApiModuleUtil;
+import com.dafy.dev.generator.project.DtoFileGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

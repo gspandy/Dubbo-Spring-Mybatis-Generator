@@ -3,6 +3,7 @@ package com.dafy.dev.generator.provider;
 import com.dafy.dev.config.MybatisConfig;
 import com.dafy.dev.config.provider.ProviderConfig;
 import com.dafy.dev.generator.maven.MavenDirUtil;
+import com.dafy.dev.generator.project.MyBatisGenerator;
 import com.dafy.dev.pojo.TableInfo;
 import com.dafy.dev.util.SourceCodeUtil;
 import com.dafy.dev.util.StringUtil;

@@ -10,11 +10,11 @@ import com.dafy.dev.generator.common.JavaFileGenerator;
 import com.dafy.dev.generator.common.PropertiesGenerator;
 import com.dafy.dev.generator.maven.MavenDirUtil;
 import com.dafy.dev.generator.maven.PomGenerator;
-import com.dafy.dev.generator.provider.DaoFileGenerator;
-import com.dafy.dev.generator.provider.DtoFileGenerator;
-import com.dafy.dev.generator.provider.DtoUtilFileGenerator;
-import com.dafy.dev.generator.provider.MyBatisGenerator;
-import com.dafy.dev.generator.provider.ServiceFileGenerator;
+import com.dafy.dev.generator.project.DaoFileGenerator;
+import com.dafy.dev.generator.project.DtoFileGenerator;
+import com.dafy.dev.generator.project.DtoUtilFileGenerator;
+import com.dafy.dev.generator.project.MyBatisGenerator;
+import com.dafy.dev.generator.project.ServiceFileGenerator;
 import com.dafy.dev.pojo.TableInfo;
 import com.dafy.dev.util.BannerUtil;
 import com.dafy.dev.util.CodeGenUtil;
@@ -423,8 +423,7 @@ public class DubboRPCProjectGenerator implements Generator {
 
     private void createMybatisFile(TableInfo tableItem) {
         String mavenBase = MavenDirUtil.getMavenBaseDir(getProviderDir());
-        MybatisConfig cfg = ConfigGenerator
-                .generateMybatisConfig(this.globalConfig, tableItem, getProviderPackage());
+        MybatisConfig cfg = ConfigGenerator.generateMybatisConfig(this.globalConfig, tableItem, getProviderPackage());
 
         cfg.setProjectDir(mavenBase);
 

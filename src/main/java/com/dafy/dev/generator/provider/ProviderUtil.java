@@ -1,9 +1,13 @@
 package com.dafy.dev.generator.provider;
 
+import com.dafy.dev.config.Config;
+import com.dafy.dev.config.ConfigDefault;
 import com.dafy.dev.config.provider.ProviderConfig;
 import com.dafy.dev.generator.CommonGenerator;
 import com.dafy.dev.generator.maven.MavenDirUtil;
+import com.dafy.dev.util.FileUtil;
 import com.dafy.dev.util.SourceCodeUtil;
+import com.dafy.dev.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,25 +20,42 @@ public class ProviderUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(ProviderUtil.class);
 
+
+    public static void createDir(ProviderConfig config){
+        String providerDir = ProviderUtil.getProviderDir(config);
+        FileUtil.createDir(providerDir);
+
+        MavenDirUtil.createModuleMavenStructure(providerDir,config.getGroupId(),config.getName());
+
+        for (String sub : Config.PROVIDER_SUB_DIRS) {
+            String subDir = ProviderUtil.getProviderSourceCodeDir(config) + File.separator + sub;
+            FileUtil.createDir(subDir);
+        }
+    }
+
     public static String getProviderDir(ProviderConfig config) {
-        String provider =
-                config.getDir() + File.separator + getProviderModuleName(config);
+        String provider = config.getDir() + File.separator + getProviderModuleName(config);
         logger.info("ProviderDir:{}", provider);
         return provider;
     }
 
+
+    public static String getResourceConfigDir(ProviderConfig config) {
+        return (StringUtil.isEmpty(config.getConfigDirName())?
+                ConfigDefault.GLOBAL_DIR_CONFIG:config.getConfigDirName());
+    }
+
     public static  String getProviderModuleName(ProviderConfig config) {
-        return config.getName() + "-" + config.getProviderDirName();
+        return config.getName() + "-" + getProviderDirName(config);
     }
 
     public static  String getProviderSourceCodeDir(ProviderConfig config) {
         return MavenDirUtil.getSourceCodeBaseDirOfGroup(getProviderDir(config),config.getGroupId(),config.getName())
-                + File.separator + config.getProviderDirName();
+                + File.separator + getProviderDirName(config);
     }
 
     public static String getProviderPackage(ProviderConfig config) {
-        return CommonGenerator.getPackageName(config,config.getName()) + "." + config
-                .getProviderDirName();
+        return CommonGenerator.getPackageName(config,config.getName()) + "." + getProviderDirName(config);
     }
 
     public static String getProviderOrmDir(ProviderConfig config) {
@@ -70,6 +91,11 @@ public class ProviderUtil {
         String mapperPostName = SourceCodeUtil
                 .getFirstUppercase(config.getMapperXmlFilePost());
         return SourceCodeUtil.uppercase(tableName, false) + mapperPostName + ".xml";
+    }
+
+    private static String getProviderDirName(ProviderConfig config){
+        return (StringUtil.isEmpty(config.getProviderDirName())?
+                ConfigDefault.GLOBAL_DIR_PROVIDER:config.getProviderDirName());
     }
 
     /*private String getDtoDir() {
