@@ -29,6 +29,12 @@ public class ProviderConfig extends ApiConfig{
     @JsonProperty("mybatis")
     private MybatisConfig mybatisConfig;
 
+    private String rootDir;
+
+    private String constantsDir;
+
+    private String controllerDir;
+
 
     private String mapperXmlFilePost;
 
@@ -160,5 +166,52 @@ public class ProviderConfig extends ApiConfig{
 
     public void setConfigDirName(String configDirName) {
         this.configDirName = configDirName;
+    }
+
+    public String getRootDir() {
+        return rootDir;
+    }
+
+    public void setRootDir(String rootDir) {
+        this.rootDir = rootDir;
+    }
+
+    public String getConstantsDir() {
+        return constantsDir;
+    }
+
+    public void setConstantsDir(String constantsDir) {
+        this.constantsDir = constantsDir;
+    }
+
+    public String getControllerDir() {
+        return controllerDir;
+    }
+
+    public void setControllerDir(String controllerDir) {
+        this.controllerDir = controllerDir;
+    }
+
+    @Override
+    public String toString() {
+        return "ProviderConfig{" +
+                "providerDirName='" + providerDirName + '\'' +
+                ", dtoDirName='" + dtoDirName + '\'' +
+                ", daoDirName='" + daoDirName + '\'' +
+                ", ormDirName='" + ormDirName + '\'' +
+                ", pojoDirName='" + pojoDirName + '\'' +
+                ", logFile='" + logFile + '\'' +
+                ", mybatisConfig=" + mybatisConfig +
+                ", rootDir='" + rootDir + '\'' +
+                ", constantsDir='" + constantsDir + '\'' +
+                ", controllerDir='" + controllerDir + '\'' +
+                ", mapperXmlFilePost='" + mapperXmlFilePost + '\'' +
+                ", serviceFilePost='" + serviceFilePost + '\'' +
+                ", serviceProviderPomTemplatePath='" + serviceProviderPomTemplatePath + '\'' +
+                ", logConfigFilePath='" + logConfigFilePath + '\'' +
+                ", applicationPropertiesTemplatePath='" + applicationPropertiesTemplatePath + '\'' +
+                ", configDirName='" + configDirName + '\'' +
+                ", springAutoConfigFullClassPath='" + springAutoConfigFullClassPath + '\'' +
+                '}';
     }
 }

@@ -144,7 +144,7 @@ public class SpringBootDubboJavaFileGenerator implements Generator {
 
     public void generateMybatisConfigFile(String propertySource, String mapperScan) {
 
-        String name = javaFileConfig.getClassName() + "MybatisConfig";
+        String name = SourceCodeUtil.getFirstUppercase(javaFileConfig.getClassName()) + "MybatisConfig";
 
         AnnotationSpec propertySourceAnnotation = AnnotationSpec.builder(PropertySource.class).
                 addMember("value", "$S", propertySource).build();

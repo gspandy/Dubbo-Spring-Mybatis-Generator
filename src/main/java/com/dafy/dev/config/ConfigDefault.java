@@ -41,11 +41,11 @@ public class ConfigDefault {
     public static final String  GLOBAL_DTO_RES_SUFFIX="ResDto";
 
 
-    public static final String  MYBATIS_DBTYPE="MySql";
-    public static final String  MYBATIS_HOST="127.0.0.1";
+    public static final String  MYBATIS_DBTYPE="MySQL";
+    public static final String  MYBATIS_HOST="10.8.15.65";
     public static final String  MYBATIS_PORT="3306";
     public static final String  MYBATIS_USER="root";
-    public static final String  MYBATIS_PASSWORD="";
+    public static final String  MYBATIS_PASSWORD="dafy1024";
     public static final String  MYBATIS_DATABASE="";
     public static final String  MYBATIS_ENCODING="utf-8";
 

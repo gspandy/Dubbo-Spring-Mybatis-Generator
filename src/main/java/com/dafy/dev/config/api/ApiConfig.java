@@ -8,6 +8,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class ApiConfig extends CommonConfig{
 
+    private String reqDtoNameSuffix;
+
+    private String resDtoNameSuffix;
+
+
     @JsonProperty("api_dir_name")
     private String apiDirName;
 
@@ -48,5 +53,21 @@ public class ApiConfig extends CommonConfig{
 
     public void setServiceFilePost(String serviceFilePost) {
         this.serviceFilePost = serviceFilePost;
+    }
+
+    public String getReqDtoNameSuffix() {
+        return reqDtoNameSuffix;
+    }
+
+    public void setReqDtoNameSuffix(String reqDtoNameSuffix) {
+        this.reqDtoNameSuffix = reqDtoNameSuffix;
+    }
+
+    public String getResDtoNameSuffix() {
+        return resDtoNameSuffix;
+    }
+
+    public void setResDtoNameSuffix(String resDtoNameSuffix) {
+        this.resDtoNameSuffix = resDtoNameSuffix;
     }
 }

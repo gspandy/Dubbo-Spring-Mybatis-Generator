@@ -4,6 +4,7 @@ import com.dafy.dev.config.Config;
 import com.dafy.dev.config.ConfigDefault;
 import com.dafy.dev.config.provider.ProviderConfig;
 import com.dafy.dev.generator.CommonGenerator;
+import com.dafy.dev.generator.api.ApiModuleUtil;
 import com.dafy.dev.generator.maven.MavenDirUtil;
 import com.dafy.dev.util.FileUtil;
 import com.dafy.dev.util.SourceCodeUtil;
@@ -98,11 +99,21 @@ public class ProviderUtil {
                 ConfigDefault.GLOBAL_DIR_PROVIDER:config.getProviderDirName());
     }
 
-    /*private String getDtoDir() {
-        return SourceCodeUtil.convertPackage2Dir(getDtoPackage());
+    public static String getProviderDaoDir(ProviderConfig config) {
+        return getProviderBaseDir(config) + SourceCodeUtil.convertPackage2Dir(getDaoPackage(config));
     }
 
-    private String getDtoPackage(ProviderConfig config) {
-        return getApiPackage() + "." + config.getDtoDirName();
-    }*/
+    public static String getServiceName(ProviderConfig config) {
+        return SourceCodeUtil.covertClassName(config.getName() + SourceCodeUtil.getFirstUppercase(
+                config.getServiceFilePost()));
+    }
+
+    private String getDtoDir(ProviderConfig config) {
+        return SourceCodeUtil.convertPackage2Dir(getDtoPackage(config));
+    }
+
+    public static String getDtoPackage(ProviderConfig config) {
+        return ApiModuleUtil.getApiPackage(config) + "." + config.getDtoDirName();
+    }
+
 }

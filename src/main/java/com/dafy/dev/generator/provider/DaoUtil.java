@@ -18,11 +18,19 @@ import java.util.List;
  */
 public class DaoUtil {
 
-    public static void createDaoFiles(ProviderConfig config, List<TableInfo> tableInfos,
-                                      ClassLoader classLoader) {
+    public static void createDaoFiles(ProviderConfig config, List<TableInfo> tableInfos, ClassLoader classLoader) {
         for (TableInfo t : tableInfos) {
             createDaoFile(config,t.getDomainName(),classLoader);
         }
+    }
+
+    public static String getDaoFullName(ProviderConfig config,String domainName) {
+        String entity = SourceCodeUtil.getFirstUppercase(domainName);
+        String daoInterfaceName =
+                entity + SourceCodeUtil.getFirstUppercase(config.getDaoDirName());
+
+        return ProviderUtil.getProviderPackage(config) + "." + config.getDaoDirName() + "."
+                + daoInterfaceName;
     }
 
     //生成dao

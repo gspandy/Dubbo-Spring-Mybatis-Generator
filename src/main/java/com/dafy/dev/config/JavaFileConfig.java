@@ -1,7 +1,5 @@
 package com.dafy.dev.config;
 
-import com.dafy.dev.util.StringUtil;
-
 import java.util.List;
 
 /**
@@ -34,7 +32,7 @@ public class JavaFileConfig {
     }
 
     public String getClassName() {
-        return StringUtil.captize(className) ;
+        return className ;
     }
 
     public void setClassName(String className) {

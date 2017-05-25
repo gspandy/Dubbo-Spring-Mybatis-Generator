@@ -38,7 +38,7 @@ public class ApiModuleUtil {
     }
 
     public static String getApiPackage(ApiConfig config) {
-        return CommonGenerator.getPackageName(config,config.getName()) + "." + config.getDir();
+        return CommonGenerator.getPackageName(config,config.getName());
     }
 
     public static String getApiDtoDir(ApiConfig config) {

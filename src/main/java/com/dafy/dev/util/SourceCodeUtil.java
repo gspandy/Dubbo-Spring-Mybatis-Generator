@@ -56,33 +56,38 @@ public class SourceCodeUtil {
      */
     public static String uppercase(String input, boolean firstLowerCase) {
 
+
         String ret = "";
 
+        if(!StringUtil.isEmpty(input)){
+            String parts[] = input.split("_");
 
-        String parts[] = input.split("_");
-
-        if (parts.length > 1) {
-            for (int i = 0; i < parts.length; i++) {
-                String w = "";
-                String first = (i == 0 && firstLowerCase) ? parts[i].substring(0, 1) : parts[i].substring(0, 1).toUpperCase();
-                w = first;
-                if (parts[i].length() > 1) {
-                    w += parts[i].substring(1, parts[i].length());
+            if (parts.length > 1) {
+                for (int i = 0; i < parts.length; i++) {
+                    String w = "";
+                    String first = (i == 0 && firstLowerCase) ? parts[i].substring(0, 1) : parts[i].substring(0, 1).toUpperCase();
+                    w = first;
+                    if (parts[i].length() > 1) {
+                        w += parts[i].substring(1, parts[i].length());
+                    }
+                    ret += w;
                 }
-                ret += w;
-            }
-        } else {//只有一个单词
-            if (!firstLowerCase) {
-                ret = getFirstUppercase(input);
-            } else {
-                ret = input;
+            } else {//只有一个单词
+                if (!firstLowerCase) {
+                    ret = getFirstUppercase(input);
+                } else {
+                    ret = input;
+                }
             }
         }
-
         return ret;
     }
 
     public static String getFirstUppercase(String input) {
+
+        if(StringUtil.isEmpty(input)){
+            return input;
+        }
 
         String firstLetterToUpperCase = input.substring(0, 1).toUpperCase();
         if (input.length() > 1) {

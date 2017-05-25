@@ -6,6 +6,7 @@ import com.dafy.dev.config.*;
 import com.dafy.dev.generator.common.JavaFileGenerator;
 import com.dafy.dev.util.CodeGenUtil;
 import com.dafy.dev.util.SourceCodeUtil;
+import com.dafy.dev.util.StringUtil;
 import com.squareup.javapoet.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,7 +44,7 @@ public class ServiceFileGenerator {
     }
 
     private void addMethod(TypeSpec.Builder builder, FieldSpec fieldSpec, Class daoCls,
-                           Class pojoCls, boolean isImpl) {
+                           Class pojoCls, boolean isImpl,ClassLoader classLoader,String utilPackge) {
         List<MethodInfo> methods = CodeGenUtil.getMethods(daoCls);
         String pojoName = null;
 
@@ -97,25 +98,25 @@ public class ServiceFileGenerator {
                         s.append("$N").append(i == daoMethodParams.length - 1 ? "" : ",");
                     }
 
-                    Class dtoType = resolveDtoClass(info.getReturnTypeFullClassName());
+                    Class dtoType = resolveDtoClass(info.getReturnTypeFullClassName(),classLoader);
 
-                    String dtoUtilClassFullName = GeneratorContext.utilPackage + "." +
-                            pojoCls.getSimpleName()+"DtoUtil";
+                    if(pojoCls!=null) {
 
-                    Class utilCls = ClassLoaderUtil
-                            .load(dtoUtilClassFullName, GeneratorContext.classLoader);
+                        String dtoUtilClassFullName = (StringUtil.isEmpty(utilPackge)?"":utilPackge) + "." + pojoCls.getSimpleName()+"DtoUtil";
 
-                    if(utilCls!=null){
-                        String pojoObj="pojo";
-                        //todo many params handle
-                        b.addStatement("$T $N=$T.convertToPojo($N)", pojoCls,pojoObj, utilCls, daoArgs[2]);
+                        Class utilCls = ClassLoaderUtil
+                                .load(dtoUtilClassFullName, GeneratorContext.classLoader);
 
-                        daoArgs[2]=pojoObj;
-                    }else {
-                        b.addStatement("//todo");
+                        if(utilCls!=null){
+                            String pojoObj="pojo";
+                            //todo many params handle
+                            b.addStatement("$T $N=$T.convertToPojo($N)", pojoCls,pojoObj, utilCls, daoArgs[2]);
+
+                            daoArgs[2]=pojoObj;
+                        }else {
+                            b.addStatement("//todo");
+                        }
                     }
-
-
 
                     b.addStatement("return $N.$N(" + s.toString() + ")", daoArgs);
 
@@ -140,7 +141,7 @@ public class ServiceFileGenerator {
                     b.addStatement("$T $N=$N.$N(" + s.toString() + ")", daoArgs);
 
                     //Class dtoType = info.getReturnType();
-                    Class dtoType = resolveDtoClass(info.getReturnTypeFullClassName());
+                    Class dtoType = resolveDtoClass(info.getReturnTypeFullClassName(),classLoader);
 
                     String dtoUtilClassFullName = GeneratorContext.utilPackage + "."+dtoType.getSimpleName()+"Util";
 
@@ -190,7 +191,7 @@ public class ServiceFileGenerator {
         return JavaFileGenerator.resolveType(type);
     }
 
-    private Class resolveDtoClass(String fullName) {
+    private Class resolveDtoClass(String fullName,ClassLoader classLoader) {
         String type = "";
         String pojoName = JavaFileGenerator.getClassName(fullName);
         if (JavaFileGenerator.isPrimaryType(pojoName) ||
@@ -198,7 +199,7 @@ public class ServiceFileGenerator {
             return JavaFileGenerator.getPrimaryClass(fullName);
         } else {
             type = this.serviceConfig.getDtoPackageName() + "." + pojoName + "Dto";
-            return ClassLoaderUtil.load(type,GeneratorContext.classLoader);
+            return ClassLoaderUtil.load(type,classLoader);
         }
     }
 
@@ -215,7 +216,7 @@ public class ServiceFileGenerator {
     }
 
     //create service interface
-    public void generateServiceInterfaceFile() {
+    public void generateServiceInterfaceFile(ClassLoader classLoader,String utilPackage) {
         String className = javaFileConfig.getClassName();
         TypeSpec.Builder builder = TypeSpec.interfaceBuilder(className)
                 .addJavadoc(javaFileConfig.getJavaFileDoc())
@@ -225,12 +226,12 @@ public class ServiceFileGenerator {
         for (ServiceConfig.ServiceDaoInfo info : serviceConfig.getDaoInfos()) {
             Class daoCls = info.getDao();
             FieldSpec field = getField(daoCls, null);
-            addMethod(builder, field, daoCls, null, false);
+            addMethod(builder, field, daoCls, null, false,classLoader,utilPackage);
         }
         generator.doGenerate(builder);
     }
 
-    public void generateServiceImplFile(String interfaceFullName) {
+    public void generateServiceImplFile(String interfaceFullName,ClassLoader classLoader,String utilPackage) {
 
         ClassName interfaceName = JavaFileGenerator.resolveClassName(interfaceFullName);
 
@@ -249,7 +250,7 @@ public class ServiceFileGenerator {
             Class pojoCls = info.getPojo();
             FieldSpec field = getField(daoCls, pojoCls);
             builder.addField(field);
-            addMethod(builder, field, daoCls, pojoCls, true);
+            addMethod(builder, field, daoCls, pojoCls, true,classLoader,utilPackage);
         }
         generator.doGenerate(builder);
     }

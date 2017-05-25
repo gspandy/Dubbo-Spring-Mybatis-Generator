@@ -35,7 +35,7 @@ public class ProjectGeneratorTest {
         config.setPojoDirName("a");
         config.setGroupId("com.chunxiao.hh");
 
-        GlobalConfig merge = ObjectConvertUtil.merge(config, ConfigGenerator.getDefault());
+        GlobalConfig merge = ObjectConvertUtil.merge(config, ConfigGenerator.getDefaultGloabal());
 
         new DubboRPCProjectGenerator(merge).createApiDir();
         new DubboRPCProjectGenerator(merge).createProviderDir();

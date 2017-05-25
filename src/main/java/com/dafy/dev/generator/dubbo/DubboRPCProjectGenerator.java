@@ -155,7 +155,8 @@ public class DubboRPCProjectGenerator implements Generator {
         //serviceConfig.setDaoList(daoCls);
         serviceConfig.setDaoInfos(list);
 
-        new ServiceFileGenerator(cfg, serviceConfig).generateServiceInterfaceFile();
+
+        new ServiceFileGenerator(cfg, serviceConfig).generateServiceInterfaceFile(this.classLoader,GeneratorContext.utilPackage);
 
         JavaFileConfig implCfg = new JavaFileConfig();
         implCfg.setJavaFileDoc(this.name + " RPC interface impl");
@@ -165,7 +166,7 @@ public class DubboRPCProjectGenerator implements Generator {
 
         String serviceFullName = getApiServicePackage() + "." + getServiceName();
 
-        new ServiceFileGenerator(implCfg, serviceConfig).generateServiceImplFile(serviceFullName);
+        new ServiceFileGenerator(implCfg, serviceConfig).generateServiceImplFile(serviceFullName,this.classLoader,GeneratorContext.utilPackage);
     }
 
     private String getApiSourceCodeDir() {
@@ -423,7 +424,8 @@ public class DubboRPCProjectGenerator implements Generator {
 
     private void createMybatisFile(TableInfo tableItem) {
         String mavenBase = MavenDirUtil.getMavenBaseDir(getProviderDir());
-        MybatisConfig cfg = ConfigGenerator.generateMybatisConfig(this.globalConfig, tableItem, getProviderPackage());
+        MybatisConfig cfg = ConfigGenerator.generateMybatisConfig(this.globalConfig.getMybatisConfig(),
+                tableItem, getProviderPackage());
 
         cfg.setProjectDir(mavenBase);
 

@@ -1,6 +1,7 @@
 package com.dafy.dev.generator.common;
 
 import com.dafy.dev.config.PojoConfig;
+import com.dafy.dev.util.ReflectionUtil;
 import com.dafy.dev.util.SerialVersionUIDUtil;
 import com.dafy.dev.util.SourceCodeUtil;
 import com.squareup.javapoet.FieldSpec;
@@ -87,7 +88,7 @@ public class PojoFileGenerator {
         String name = "toString";
         MethodSpec.Builder mBuilder = MethodSpec.methodBuilder(name).addModifiers(Modifier.PUBLIC);
         mBuilder.returns(String.class);
-        Field[] fields = cls.getDeclaredFields();
+        Field[] fields = ReflectionUtil.getFields(cls, true).toArray(new Field[0]);
         StringBuffer sb = new StringBuffer();
         sb.append("return \"").append(className).append("{\"+\n");
 
@@ -104,6 +105,8 @@ public class PojoFileGenerator {
         return mBuilder;
 
     }
+
+
 
     private MethodSpec.Builder getSetterMethod(Field field) {
         String fieldName = field.getName();

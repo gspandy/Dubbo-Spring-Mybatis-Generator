@@ -119,12 +119,14 @@ public class ObjectConvertUtil {
     }
 
 
+
+
     public  static <T>  T merge(T source, T target){
 
         if(source!=null&&target!=null){
-            Field[] oldFields= source.getClass().getDeclaredFields();
+            List<Field> oldFields= ReflectionUtil.getFields(source.getClass(),true);
 
-            Field[] newFields= target.getClass().getDeclaredFields();
+            List<Field> newFields= ReflectionUtil.getFields(target.getClass(),true);
 
             //生成新对象
             //Object ret=cloneObject(target);

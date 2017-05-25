@@ -77,8 +77,7 @@ public class MybatisUtil {
     }
 
     public static void createOrm(ProviderConfig config,String moduleName, String providerDir) {
-        MybatisUtil.createMybatisConfig(config,moduleName, moduleName, providerDir);
-
+        createMybatisConfig(config,moduleName, moduleName, providerDir);
         //todo
         if (getTableList(config) != null) {
             MBGUtil.createMybatisFiles(config,getTableList(config));
@@ -101,7 +100,11 @@ public class MybatisUtil {
 
     public static List<TableInfo> getTableList(ProviderConfig config){
         if(config.getMybatisConfig()!=null){
-            return config.getMybatisConfig().getTableInfoList();
+            List<TableInfo> ret= config.getMybatisConfig().getTableInfoList();
+            for (TableInfo t : ret) {
+                t.setDomainName(MBGUtil.getDomainName(t));
+            }
+            return ret;
         }
         return new ArrayList<>();
     }

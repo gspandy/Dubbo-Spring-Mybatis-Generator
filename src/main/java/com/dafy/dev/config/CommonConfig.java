@@ -7,6 +7,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class CommonConfig {
 
+
+    @JsonProperty("artifact_id")
+    private String artifactId;
+
+    private String version;
+
+    private String owner;
+
     @JsonProperty("name")
     private String name;
 
@@ -17,6 +25,30 @@ public class CommonConfig {
 
     @JsonProperty("group_id")
     private String groupId;
+
+    public String getArtifactId() {
+        return artifactId;
+    }
+
+    public void setArtifactId(String artifactId) {
+        this.artifactId = artifactId;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
 
     public String getName() {
         return name;

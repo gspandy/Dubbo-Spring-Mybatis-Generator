@@ -5,7 +5,6 @@ import com.dafy.dev.codegen.ClassLoaderUtil;
 import com.dafy.dev.config.ConfigDefault;
 import com.dafy.dev.config.provider.ProviderConfig;
 import com.dafy.dev.generator.CommonGenerator;
-import com.dafy.dev.pojo.TableInfo;
 import com.dafy.dev.util.SourceCodeUtil;
 import com.dafy.dev.util.StringUtil;
 import org.slf4j.Logger;
@@ -51,9 +50,6 @@ public class ProviderModuleGenerator {
         // todo
         //createProviderPom();
 
-        for (TableInfo t : MybatisUtil.getTableList(config)) {
-            t.setDomainName(MBGUtil.getDomainName(t));
-        }
 
         MybatisUtil.createOrm(config,moduleName, ProviderUtil.getProviderDir(this.config));
 
@@ -69,7 +65,7 @@ public class ProviderModuleGenerator {
 
             this.classLoader = ClassLoaderUtil.loadAllClass(getDir());
 
-            ProviderUtilGenerator.createUtilFiles(MybatisUtil.getTableList(config),this.config,this.classLoader);
+            DtoUtil.createUtilFiles(this.config,this.classLoader,MybatisUtil.getTableList(config));
         }
 
         //update classloader

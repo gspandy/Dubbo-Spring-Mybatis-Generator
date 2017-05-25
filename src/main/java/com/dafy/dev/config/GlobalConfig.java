@@ -414,5 +414,48 @@ public class GlobalConfig {
         this.version = version;
     }
 
-
+    @Override
+    public String toString() {
+        return "GlobalConfig{" +
+                "name='" + name + '\'' +
+                ", apiDirName='" + apiDirName + '\'' +
+                ", configDirName='" + configDirName + '\'' +
+                ", providerDirName='" + providerDirName + '\'' +
+                ", dtoDirName='" + dtoDirName + '\'' +
+                ", daoDirName='" + daoDirName + '\'' +
+                ", ormDirName='" + ormDirName + '\'' +
+                ", pojoDirName='" + pojoDirName + '\'' +
+                ", logFile='" + logFile + '\'' +
+                ", outputDir='" + outputDir + '\'' +
+                ", dir='" + dir + '\'' +
+                ", type='" + type + '\'' +
+                ", groupId='" + groupId + '\'' +
+                ", artifactId='" + artifactId + '\'' +
+                ", version='" + version + '\'' +
+                ", owner='" + owner + '\'' +
+                ", mybatisConfig=" + mybatisConfig +
+                ", mapperXmlFilePost='" + mapperXmlFilePost + '\'' +
+                ", serviceFilePost='" + serviceFilePost + '\'' +
+                ", rootDir='" + rootDir + '\'' +
+                ", constantsDir='" + constantsDir + '\'' +
+                ", controllerDir='" + controllerDir + '\'' +
+                ", springAutoConfigFullClassPath='" + springAutoConfigFullClassPath + '\'' +
+                ", applicationPropertiesTemplatePath='" + applicationPropertiesTemplatePath + '\'' +
+                ", webApplicationPropertiesTemplatePath='" + webApplicationPropertiesTemplatePath
+                + '\''
+                +
+                ", serviceProviderPomTemplatePath='" + serviceProviderPomTemplatePath + '\'' +
+                ", serviceParentPomTemplatePath='" + serviceParentPomTemplatePath + '\'' +
+                ", serviceApiPomTemplatePath='" + serviceApiPomTemplatePath + '\'' +
+                ", webPomTemplatePath='" + webPomTemplatePath + '\'' +
+                ", dubboProviderTemplatePath='" + dubboProviderTemplatePath + '\'' +
+                ", dubboConsumerTemplatePath='" + dubboConsumerTemplatePath + '\'' +
+                ", cgiJsonFile='" + cgiJsonFile + '\'' +
+                ", logConfigFilePath='" + logConfigFilePath + '\'' +
+                ", serviceInfoList=" + serviceInfoList +
+                ", webServerInfos=" + webServerInfos +
+                ", reqDtoNameSuffix='" + reqDtoNameSuffix + '\'' +
+                ", resDtoNameSuffix='" + resDtoNameSuffix + '\'' +
+                '}';
+    }
 }
