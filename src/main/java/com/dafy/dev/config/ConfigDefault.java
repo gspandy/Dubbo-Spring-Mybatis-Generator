@@ -104,6 +104,17 @@ public class ConfigDefault {
         return pomConfig;
     }
 
+    public static PomConfig getDefaultPomConfig(CommonConfig config,String dir,String module){
+        PomConfig pomConfig=new PomConfig();
+        pomConfig.setGroupId(config.getGroupId());
+        pomConfig.setArtifactId(module);
+        pomConfig.setVersion(config.getVersion());
+        pomConfig.setProjectName(module);
+        pomConfig.setDirName(module);
+        pomConfig.setDir(dir);
+        return pomConfig;
+    }
+
 
 
 

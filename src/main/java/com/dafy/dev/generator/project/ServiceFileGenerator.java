@@ -1,13 +1,20 @@
 package com.dafy.dev.generator.project;
 
-import com.dafy.dev.GeneratorContext;
 import com.dafy.dev.codegen.ClassLoaderUtil;
-import com.dafy.dev.config.*;
+import com.dafy.dev.config.DtoUtilConfig;
+import com.dafy.dev.config.JavaFileConfig;
+import com.dafy.dev.config.MethodInfo;
+import com.dafy.dev.config.ParameterInfo;
+import com.dafy.dev.config.ServiceConfig;
 import com.dafy.dev.generator.common.JavaFileGenerator;
 import com.dafy.dev.util.CodeGenUtil;
 import com.dafy.dev.util.SourceCodeUtil;
 import com.dafy.dev.util.StringUtil;
-import com.squareup.javapoet.*;
+import com.squareup.javapoet.ClassName;
+import com.squareup.javapoet.FieldSpec;
+import com.squareup.javapoet.MethodSpec;
+import com.squareup.javapoet.TypeName;
+import com.squareup.javapoet.TypeSpec;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -105,7 +112,7 @@ public class ServiceFileGenerator {
                         String dtoUtilClassFullName = (StringUtil.isEmpty(utilPackge)?"":utilPackge) + "." + pojoCls.getSimpleName()+"DtoUtil";
 
                         Class utilCls = ClassLoaderUtil
-                                .load(dtoUtilClassFullName, GeneratorContext.classLoader);
+                                .load(dtoUtilClassFullName, classLoader);
 
                         if(utilCls!=null){
                             String pojoObj="pojo";
@@ -143,11 +150,10 @@ public class ServiceFileGenerator {
                     //Class dtoType = info.getReturnType();
                     Class dtoType = resolveDtoClass(info.getReturnTypeFullClassName(),classLoader);
 
-                    String dtoUtilClassFullName = GeneratorContext.utilPackage + "."+dtoType.getSimpleName()+"Util";
+                    String dtoUtilClassFullName = (StringUtil.isEmpty(utilPackge)?"":utilPackge) + "."+dtoType.getSimpleName()+"Util";
 
 
-                    Class utilCls = ClassLoaderUtil
-                            .load(dtoUtilClassFullName, GeneratorContext.classLoader);
+                    Class utilCls = ClassLoaderUtil.load(dtoUtilClassFullName, classLoader);
                     if(utilCls!=null){
                         b.addStatement("$N=$T.convertToDto($N)", dto, utilCls, pojoName);
                     }else {

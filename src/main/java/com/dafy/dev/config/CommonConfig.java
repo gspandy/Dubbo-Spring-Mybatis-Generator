@@ -26,6 +26,8 @@ public class CommonConfig {
     @JsonProperty("group_id")
     private String groupId;
 
+    private String serviceParentPomTemplatePath;
+
     public String getArtifactId() {
         return artifactId;
     }
@@ -80,5 +82,13 @@ public class CommonConfig {
 
     public void setGroupId(String groupId) {
         this.groupId = groupId;
+    }
+
+    public String getServiceParentPomTemplatePath() {
+        return serviceParentPomTemplatePath;
+    }
+
+    public void setServiceParentPomTemplatePath(String serviceParentPomTemplatePath) {
+        this.serviceParentPomTemplatePath = serviceParentPomTemplatePath;
     }
 }

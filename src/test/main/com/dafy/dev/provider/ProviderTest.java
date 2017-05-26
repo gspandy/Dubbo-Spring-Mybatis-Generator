@@ -10,6 +10,7 @@ import com.dafy.dev.generator.provider.ApplicationPropertiesUtil;
 import com.dafy.dev.generator.provider.DaoUtil;
 import com.dafy.dev.generator.provider.DtoUtil;
 import com.dafy.dev.generator.provider.MybatisUtil;
+import com.dafy.dev.generator.provider.PomUtil;
 import com.dafy.dev.generator.provider.ProviderHookUtil;
 import com.dafy.dev.generator.provider.ProviderUtil;
 import com.dafy.dev.generator.provider.ServiceUtil;
@@ -82,6 +83,11 @@ public class ProviderTest {
     @Test
     public void testProviderGenerator() {
 
+    }
+
+    @Test
+    public void createProviderPom() {
+        PomUtil.createProviderPom(config,ProviderUtil.getProviderDir(config));
     }
 
     @Test

@@ -27,7 +27,6 @@ public class PomGenerator {
     private MavenXpp3Writer mavenXpp3Writer;
     private MavenXpp3Reader mavenXpp3Reader;
     private PomConfig config;
-    private ProjectConfig parentConfig;
 
     private Model parent;
 
@@ -38,12 +37,14 @@ public class PomGenerator {
     private Model model;
 
     public PomGenerator(ProjectConfig projectConfig, PomConfig config) {
-        this.parentConfig = projectConfig;
         this.config = config;
         this.mavenXpp3Writer = new MavenXpp3Writer();
         this.mavenXpp3Reader = new MavenXpp3Reader();
         this.outputPomFilePath = config.getDir() + File.separator + "pom.xml";
         generateConfigFromTemplate();
+    }
+    public PomGenerator(PomConfig config) {
+         new PomGenerator(null,config);
     }
 
     public void generate() {

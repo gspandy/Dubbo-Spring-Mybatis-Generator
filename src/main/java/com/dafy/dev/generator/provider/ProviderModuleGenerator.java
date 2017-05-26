@@ -2,15 +2,12 @@ package com.dafy.dev.generator.provider;
 
 import com.dafy.dev.GeneratorContext;
 import com.dafy.dev.codegen.ClassLoaderUtil;
-import com.dafy.dev.config.ConfigDefault;
 import com.dafy.dev.config.provider.ProviderConfig;
 import com.dafy.dev.generator.CommonGenerator;
 import com.dafy.dev.util.SourceCodeUtil;
-import com.dafy.dev.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static com.dafy.dev.util.SourceCodeUtil.createService;
 
 /**
  * Created by chunxiaoli on 5/19/17.
@@ -48,7 +45,7 @@ public class ProviderModuleGenerator {
         String moduleName = this.config.getName();
 
         // todo
-        //createProviderPom();
+        PomUtil.createProviderPom(this.config,ProviderUtil.getProviderDir(config));
 
 
         MybatisUtil.createOrm(config,moduleName, ProviderUtil.getProviderDir(this.config));
@@ -75,7 +72,7 @@ public class ProviderModuleGenerator {
 
         GeneratorContext.utilPackage = ProviderUtil.getProviderUtilPackage(this.config);
 
-        createService();
+        ServiceUtil.createService(config,this.classLoader);
 
 
         ApplicationPropertiesUtil.createApplicationPropertiesFile(this.config);
@@ -99,13 +96,7 @@ public class ProviderModuleGenerator {
 
 
 
-    private void createProviderPom(String rootPomPath) {
-        String providerDir = ProviderUtil.getProviderDir(this.config);
-        String module = ProviderUtil.getProviderModuleName(this.config);
-        String template = this.config.getServiceProviderPomTemplatePath();
-        template = StringUtil.isEmpty(template) ? ConfigDefault.POM_TEMPLATE_PROVIDER : template;
-        commonGenerator.createPomFile(null, rootPomPath, template, providerDir, module);
-    }
+
 
 
     private void createLogConfig() {

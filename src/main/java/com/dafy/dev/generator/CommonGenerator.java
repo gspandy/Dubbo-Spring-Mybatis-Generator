@@ -58,6 +58,12 @@ public class CommonGenerator implements Generator {
         //this.config.setServices((Map<String,Map<String, List<String>>>) map.get("services"));
     }
 
+    public CommonGenerator(CommonConfig config){
+        this.pomConfig=createRootPomConfig(config);
+        InputStream inputStream=getClass().getClassLoader().getResourceAsStream("config.yaml");
+        //this.config.setServices((Map<String,Map<String, List<String>>>) map.get("services"));
+    }
+
     private void parseConfig(String configPath){
 
     }
@@ -86,6 +92,23 @@ public class CommonGenerator implements Generator {
         List<String> modules=new ArrayList<>();
         modules.add("./"+config.getProjectName()+"-api");
         modules.add("./"+config.getProjectName()+"-provider");
+        cfg.setModules(modules);
+        return cfg;
+    }
+
+    private PomConfig createRootPomConfig(CommonConfig config){
+        PomConfig cfg=new PomConfig();
+        cfg.setPackaging("pom");
+        cfg.setTemplate("template/template-root-pom.xml");
+        cfg.setGroupId(config.getGroupId());
+        cfg.setArtifactId(config.getArtifactId());
+        cfg.setVersion(config.getVersion());
+        cfg.setDir(config.getDir());
+        cfg.setProjectName(config.getName());
+        //子模块
+        List<String> modules=new ArrayList<>();
+        modules.add("./"+config.getName()+"-api");
+        modules.add("./"+config.getName()+"-provider");
         cfg.setModules(modules);
         return cfg;
     }
@@ -153,6 +176,21 @@ public class CommonGenerator implements Generator {
 
     public String createPomFile(String parentTemplate,String template,String dir,String module){
        return createPomFile(null,parentTemplate,template,dir,module);
+    }
+
+    public String createPomFile(CommonConfig commonConfig,List<String>modules,
+                                String parentTemplate, String template,String dir,String moduleName){
+        //生成pom文件
+        PomConfig config= ConfigDefault.getDefaultPomConfig(commonConfig,dir,moduleName);
+        config.setTemplate(template);
+        config.setParentTemplate(parentTemplate);
+        config.setModules(modules);
+
+        PomGenerator generator= new PomGenerator(this.config,config);
+
+        generator.generate();
+
+        return generator.getOutputPomFilePath();
     }
 
     public String createPomFile(List<String>modules,String parentTemplate,
